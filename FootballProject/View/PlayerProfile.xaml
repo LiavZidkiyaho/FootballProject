@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="FootballProject.View.PlayerProfile"
+             Title="PlayerProfile"
+             BackgroundColor="#1E1E1E">
+
+    <ScrollView>
+        <StackLayout Spacing="20" Padding="10">
+
+            <!-- Player Information Frame -->
+            <Frame WidthRequest="1798" HeightRequest="302" CornerRadius="50" BorderColor="#8294C4" BackgroundColor="#8294C4"
+                   HorizontalOptions="Center" VerticalOptions="Start">
+                <Grid>
+                    <!-- Player Image Placeholder -->
+                    <Frame WidthRequest="216" HeightRequest="216" CornerRadius="50" BackgroundColor="White" BorderColor="White"
+                           HorizontalOptions="Start" VerticalOptions="Center" Margin="40,0"/>
+
+                    <!-- Player Name & Details -->
+                    <Label Text="Player Name" TextColor="White" FontSize="Large" FontAttributes="Bold" 
+                           HorizontalOptions="Start" Margin="306,50,0,0"/>
+                    <Label Text="Nationality ▉" TextColor="White" FontSize="Medium" FontAttributes="Bold"
+                           HorizontalOptions="Start" Margin="306,115,0,0"/>
+                    <Label Text="DD/MM/YYYY - AGE Y/O" TextColor="White" FontSize="Medium" FontAttributes="Bold"
+                           HorizontalOptions="Start" Margin="306,170,0,0"/>
+
+                    <!-- Squad Information -->
+                    <Label Text="● Squad Name" TextColor="White" FontSize="Medium" FontAttributes="Bold"
+                           HorizontalOptions="Start" Margin="900,50,0,0"/>
+                    <Label Text="999,999,999 €" TextColor="White" FontSize="Medium" FontAttributes="Bold"
+                           HorizontalOptions="Start" Margin="900,115,0,0"/>
+                    <Label Text="999,999 € p/m" TextColor="White" FontSize="Medium" FontAttributes="Bold"
+                           HorizontalOptions="Start" Margin="900,170,0,0"/>
+
+                    <!-- Physical Attributes -->
+                    <Label Text="Height cm" TextColor="White" FontSize="Medium" FontAttributes="Bold"
+                           HorizontalOptions="Start" Margin="1400,50,0,0"/>
+                    <Label Text="Weight kg" TextColor="White" FontSize="Medium" FontAttributes="Bold"
+                           HorizontalOptions="Start" Margin="1400,115,0,0"/>
+                    <Label Text="Preferred Foot" TextColor="White" FontSize="Medium" FontAttributes="Bold"
+                           HorizontalOptions="Start" Margin="1400,170,0,0"/>
+                </Grid>
+            </Frame>
+
+            <!-- Position and Stats Section -->
+            <Grid ColumnSpacing="20">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <!-- Position Section -->
+                <Frame WidthRequest="420" HeightRequest="600" CornerRadius="50" BackgroundColor="#8294C4" Margin="65,0,0,0"
+                   Padding="20" HorizontalOptions="Center">
+                    <StackLayout HorizontalOptions="Center">
+                        <Label Text="Position" TextColor="White" FontSize="Medium" FontAttributes="Bold" HorizontalOptions="Center"/>
+
+                        <!-- Vertical Formation Layout -->
+                        <Grid RowSpacing="50">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+
+                            <!-- Row 1 - 1 ellipse -->
+                            <Ellipse Grid.Row="0" WidthRequest="40" HeightRequest="40" Fill="LightGray" HorizontalOptions="Center"/>
+
+                            <!-- Row 2 - 3 ellipses -->
+                            <StackLayout Grid.Row="1" Orientation="Horizontal" HorizontalOptions="Center" Spacing="60">
+                                <Ellipse WidthRequest="40" HeightRequest="40" Fill="LightGray"/>
+                                <Ellipse WidthRequest="40" HeightRequest="40" Fill="LightGray"/>
+                                <Ellipse WidthRequest="40" HeightRequest="40" Fill="LightGray"/>
+                            </StackLayout>
+
+                            <!-- Row 3 - 1 ellipse -->
+                            <Ellipse Grid.Row="2" WidthRequest="40" HeightRequest="40" Fill="LightGray" HorizontalOptions="Center"/>
+
+                            <!-- Row 4 - 1 ellipse -->
+                            <Ellipse Grid.Row="3" WidthRequest="40" HeightRequest="40" Fill="LightGray" HorizontalOptions="Center"/>
+
+                            <!-- Row 5 - 3 ellipses -->
+                            <StackLayout Grid.Row="4" Orientation="Horizontal" HorizontalOptions="Center" Spacing="60">
+                                <Ellipse WidthRequest="40" HeightRequest="40" Fill="LightGray"/>
+                                <Ellipse WidthRequest="40" HeightRequest="40" Fill="LightGray"/>
+                                <Ellipse WidthRequest="40" HeightRequest="40" Fill="LightGray"/>
+                            </StackLayout>
+
+                            <!-- Row 6 - 1 ellipse -->
+                            <Ellipse Grid.Row="5" WidthRequest="40" HeightRequest="40" Fill="LightGray" HorizontalOptions="Center"/>
+                        </Grid>
+
+                    </StackLayout>
+                </Frame>
+
+                <!-- Stats Section -->
+                <Frame Grid.Column="1" WidthRequest="1310" HeightRequest="603" CornerRadius="50" BackgroundColor="#8294C4">
+                    <StackLayout>
+                        <Label Text="Stats - games played/started" TextColor="White" FontSize="Medium" FontAttributes="Bold"
+                               HorizontalOptions="Center"/>
+
+                        <StackLayout Orientation="Horizontal" HorizontalOptions="Center" VerticalOptions="End" Margin="0,400,0,0">
+                            <Label Text="stat" TextColor="White" FontSize="Medium" Padding="40"/>
+                            <Label Text="stat" TextColor="White" FontSize="Medium" Padding="40"/>
+                            <Label Text="stat" TextColor="White" FontSize="Medium" Padding="40"/>
+                            <Label Text="stat" TextColor="White" FontSize="Medium" Padding="40"/>
+                            <Label Text="stat" TextColor="White" FontSize="Medium" Padding="40"/>
+                            <Label Text="stat" TextColor="White" FontSize="Medium" Padding="40"/>
+                            <Label Text="stat" TextColor="White" FontSize="Medium" Padding="40"/>
+                            <Label Text="stat" TextColor="White" FontSize="Medium" Padding="40"/>
+                            <Label Text="stat" TextColor="White" FontSize="Medium" Padding="40"/>
+                            <Label Text="stat" TextColor="White" FontSize="Medium" Padding="40"/>
+                        </StackLayout>
+                    </StackLayout>
+                </Frame>
+            </Grid>
+
+        </StackLayout>
+    </ScrollView>
+
+</ContentPage>
