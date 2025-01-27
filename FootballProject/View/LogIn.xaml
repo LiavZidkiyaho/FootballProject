@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="FootballProject.View.LogIn"
+             BackgroundColor="#1E1E1E">
+
+    <VerticalStackLayout FlowDirection="LeftToRight">
+        <Grid RowDefinitions="*,*,*">
+            <HorizontalStackLayout Grid.Row="0">
+                <Label Padding="15" Text="Username:" FontSize="15" TextColor="white" />
+                <Entry Placeholder="Enter your username"
+                       Text="{Binding Username}"
+                       TextColor="White"
+                       WidthRequest="250"
+                       ReturnType="Next"/>
+            </HorizontalStackLayout>
+
+            <HorizontalStackLayout Grid.Row="1">
+                <Label Padding="15" Text="Password:" FontSize="15" TextColor="White" />
+                <Entry Placeholder="Enter your password"
+                       Text="{Binding Password}"
+                       TextColor="White"
+                       WidthRequest="250"
+                       IsPassword="True"
+                       ReturnType="Done"/>
+            </HorizontalStackLayout>
+
+            <Button Text="Login"
+                    BorderColor="#8294C4"
+                    BackgroundColor="#8294C4"
+                    Command="{Binding LoginCommand}"
+                    Grid.Row="2"
+                    HorizontalOptions="Center"/>
+        </Grid>
+    </VerticalStackLayout>
+
+</ContentPage>
