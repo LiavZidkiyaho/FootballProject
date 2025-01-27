@@ -11,10 +11,14 @@
     <ShellContent
         Title="Home"
         ContentTemplate="{DataTemplate local:MainPage}"
-        Route="MainPage" />
+        Route="rMainPage" />
     <ShellContent
-    Title="PlayerProfile"
-    ContentTemplate="{DataTemplate local:View.PlayerProfile}"
-    Route="PlayerProfile" />
-
+        Title="LogIn"
+        ContentTemplate="{DataTemplate local:View.LogIn}"
+        Route="rLogIn" />
+    <ShellContent
+        Title="PlayerProfile"
+        ContentTemplate="{DataTemplate local:View.PlayerProfile}"
+        Route="PlayerProfile" />
+    
 </Shell>

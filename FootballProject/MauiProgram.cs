@@ -1,4 +1,7 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using FootballProject.Services;
+using FootballProject.View;
+using FootballProject.ViewModel;
+using Microsoft.Extensions.Logging;
 
 namespace FootballProject
 {
@@ -18,7 +21,13 @@ namespace FootballProject
 #if DEBUG
     		builder.Logging.AddDebug();
 #endif
+            builder.Services.AddSingleton<SignUp>();
+            builder.Services.AddSingleton<SignUpViewModel>();
 
+            builder.Services.AddSingleton<LogIn>();
+            builder.Services.AddSingleton<LoginViewModel>();
+
+            builder.Services.AddSingleton<IUser, UserService>();
             return builder.Build();
         }
     }
