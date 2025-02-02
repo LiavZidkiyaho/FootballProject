@@ -10,51 +10,89 @@ namespace FootballProject.ViewModel
 {
     public class LoginViewModel : ViewModelBase
     {
-        private readonly IUser userService;
+        private string username, password;
+        UserService service;
+        List<Model.User> users;
+        private Model.User user;
 
-        private string username;
-        private string password;
 
-        public LoginViewModel(IUser service)
+        public ICommand NavToRegisterCommand { get; }
+        public ICommand LoginUserCommand { get; }
+        public LoginViewModel(UserService service)
         {
-            userService = service;
-            LoginCommand = new Command(Login);
+            this.service = service;
+            LoginUserCommand = new Command(LoginUser);
+            users = service.GetUsersList();
+            Username = "Bruh";
+            Password = "Bruh12";
+        }
+
+        public Model.User User
+        {
+            get => user;
+            set
+            {
+                if (user != value)
+                {
+                    user = value;
+                    OnPropertyChanged(nameof(User));
+                }
+            }
         }
 
         public string Username
         {
-            get => username;
+            get { return username; }
             set
             {
                 if (username != value)
                 {
                     username = value;
                     OnPropertyChanged(nameof(Username));
+                    OnPropertyChanged(nameof(CanLogin));
                 }
             }
         }
 
         public string Password
         {
-            get => password;
+            get { return password; }
             set
             {
                 if (password != value)
                 {
                     password = value;
                     OnPropertyChanged(nameof(Password));
+                    OnPropertyChanged(nameof(CanLogin));
                 }
             }
         }
 
-        public ICommand LoginCommand { get; }
 
-        private async void Login()
+
+        public bool IsValidUser()
         {
-            var user = userService.GetUserByUsernameAndPassword(Username, Password);
-            if (user != null)
+            if (service.GetUser(Username) != null) return true;
+            return false;
+        }
+
+        public bool CanLogin
+        {
+            get
             {
-                await Shell.Current.GoToAsync("///MainPage");
+                return Username != null && Password != null;
+            }
+        }
+
+        public async void LoginUser()
+        {
+            if (IsValidUser())
+            {
+                User = service.GetUser(Username);
+                service.CurrentUser = User;
+                Dictionary<string, object> data = new Dictionary<string, object>();
+                data.Add("User", User);
+                await Shell.Current.GoToAsync("//HomePage", true, data);
             }
         }
     }

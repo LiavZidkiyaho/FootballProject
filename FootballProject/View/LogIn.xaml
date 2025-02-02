@@ -28,7 +28,7 @@
             <Button Text="Login"
                     BorderColor="#8294C4"
                     BackgroundColor="#8294C4"
-                    Command="{Binding LoginCommand}"
+                    Command="{Binding LoginUserCommand}"
                     Grid.Row="2"
                     HorizontalOptions="Center"/>
         </Grid>

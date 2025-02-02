@@ -14,7 +14,7 @@ namespace FootballProject.ViewModel
     {
         private Model.User user = new Model.User();
         private List<Model.User> users = new List<Model.User>();
-        private readonly IUser userService;
+        private readonly UserService userService;
 
         private string name;
         private string username;
@@ -22,9 +22,9 @@ namespace FootballProject.ViewModel
         private string email;
         private string errorMessage;
 
-        public SignUpViewModel(IUser service)
+        public SignUpViewModel(UserService service)
         {
-            userService = service;
+            this.userService = service;
             AddUserCommand = new Command(AddNewUser);
         }
 
@@ -157,10 +157,8 @@ namespace FootballProject.ViewModel
             if (!userExists)
             {
                 users.Add(user);
+                userService.CurrentUser = user;
             }
-
-            userService.AddUser(user);
-            users = userService.GetAllUsers();
             UpdateUser();
         }
 
