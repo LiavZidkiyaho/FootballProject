@@ -92,9 +92,17 @@ namespace FootballProject.ViewModel
                 service.CurrentUser = User;
                 Dictionary<string, object> data = new Dictionary<string, object>();
                 data.Add("User", User);
-                await Shell.Current.GoToAsync("//HomePage", true, data);
+                if (user == null)
+                    await Application.Current.MainPage.DisplayAlert("Login", "Login Faild!", "ok");
+                else
+                {
+                    await Application.Current.MainPage.DisplayAlert("Login", $"Login Succeed! for {user.Name}", "ok");
+                    App.Current.MainPage = new AppShell();
+                    await Shell.Current.GoToAsync("/rHomePage", data);
+                }
             }
         }
+
     }
 }
 

@@ -1,15 +1,13 @@
-﻿namespace FootballProject
+﻿using FootballProject.View;
+
+namespace FootballProject
 {
     public partial class App : Application
     {
-        public App()
+        public App(LogIn page)
         {
             InitializeComponent();
-        }
-
-        protected override Window CreateWindow(IActivationState? activationState)
-        {
-            return new Window(new AppShell());
+            MainPage = page;
         }
     }
 }

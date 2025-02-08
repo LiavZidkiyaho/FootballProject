@@ -7,6 +7,7 @@ namespace FootballProject
         public AppShell()
         {
             InitializeComponent();
+            Routing.RegisterRoute("rHomePage", typeof(HomePage));
         }
     }
 }

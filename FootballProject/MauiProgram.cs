@@ -21,6 +21,8 @@ namespace FootballProject
 #if DEBUG
     		builder.Logging.AddDebug();
 #endif
+            builder.Services.AddSingleton<MainPage>();
+
             builder.Services.AddSingleton<SignUp>();
             builder.Services.AddSingleton<SignUpViewModel>();
 
