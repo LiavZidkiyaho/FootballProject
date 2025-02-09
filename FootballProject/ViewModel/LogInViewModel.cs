@@ -24,7 +24,7 @@ namespace FootballProject.ViewModel
             LoginUserCommand = new Command(LoginUser);
             users = service.GetAllUsers();
             Username = "Bruh";
-            Password = "Bruh12";
+            Password = "Bruh";
         }
 
         public Model.User User

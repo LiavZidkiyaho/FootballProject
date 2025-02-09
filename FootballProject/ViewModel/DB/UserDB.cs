@@ -14,19 +14,19 @@ namespace FootballProject.ViewModel.DB
         protected override string CreateInsertOleDb(BaseEntity entity)
         {
             var user = (User)entity;
-            return $"INSERT INTO Users (Username, Password) VALUES ('{user.Username}', '{user.Password}')";
+            return $"INSERT INTO users (Username, UserPassword) VALUES ('{user.Username}', '{user.Password}')";
         }
 
         protected override string CreateUpdateOleDb(BaseEntity entity)
         {
             var user = (User)entity;
-            return $"UPDATE Users SET Username = '{user.Username}', Password = '{user.Password}' WHERE Id = {user.Id}";
+            return $"UPDATE users SET Username = '{user.Username}', UserPassword = '{user.Password}' WHERE id = {user.Id}";
         }
 
         protected override string CreateDeleteOleDb(BaseEntity entity)
         {
             var user = (User)entity;
-            return $"DELETE FROM Users WHERE Id = {user.Id}";
+            return $"DELETE FROM users WHERE id = {user.Id}";
         }
 
         protected override BaseEntity CreateModel(BaseEntity entity)
@@ -35,29 +35,29 @@ namespace FootballProject.ViewModel.DB
             user.Id = reader.GetInt32(0);
             user.Username = reader.GetString(1);
             user.Password = reader.GetString(2);
-            // Add other properties as needed
             return user;
         }
 
         public List<User> SelectAllUsers()
         {
-            string query = "SELECT * FROM Users";
+            string query = "SELECT * FROM users";
             var result = Select(query);
             return result.ConvertAll(x => (User)x);
         }
 
         public User SelectById(int id)
         {
-            string query = $"SELECT * FROM Users WHERE Id = {id}";
+            string query = $"SELECT * FROM users WHERE id = {id}";
             var result = Select(query);
             return result.Count > 0 ? (User)result[0] : null;
         }
 
         public User SelectByUsername(string username)
         {
-            string query = $"SELECT * FROM Users WHERE Username = '{username}'";
+            string query = $"SELECT * FROM users WHERE Username = '{username}'";
             var result = Select(query);
             return result.Count > 0 ? (User)result[0] : null;
+
         }
     }
 }

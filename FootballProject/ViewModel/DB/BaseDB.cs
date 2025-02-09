@@ -24,7 +24,7 @@ namespace FootballProject.ViewModel.DB
 
         public BaseDB()
         {
-            connectionString = @"Provider=Microsoft.ACE.OLEDB.12.0;Data Source=C:\Users\LiavZidkiyaho\Documents\GitHub\FootballProject\FootballProject\ViewModel\DB\FootballDB.accdb;Persist Security Info=True";
+            connectionString = @"Provider=Microsoft.ACE.OLEDB.12.0;Data Source=C:\Users\Magshimim\Desktop\Project\FootballProject\FootballProject\ViewModel\DB\FootballDB.accdb;Persist Security Info=True";
             connection = new OleDbConnection(connectionString);
             command = new OleDbCommand();
         }
