@@ -5,12 +5,32 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:local="clr-namespace:FootballProject"
     xmlns:views="clr-namespace:FootballProject.View"
-    Shell.FlyoutBehavior="Flyout"
+    Shell.FlyoutBehavior="Disabled"
     Title="FootballProject">
 
-    <ShellContent
-        Title="ViewUsers"
-        ContentTemplate="{DataTemplate local:View.ViewUsers}"
-        Route="rViewUsers" />
+
+    <TabBar >
+        <Tab Title="HomePage">
+            <ShellContent
+             Title="HomePage"
+             ContentTemplate="{DataTemplate local:View.HomePage}"
+             Route="rHomePage" />
+        </Tab>
+
+        <Tab Title="View Users">
+            <ShellContent
+             Title="ViewUsers"
+             ContentTemplate="{DataTemplate local:View.ViewUsers}"
+             Route="rViewUsers" />
+            </Tab>
+
+            <Tab Title="Sign Up">
+            <ShellContent
+             Title="ViewUsers"
+             ContentTemplate="{DataTemplate local:View.SignUp}"
+             Route="rSignUp" />
+        </Tab>
+
+    </TabBar>
 
 </Shell>

@@ -9,5 +9,7 @@ namespace FootballProject
             InitializeComponent();
             MainPage = page;
         }
+
+
     }
 }

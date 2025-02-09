@@ -98,7 +98,7 @@ namespace FootballProject.ViewModel
                 {
                     await Application.Current.MainPage.DisplayAlert("Login", $"Login Succeed! for {user.Name}", "ok");
                     App.Current.MainPage = new AppShell();
-                    await Shell.Current.GoToAsync("/rHomePage", data);
+                    await Shell.Current.GoToAsync("///rHomePage", data);
                 }
             }
         }

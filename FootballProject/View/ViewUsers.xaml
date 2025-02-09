@@ -25,10 +25,6 @@
                                 Grid.Row="2" Grid.Column="1" BackgroundColor="#D0B8A8" TextColor="White" FontSize="Medium" FontFamily="Impact" Text="Edit user" HeightRequest="35" CornerRadius="10" Margin="5"
                                 Command="{Binding EditCommand, Source={x:RelativeSource AncestorType={x:Type viewmodel:ViewUsersViewModel},Mode=FindAncestorBindingContext}}" 
                                 CommandParameter="{Binding .}"/>
-
-                                <Button Grid.Row="2" Grid.Column="2" BackgroundColor="#D0B8A8" TextColor="White" FontSize="Medium" FontFamily="Impact" Text="User details" HeightRequest="35" CornerRadius="10" Margin="5"
-                                Command="{Binding UserDetailsCommand, Source={x:RelativeSource AncestorType={x:Type viewmodel:ViewUsersViewModel},Mode=FindAncestorBindingContext}}" 
-                                CommandParameter="{Binding .}"/>
                             </Grid>
                         </Border>
                     </DataTemplate>
