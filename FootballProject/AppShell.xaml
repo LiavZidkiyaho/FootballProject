@@ -9,16 +9,8 @@
     Title="FootballProject">
 
     <ShellContent
-        Title="Home"
-        ContentTemplate="{DataTemplate local:MainPage}"
-        Route="rMainPage" />
-    <ShellContent
-        Title="LogIn"
-        ContentTemplate="{DataTemplate local:View.LogIn}"
-        Route="rLogIn" />
-    <ShellContent
-        Title="PlayerProfile"
-        ContentTemplate="{DataTemplate local:View.PlayerProfile}"
-        Route="PlayerProfile" />
-    
+        Title="ViewUsers"
+        ContentTemplate="{DataTemplate local:View.ViewUsers}"
+        Route="rViewUsers" />
+
 </Shell>

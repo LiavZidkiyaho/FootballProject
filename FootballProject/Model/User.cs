@@ -6,16 +6,14 @@ using System.Threading.Tasks;
 
 namespace FootballProject.Model
 {
-    public class User
+    public class User : BaseEntity
     {
-        private int id;
         private string? name;
         private string? username;
         private string? password;
         private string? email;
 
 
-        public int Id { get => id; set => id = value; }
         public string Name { get => name; set => name = value; }
         public string? Email { get => email; set => email = value; }
         public string? Username { get => username; set => username = value; }

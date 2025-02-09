@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="FootballProject.View.ViewUsers"
+             xmlns:model="clr-namespace:FootballProject.Model;assembly=FootballProject"
+             xmlns:viewmodel="clr-namespace:FootballProject.ViewModel;assembly=FootballProject"
+             Title="ViewUsers">
+    <Grid Margin="10">
+        <RefreshView Command="{Binding RefreshCommand}" IsRefreshing="{Binding IsRefreshing}" Grid.Row="2">
+            <CollectionView ItemsSource="{Binding ObservableUsers}">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate x:DataType="model:User">
+                        <Border StrokeThickness="1" StrokeShape="RoundRectangle 10" Padding="10" Margin="5">
+                            <Grid ColumnDefinitions="*,*,*,*,*,*,*" RowDefinitions="*,*,*" >
+                                <Label Grid.Column="0" Text="{Binding Name}" TextColor="#D0B8A8" FontFamily="Impact" FontSize="Medium"/>
+                                <Label Grid.Column="1" Text="{Binding Username}" TextColor="#D0B8A8" FontFamily="Impact" FontSize="Medium"/>
+                                <Label Grid.Column="2" Text="{Binding Password}" TextColor="#D0B8A8" FontFamily="Impact" FontSize="Medium"/>
+                                <Label Grid.Column="3" Text="{Binding Email}" TextColor="#D0B8A8" FontFamily="Impact" FontSize="Medium"/>
+                              
+                                <Button IsVisible="{Binding IsAdmin, Source={x:RelativeSource AncestorType={x:Type viewmodel:ViewUsersViewModel},Mode=FindAncestorBindingContext}}"
+                                Grid.Row="2" Grid.Column="0" BackgroundColor="#D0B8A8" TextColor="White" FontSize="Medium" FontFamily="Impact" Text="Delete user" HeightRequest="35" CornerRadius="10" Margin="5"
+                                Command="{Binding DeleteCommand, Source={x:RelativeSource AncestorType={x:Type viewmodel:ViewUsersViewModel},Mode=FindAncestorBindingContext}}" 
+  		                            CommandParameter="{Binding .}"/>
+                                <Button IsVisible="{Binding IsAdmin, Source={x:RelativeSource AncestorType={x:Type viewmodel:ViewUsersViewModel},Mode=FindAncestorBindingContext}}"
+                                Grid.Row="2" Grid.Column="1" BackgroundColor="#D0B8A8" TextColor="White" FontSize="Medium" FontFamily="Impact" Text="Edit user" HeightRequest="35" CornerRadius="10" Margin="5"
+                                Command="{Binding EditCommand, Source={x:RelativeSource AncestorType={x:Type viewmodel:ViewUsersViewModel},Mode=FindAncestorBindingContext}}" 
+                                CommandParameter="{Binding .}"/>
+
+                                <Button Grid.Row="2" Grid.Column="2" BackgroundColor="#D0B8A8" TextColor="White" FontSize="Medium" FontFamily="Impact" Text="User details" HeightRequest="35" CornerRadius="10" Margin="5"
+                                Command="{Binding UserDetailsCommand, Source={x:RelativeSource AncestorType={x:Type viewmodel:ViewUsersViewModel},Mode=FindAncestorBindingContext}}" 
+                                CommandParameter="{Binding .}"/>
+                            </Grid>
+                        </Border>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </RefreshView>
+    </Grid>
+</ContentPage>

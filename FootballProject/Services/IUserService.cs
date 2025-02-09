@@ -1,50 +1,82 @@
 ﻿using FootballProject.Model;
-using FootballProject.Services;
-using System;
+using FootballProject.ViewModel.DB;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Windows.System;
 
 namespace FootballProject.Services
 {
     public class UserService
     {
-        private List<Model.User> users = new List<Model.User>();
-        public Model.User CurrentUser;
-
-        Model.User tempUser = new Model.User() { Id = 1, Username = "Bruh", Password = "Bruh12", Email = "Bruh@gmail.com" };
-        Model.User tempOtherUser = new Model.User() { Id = 2, Username = "admin", Password = "admin", Email = "admin@gmail.com" };
+        private List<User> users;
+        private User currentUser;
+        private readonly UserDB userDB = new UserDB();
 
         public UserService()
         {
-            users = GetUsersList();
-            users.Add(tempUser);
-            users.Add(tempOtherUser);
+            users = userDB.SelectAllUsers();
         }
 
-        public List<Model.User> GetUsersList()
+        public List<User> GetUsersList()
         {
+            return new List<User>(users);
+        }
+
+        public User GetUser(string username)
+        {
+            return userDB.SelectByUsername(username);
+        }
+
+        public User GetUserByID(int id)
+        {
+            return userDB.SelectById(id);
+        }
+
+        public User CurrentUser
+        {
+            get { return currentUser; }
+            set
+            {
+                currentUser = value;
+            }
+        }
+
+        public void SetCurrentUser(User user)
+        {
+            CurrentUser = user;
+        }
+
+        public User GetCurrentUser()
+        {
+            return CurrentUser;
+        }
+
+        public bool AddUser(User user)
+        {
+            userDB.Insert(user);
+            userDB.SaveChanges();
+            users = userDB.SelectAllUsers(); // Refresh the local list
+            return true;
+        }
+
+        public bool UpdateUser(User user)
+        {
+            userDB.Update(user);
+            userDB.SaveChanges();
+            users = userDB.SelectAllUsers(); // Refresh the local list
+            return true;
+        }
+
+        public bool DeleteUser(User user)
+        {
+            userDB.Delete(user);
+            userDB.SaveChanges();
+            users = userDB.SelectAllUsers(); // Refresh the local list
+            return true;
+        }
+
+        public List<User> GetAllUsers()
+        {
+            users = userDB.SelectAllUsers();
             return users;
-        }
-
-        public Model.User GetUser(string username)
-        {
-            foreach (Model.User usr in users)
-            {
-                if (usr.Username == username) return usr;
-            }
-            return null;
-        }
-        public Model.User GetUserByID(int id)
-        {
-            foreach (Model.User usr in users)
-            {
-                if (usr.Id == id) return usr;
-            }
-            return null;
         }
     }
 }

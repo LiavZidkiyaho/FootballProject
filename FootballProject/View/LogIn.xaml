@@ -4,34 +4,89 @@
              x:Class="FootballProject.View.LogIn"
              BackgroundColor="#1E1E1E">
 
-    <VerticalStackLayout FlowDirection="LeftToRight">
-        <Grid RowDefinitions="*,*,*">
-            <HorizontalStackLayout Grid.Row="0">
-                <Label Padding="15" Text="Username:" FontSize="15" TextColor="white" />
-                <Entry Placeholder="Enter your username"
-                       Text="{Binding Username}"
-                       TextColor="White"
-                       WidthRequest="250"
-                       ReturnType="Next"/>
-            </HorizontalStackLayout>
+    <ScrollView>
+        <VerticalStackLayout
+            VerticalOptions="CenterAndExpand"
+            HorizontalOptions="CenterAndExpand"
+            Spacing="20"
+            Padding="30">
 
-            <HorizontalStackLayout Grid.Row="1">
-                <Label Padding="15" Text="Password:" FontSize="15" TextColor="White" />
-                <Entry Placeholder="Enter your password"
-                       Text="{Binding Password}"
-                       TextColor="White"
-                       WidthRequest="250"
-                       IsPassword="True"
-                       ReturnType="Done"/>
-            </HorizontalStackLayout>
+            <Label
+                Text="The Human Before The Player"
+                TextColor="White"
+                FontSize="40"
+                HorizontalOptions="Center"
+                VerticalOptions="CenterAndExpand"
+                FontAttributes="Bold"
+                Margin="0,20,0,20"/>
 
-            <Button Text="Login"
-                    BorderColor="#8294C4"
-                    BackgroundColor="#8294C4"
-                    Command="{Binding LoginUserCommand}"
-                    Grid.Row="2"
-                    HorizontalOptions="Center"/>
-        </Grid>
-    </VerticalStackLayout>
+            <Label
+                Text="Welcome to "
+                TextColor="White"
+                FontSize="36"
+                HorizontalOptions="Center"
+                VerticalOptions="CenterAndExpand"
+                FontAttributes="Bold"
+                Margin="0,20,0,40"/>
+
+            <Label
+                Text="Your ultimate football management tool"
+                TextColor="LightGray"
+                FontSize="20"
+                HorizontalOptions="Center"
+                VerticalOptions="CenterAndExpand"
+                Margin="0,0,0,20"/>
+
+            <Label
+                Text="Join us to manage your football team and stay updated with the latest news and stats."
+                TextColor="LightGray"
+                FontSize="16"
+                HorizontalOptions="Center"
+                VerticalOptions="CenterAndExpand"
+                Margin="0,40,0,0"
+                HorizontalTextAlignment="Center"/>
+
+            <!-- Login Form Section -->
+            <Frame WidthRequest="400" HeightRequest="300" CornerRadius="20" BorderColor="#8294C4" BackgroundColor="#1E1E1E" HorizontalOptions="Center" VerticalOptions="Center" Margin="0,20">
+                <VerticalStackLayout FlowDirection="LeftToRight" Padding="20">
+                    <Grid RowDefinitions="*,*,*">
+                        <HorizontalStackLayout Grid.Row="0">
+                            <Label Padding="15" Text="Username:" FontSize="15" TextColor="white" />
+                            <Entry Placeholder="Enter your username"
+                                   Text="{Binding Username}"
+                                   TextColor="White"
+                                   WidthRequest="250"
+                                   ReturnType="Next"/>
+                        </HorizontalStackLayout>
+
+                        <HorizontalStackLayout Grid.Row="1">
+                            <Label Padding="15" Text="Password:" FontSize="15" TextColor="White" />
+                            <Entry Placeholder="Enter your password"
+                                   Text="{Binding Password}"
+                                   TextColor="White"
+                                   WidthRequest="250"
+                                   IsPassword="True"
+                                   ReturnType="Done"/>
+                        </HorizontalStackLayout>
+
+                        <Button Text="Login"
+                                BorderColor="#8294C4"   
+                                BackgroundColor="#8294C4"
+                                Command="{Binding LoginUserCommand}"
+                                Grid.Row="2"
+                                HorizontalOptions="Center"/>
+                    </Grid>
+                </VerticalStackLayout>
+            </Frame>
+
+            <StackLayout Orientation="Horizontal" HorizontalOptions="Center" VerticalOptions="End" Spacing="20" Margin="0,40,0,0">
+                <Image Source="psagot.png" WidthRequest="100" HeightRequest="100" />
+                <Image Source="karmiel.png" WidthRequest="100" HeightRequest="100" />
+                <Image Source="israel.png" WidthRequest="100" HeightRequest="100" />
+            </StackLayout>
+
+        </VerticalStackLayout>
+    </ScrollView>
+
 
 </ContentPage>
