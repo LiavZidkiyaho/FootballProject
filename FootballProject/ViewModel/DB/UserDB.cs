@@ -14,7 +14,7 @@ namespace FootballProject.ViewModel.DB
         protected override string CreateInsertOleDb(BaseEntity entity)
         {
             var user = (User)entity;
-            return $"INSERT INTO users (Username, UserPassword) VALUES ('{user.Username}', '{user.Password}')";
+            return $"INSERT INTO users (FullName, Username, UserPassword, Email) VALUES ('{user.Name}', '{user.Username}', '{user.Password}', '{user.Email}')";
         }
 
         protected override string CreateUpdateOleDb(BaseEntity entity)
@@ -33,8 +33,12 @@ namespace FootballProject.ViewModel.DB
         {
             var user = (User)entity;
             user.Id = reader.GetInt32(0);
-            user.Username = reader.GetString(1);
-            user.Password = reader.GetString(2);
+            user.Name= reader.GetString(1);
+            user.Username = reader.GetString(2);
+            user.Password = reader.GetString(3);
+            user.Email = reader.GetString(4);
+            user.Team = reader.GetString(5);
+            user.IsAdmin = reader.GetBoolean(6);
             return user;
         }
 
@@ -58,6 +62,33 @@ namespace FootballProject.ViewModel.DB
             var result = Select(query);
             return result.Count > 0 ? (User)result[0] : null;
 
+        }
+
+        public override void Insert(BaseEntity entity)
+        {
+            User user = entity as User;
+            if (user != null)
+            {
+                inserted.Add(new ChangeEntity(this.CreateInsertOleDb, entity));
+            }
+        }
+
+        public override void Update(BaseEntity entity)
+        {
+            User user = entity as User;
+            if (user != null)
+            {
+                updated.Add(new ChangeEntity(this.CreateUpdateOleDb, entity));
+            }
+        }
+
+        public override void Delete(BaseEntity entity)
+        {
+            User user = entity as User;
+            if (user != null)
+            {
+                deleted.Add(new ChangeEntity(this.CreateDeleteOleDb, entity));
+            }
         }
     }
 }

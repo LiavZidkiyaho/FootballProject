@@ -7,6 +7,7 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Windows.System;
+using FootballProject.ViewModel.DB;
 
 namespace FootballProject.ViewModel
 {
@@ -15,6 +16,7 @@ namespace FootballProject.ViewModel
         private Model.User user = new Model.User();
         private List<Model.User> users = new List<Model.User>();
         private readonly UserService userService;
+        private UserDB db = new UserDB();
 
         private string name;
         private string username;
@@ -156,7 +158,9 @@ namespace FootballProject.ViewModel
 
             if (!userExists)
             {
-                users.Add(user);
+
+                db.Insert(user);
+                db.SaveChanges();
                 userService.CurrentUser = user;
             }
             UpdateUser();
@@ -164,7 +168,7 @@ namespace FootballProject.ViewModel
 
         private async void UpdateUser()
         {
-            await Shell.Current.GoToAsync("///rMainPage");
+            await Shell.Current.GoToAsync("///rViewUsers");
         }
     }
 }

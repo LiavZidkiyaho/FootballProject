@@ -22,13 +22,6 @@
              Title="ViewUsers"
              ContentTemplate="{DataTemplate local:View.ViewUsers}"
              Route="rViewUsers" />
-            </Tab>
-
-            <Tab Title="Sign Up">
-            <ShellContent
-             Title="ViewUsers"
-             ContentTemplate="{DataTemplate local:View.SignUp}"
-             Route="rSignUp" />
         </Tab>
 
     </TabBar>

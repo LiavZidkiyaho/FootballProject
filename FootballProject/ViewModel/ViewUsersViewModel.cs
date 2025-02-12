@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace FootballProject.ViewModel
 {
@@ -62,37 +63,15 @@ namespace FootballProject.ViewModel
                 observableUsers.Add(user);
             }
             RefreshCommand = new Command(Refresh);
-            DeleteCommand = new Command<User>((u) => { if (userService.DeleteUser(u)) Refresh(); });
-            EditCommand = new Command<User>(async (user) => { await EditMethodeCommand(user); });
-            UserDetailsCommand = new Command<User>(UserDetailsMethodeCommand);
+            AddCommand = new Command(addCommand);
         }
-
-        private async Task EditMethodeCommand(User user)
-        {
-            Dictionary<string, object> data = new Dictionary<string, object>();
-            data.Add("user", user);
-            await Shell.Current.GoToAsync("RegisterPage", data);
-        }
-
-        private void UserDetailsMethodeCommand(User user)
-        {
-            if (user == null) return;
-            Dictionary<string, object> data = new Dictionary<string, object>();
-            data.Add("user", user);
-            Shell.Current.GoToAsync("UserDetails", data);
-        }
+      
 
         public ICommand RefreshCommand
         { get; private set; }
 
-        public ICommand DeleteCommand
-        { get; private set; }
+        public ICommand AddCommand { get; private set; }
 
-        public ICommand EditCommand
-        { get; private set; }
-
-        public ICommand UserDetailsCommand
-        { get; private set; }
 
         public bool IsRefreshing
         {
@@ -109,6 +88,11 @@ namespace FootballProject.ViewModel
             ObservableUsers = null;
             ObservableUsers = new ObservableCollection<User>(users);
             IsRefreshing = false;
+        }
+
+        public async void addCommand()
+        {
+            await Shell.Current.GoToAsync("/rSignUp");
         }
 
         public bool IsAdmin

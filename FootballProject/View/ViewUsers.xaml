@@ -12,24 +12,21 @@
                     <DataTemplate x:DataType="model:User">
                         <Border StrokeThickness="1" StrokeShape="RoundRectangle 10" Padding="10" Margin="5">
                             <Grid ColumnDefinitions="*,*,*,*,*,*,*" RowDefinitions="*,*,*" >
-                                <Label Grid.Column="0" Text="{Binding Name}" TextColor="#D0B8A8" FontFamily="Impact" FontSize="Medium"/>
-                                <Label Grid.Column="1" Text="{Binding Username}" TextColor="#D0B8A8" FontFamily="Impact" FontSize="Medium"/>
-                                <Label Grid.Column="2" Text="{Binding Password}" TextColor="#D0B8A8" FontFamily="Impact" FontSize="Medium"/>
-                                <Label Grid.Column="3" Text="{Binding Email}" TextColor="#D0B8A8" FontFamily="Impact" FontSize="Medium"/>
-                              
-                                <Button IsVisible="{Binding IsAdmin, Source={x:RelativeSource AncestorType={x:Type viewmodel:ViewUsersViewModel},Mode=FindAncestorBindingContext}}"
-                                Grid.Row="2" Grid.Column="0" BackgroundColor="#D0B8A8" TextColor="White" FontSize="Medium" FontFamily="Impact" Text="Delete user" HeightRequest="35" CornerRadius="10" Margin="5"
-                                Command="{Binding DeleteCommand, Source={x:RelativeSource AncestorType={x:Type viewmodel:ViewUsersViewModel},Mode=FindAncestorBindingContext}}" 
-  		                            CommandParameter="{Binding .}"/>
-                                <Button IsVisible="{Binding IsAdmin, Source={x:RelativeSource AncestorType={x:Type viewmodel:ViewUsersViewModel},Mode=FindAncestorBindingContext}}"
-                                Grid.Row="2" Grid.Column="1" BackgroundColor="#D0B8A8" TextColor="White" FontSize="Medium" FontFamily="Impact" Text="Edit user" HeightRequest="35" CornerRadius="10" Margin="5"
-                                Command="{Binding EditCommand, Source={x:RelativeSource AncestorType={x:Type viewmodel:ViewUsersViewModel},Mode=FindAncestorBindingContext}}" 
-                                CommandParameter="{Binding .}"/>
+                                <Label Grid.Column="0" Text="{Binding Name}" TextColor="#8294C4" FontFamily="Impact" FontSize="Medium"/>
+                                <Label Grid.Column="1" Text="{Binding Username}" TextColor="#8294C4" FontFamily="Impact" FontSize="Medium"/>
+                                <Label Grid.Column="2" Text="{Binding Password}" TextColor="#8294C4" FontFamily="Impact" FontSize="Medium"/>
+                                <Label Grid.Column="3" Text="{Binding Email}" TextColor="#8294C4" FontFamily="Impact" FontSize="Medium"/>
+                                <Label Grid.Column="4" Text="{Binding Team}" TextColor="#8294C4" FontFamily="Impact" FontSize="Medium"/>
+                                <Label Grid.Column="5" Text="{Binding IsAdmin}" TextColor="#8294C4" FontFamily="Impact" FontSize="Medium"/>
                             </Grid>
                         </Border>
                     </DataTemplate>
                 </CollectionView.ItemTemplate>
             </CollectionView>
         </RefreshView>
+        <Button 
+        Grid.Row="2" BackgroundColor="#8294C4" TextColor="White" FontSize="Medium" FontFamily="Impact" Text="Add User" HeightRequest="35" CornerRadius="10" Margin="5"
+        Command="{Binding AddCommand, Source={x:RelativeSource AncestorType={x:Type viewmodel:ViewUsersViewModel}, Mode=FindAncestorBindingContext}}" 
+        CommandParameter="{Binding .}"/>
     </Grid>
 </ContentPage>
