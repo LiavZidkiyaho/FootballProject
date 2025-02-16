@@ -64,10 +64,14 @@ namespace FootballProject.ViewModel
             }
             RefreshCommand = new Command(Refresh);
             AddCommand = new Command(addCommand);
+            DeleteCommand = new Command<User>((u) => { if (userService.DeleteUser(u)) Refresh(); });
         }
       
 
         public ICommand RefreshCommand
+        { get; private set; }
+
+        public ICommand DeleteCommand
         { get; private set; }
 
         public ICommand AddCommand { get; private set; }

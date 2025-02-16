@@ -6,6 +6,7 @@
              xmlns:viewmodel="clr-namespace:FootballProject.ViewModel;assembly=FootballProject"
              Title="ViewUsers">
     <Grid Margin="10">
+        <ScrollView>
         <RefreshView Command="{Binding RefreshCommand}" IsRefreshing="{Binding IsRefreshing}" Grid.Row="2">
             <CollectionView ItemsSource="{Binding ObservableUsers}">
                 <CollectionView.ItemTemplate>
@@ -18,14 +19,22 @@
                                 <Label Grid.Column="3" Text="{Binding Email}" TextColor="#8294C4" FontFamily="Impact" FontSize="Medium"/>
                                 <Label Grid.Column="4" Text="{Binding Team}" TextColor="#8294C4" FontFamily="Impact" FontSize="Medium"/>
                                 <Label Grid.Column="5" Text="{Binding IsAdmin}" TextColor="#8294C4" FontFamily="Impact" FontSize="Medium"/>
+
+                                    <Button
+                                            Grid.Row="2" Grid.Column="0" BackgroundColor="#8294C4" TextColor="White" FontSize="Medium" FontFamily="Impact" Text="Delete user" HeightRequest="35" CornerRadius="10" Margin="5"
+                                            Command="{Binding DeleteCommand, Source={x:RelativeSource AncestorType={x:Type viewmodel:ViewUsersViewModel},Mode=FindAncestorBindingContext}}" 
+                                            CommandParameter="{Binding .}"/>
+                                    <Button Grid.Row="2" Grid.Column="1" BackgroundColor="#8294C4" TextColor="White" FontSize="Medium" FontFamily="Impact" Text="Edit user" HeightRequest="35" CornerRadius="10" Margin="5"
+                                            Command="{Binding EditCommand, Source={x:RelativeSource AncestorType={x:Type viewmodel:ViewUsersViewModel},Mode=FindAncestorBindingContext}}" 
+                                            CommandParameter="{Binding .}"/>
                             </Grid>
                         </Border>
                     </DataTemplate>
                 </CollectionView.ItemTemplate>
             </CollectionView>
         </RefreshView>
-        <Button 
-        Grid.Row="2" BackgroundColor="#8294C4" TextColor="White" FontSize="Medium" FontFamily="Impact" Text="Add User" HeightRequest="35" CornerRadius="10" Margin="5"
+        </ScrollView>
+        <Button  BackgroundColor="#8294C4" VerticalOptions="End" TextColor="White" FontSize="Medium" FontFamily="Impact" Text="Add User" HeightRequest="35" CornerRadius="10" Margin="5"
         Command="{Binding AddCommand, Source={x:RelativeSource AncestorType={x:Type viewmodel:ViewUsersViewModel}, Mode=FindAncestorBindingContext}}" 
         CommandParameter="{Binding .}"/>
     </Grid>

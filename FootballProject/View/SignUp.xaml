@@ -5,7 +5,7 @@
              Title="SignUp"
              BackgroundColor="#1E1E1E">
     <VerticalStackLayout FlowDirection="LeftToRight">
-        <Grid RowDefinitions="*,*,*,*,*">
+        <Grid RowDefinitions="*,*,*,*,*,*,*">
             <Label TextColor="Red" Grid.Row="0"
                    Text="{Binding ErrorMessage}"
                    IsVisible="{Binding HasError}"
@@ -51,6 +51,21 @@
                        WidthRequest="200"
                        Keyboard="Email"
                        Text="{Binding Email}"/>
+            </HorizontalStackLayout>
+
+            <HorizontalStackLayout Grid.Row="5">
+                <Label TextColor="White" Padding="15" Text="Team:" FontSize="15" />
+                <Entry x:Name="team"
+                       PlaceholderColor="White"
+                       TextColor="White"
+                       WidthRequest="200"
+                       Text="{Binding Team}"/>
+            </HorizontalStackLayout>
+
+            <HorizontalStackLayout Grid.Row="6" RadioButtonGroup.GroupName="yn" RadioButtonGroup.SelectedValue="{Binding IsAdmin}">
+                <Label TextColor="White" Padding="15" Text="isAdmin:" FontSize="15" />
+                <RadioButton Content="Yes" Value="Yes"/>
+                <RadioButton Content="No" Value="No" IsChecked="True"/>
             </HorizontalStackLayout>
 
             <Button Text="Register"

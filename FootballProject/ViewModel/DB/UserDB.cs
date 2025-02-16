@@ -14,7 +14,7 @@ namespace FootballProject.ViewModel.DB
         protected override string CreateInsertOleDb(BaseEntity entity)
         {
             var user = (User)entity;
-            return $"INSERT INTO users (FullName, Username, UserPassword, Email) VALUES ('{user.Name}', '{user.Username}', '{user.Password}', '{user.Email}')";
+            return $"INSERT INTO users (FullName, Username, UserPassword, Email, team, admin) VALUES ('{user.Name}', '{user.Username}', '{user.Password}', '{user.Email}','{user.Team}','{user.IsAdmin}')";
         }
 
         protected override string CreateUpdateOleDb(BaseEntity entity)
@@ -38,7 +38,7 @@ namespace FootballProject.ViewModel.DB
             user.Password = reader.GetString(3);
             user.Email = reader.GetString(4);
             user.Team = reader.GetString(5);
-            user.IsAdmin = reader.GetBoolean(6);
+            user.IsAdmin = reader.GetString(6);
             return user;
         }
 

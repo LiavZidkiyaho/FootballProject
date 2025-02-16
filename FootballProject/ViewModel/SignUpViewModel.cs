@@ -22,6 +22,8 @@ namespace FootballProject.ViewModel
         private string username;
         private string password;
         private string email;
+        private string team;
+        private string isAdmin = "No";
         private string errorMessage;
 
         public SignUpViewModel(UserService service)
@@ -99,6 +101,25 @@ namespace FootballProject.ViewModel
             }
         }
 
+        public string IsAdmin 
+        { 
+            get => isAdmin;
+            set
+            {
+                isAdmin = value;
+                OnPropertyChanged(nameof(IsAdmin));
+            }
+        }
+        public string Team 
+        {
+            get => team;
+            set
+            {
+                team = value;
+                OnPropertyChanged(nameof(Team));
+            }
+        }
+
         private bool ValidName() => !string.IsNullOrWhiteSpace(Name) && Name.Length >= 3;
 
         private bool ValidUsername() => !string.IsNullOrWhiteSpace(Username) && Username.Length >= 3;
@@ -133,6 +154,8 @@ namespace FootballProject.ViewModel
 
         public ICommand AddUserCommand { get; private set; }
 
+
+
         private void AddNewUser()
         {
             user = new Model.User()
@@ -141,7 +164,9 @@ namespace FootballProject.ViewModel
                 Name = this.Name,
                 Username = this.Username,
                 Password = this.Password,
-                Email = this.Email
+                Email = this.Email,
+                Team = this.Team,
+                IsAdmin = this.IsAdmin
             };
 
             bool userExists = false;
