@@ -20,7 +20,7 @@ namespace FootballProject.ViewModel.DB
         protected override string CreateUpdateOleDb(BaseEntity entity)
         {
             var user = (User)entity;
-            return $"UPDATE users SET Username = '{user.Username}', UserPassword = '{user.Password}' WHERE id = {user.Id}";
+            return $"UPDATE users SET FullName = '{user.Name}', Username = '{user.Username}', UserPassword = '{user.Password}', Email = '{user.Email}', team = '{user.Team}', admin = '{user.IsAdmin}' WHERE id = {user.Id}";
         }
 
         protected override string CreateDeleteOleDb(BaseEntity entity)

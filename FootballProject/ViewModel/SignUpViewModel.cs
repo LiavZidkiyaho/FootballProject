@@ -11,12 +11,14 @@ using FootballProject.ViewModel.DB;
 
 namespace FootballProject.ViewModel
 {
+    [QueryProperty(nameof(EditUser), "user")]
     public class SignUpViewModel : ViewModelBase
     {
         private Model.User user = new Model.User();
         private List<Model.User> users = new List<Model.User>();
         private readonly UserService userService;
         private UserDB db = new UserDB();
+        private Model.User? editUser;
 
         private string name;
         private string username;
@@ -29,7 +31,8 @@ namespace FootballProject.ViewModel
         public SignUpViewModel(UserService service)
         {
             this.userService = service;
-            AddUserCommand = new Command(AddNewUser);
+            users = userService.GetAllUsers();
+            AddUserCommand = new Command<string>(AddnewUser);
         }
 
         public string Name
@@ -154,46 +157,109 @@ namespace FootballProject.ViewModel
 
         public ICommand AddUserCommand { get; private set; }
 
-
-
-        private void AddNewUser()
+        public Model.User? EditUser
         {
-            user = new Model.User()
+            get { return editUser; }
+            set
             {
-                Id = users.Count + 1, // Auto-increment ID
-                Name = this.Name,
-                Username = this.Username,
-                Password = this.Password,
-                Email = this.Email,
-                Team = this.Team,
-                IsAdmin = this.IsAdmin
-            };
-
-            bool userExists = false;
-
-            for (int i = 0; i < users.Count; i++)
-            {
-                if (user.Id == users[i].Id)
+                if (value == null) editUser = null;
+                if (value != null && EditUser != value)
                 {
-                    users[i] = user;
-                    userExists = true;
-                    break;
+                    editUser = value;
+                    user = new Model.User();
+                    user = value;
+                    Name = user.Name;
+                    Username = user.Username;
+                    Password = user.Password;
+                    Email = user.Email;
+                    Team = user.Team;
+                    isAdmin = user.IsAdmin;
+                    OnPropertyChanged(nameof(EditUser));
+                    HandleError();
+                }
+                else
+                {
+                    editUser = null;
+                    user = new Model.User();
+                    user = value;
+                    Name = null;
+                    Username = null;
+                    Password = null;
+                    Email = null;
+                    Team = null;
+                    OnPropertyChanged(nameof(EditUser));
+                    HandleError();
                 }
             }
-
-            if (!userExists)
-            {
-
-                db.Insert(user);
-                db.SaveChanges();
-                userService.CurrentUser = user;
-            }
-            UpdateUser();
         }
 
-        private async void UpdateUser()
+        private async void AddnewUser(string name)
         {
-            await Shell.Current.GoToAsync("///rViewUsers");
+            if (EditUser != null && user != null && EditUser.Id == user.Id)
+            {
+                OnPropertyChanged(nameof(AddnewUser));
+                HandleError();
+                int i = 0;
+                for (; i < users.Count; i++)
+                {
+                    if (EditUser.Id == users[i].Id)
+                    {
+                        users[i].Name = this.Name;
+                        users[i].Username = this.Username;
+                        users[i].Password = this.Password;
+                        users[i].Email = this.Email;
+                        users[i].Team = this.Team;
+                        users[i].IsAdmin = this.IsAdmin;
+
+                        break;
+                    }
+                }
+
+                bool f = userService.UpdateUser(users[i]);
+                if (f)
+                {
+                    await Shell.Current.DisplayAlert(title: "Updated user or not", message: "user updated succsesfully", cancel: "Go back");
+                    await Shell.Current.GoToAsync("///rViewUsers");
+                    EditUser = null;
+
+                }
+                else Shell.Current.DisplayAlert(title: "Updated user or not", message: "Error, user was not updated", cancel: "Cancel");
+                EditUser = null;
+
+            }
+            else
+            {
+                OnPropertyChanged(nameof(AddnewUser));
+                HandleError();
+                user = new Model.User()
+                {
+                    Id = users.Count + 1,
+                    Name = this.Name,
+                    Username = this.Username,
+                    Password = this.Password,
+                    Email = this.Email,
+                    Team = this.Team,
+                    IsAdmin = this.IsAdmin,
+                };
+
+
+                bool f = userService.AddUser(user);
+                if (f)
+                {
+                    await Shell.Current.DisplayAlert(title: "Added user or not", message: "Added user succsesfully", cancel: "Go back");
+                    await Shell.Current.GoToAsync("///StatisticsPage");
+
+                }
+                else Shell.Current.DisplayAlert(title: "Added user or not", message: "Error, user was not added", cancel: "Cancel");
+                EditUser = null;
+
+
+            }
         }
+
+            private async void UpdateUser()
+            {
+                await Shell.Current.GoToAsync("///rViewUsers");
+            }
     }
 }

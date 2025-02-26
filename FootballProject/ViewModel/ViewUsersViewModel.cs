@@ -65,10 +65,14 @@ namespace FootballProject.ViewModel
             RefreshCommand = new Command(Refresh);
             AddCommand = new Command(addCommand);
             DeleteCommand = new Command<User>((u) => { if (userService.DeleteUser(u)) Refresh(); });
+            EditCommand = new Command<User>(async (user) => { await EditMethodeCommand(user); });
         }
       
 
         public ICommand RefreshCommand
+        { get; private set; }
+
+        public ICommand EditCommand
         { get; private set; }
 
         public ICommand DeleteCommand
@@ -97,6 +101,13 @@ namespace FootballProject.ViewModel
         public async void addCommand()
         {
             await Shell.Current.GoToAsync("/rSignUp");
+        }
+
+        private async Task EditMethodeCommand(User user)
+        {
+            Dictionary<string, object> data = new Dictionary<string, object>();
+            data.Add("user", user);
+            await Shell.Current.GoToAsync("rSignUp", data);
         }
 
         public bool IsAdmin
