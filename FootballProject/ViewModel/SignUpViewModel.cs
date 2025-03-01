@@ -247,7 +247,7 @@ namespace FootballProject.ViewModel
                 if (f)
                 {
                     await Shell.Current.DisplayAlert(title: "Added user or not", message: "Added user succsesfully", cancel: "Go back");
-                    await Shell.Current.GoToAsync("///StatisticsPage");
+                    await Shell.Current.GoToAsync("///rViewUsers");
 
                 }
                 else Shell.Current.DisplayAlert(title: "Added user or not", message: "Error, user was not added", cancel: "Cancel");
