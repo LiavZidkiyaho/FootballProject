@@ -195,6 +195,7 @@ namespace FootballProject.ViewModel
 
         private async void AddnewUser(string name)
         {
+            users = userService.GetAllUsers();
             if (EditUser != null && user != null && EditUser.Id == user.Id)
             {
                 OnPropertyChanged(nameof(AddnewUser));
