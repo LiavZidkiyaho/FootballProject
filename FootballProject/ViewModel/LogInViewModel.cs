@@ -88,7 +88,7 @@ namespace FootballProject.ViewModel
         {
             if (IsValidUser())
             {
-                User = service.GetUser(Username);
+                User = await service.GetUser(Username);
                 service.CurrentUser = User;
                 Dictionary<string, object> data = new Dictionary<string, object>();
                 data.Add("User", User);

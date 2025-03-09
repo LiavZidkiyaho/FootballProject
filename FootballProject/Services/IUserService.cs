@@ -20,14 +20,14 @@ namespace FootballProject.Services
             return new List<User>(users);
         }
 
-        public User GetUser(string username)
+        public async Task<User> GetUser(string username)
         {
-            return userDB.SelectByUsername(username);
+            return await userDB.SelectByUsername(username);
         }
 
-        public User GetUserByID(int id)
+        public async Task<User> GetUserByID(int id)
         {
-            return userDB.SelectById(id);
+            return await userDB.SelectById(id);
         }
 
         public User CurrentUser
@@ -49,33 +49,33 @@ namespace FootballProject.Services
             return CurrentUser;
         }
 
-        public bool AddUser(User user)
+        public async Task<bool> AddUser(User user)
         {
             userDB.Insert(user);
             userDB.SaveChanges();
-            users = userDB.SelectAllUsers(); // Refresh the local list
+            users = await userDB.SelectAllUsers(); // Refresh the local list
             return true;
         }
 
-        public bool UpdateUser(User user)
+        public async Task<bool> UpdateUser(User user)
         {
             userDB.Update(user);
             userDB.SaveChanges();
-            users = userDB.SelectAllUsers(); // Refresh the local list
+            users = await userDB.SelectAllUsers(); // Refresh the local list
             return true;
         }
 
-        public bool DeleteUser(User user)
+        public async Task<bool> DeleteUser(User user)
         {
             userDB.Delete(user);
             userDB.SaveChanges();
-            users = userDB.SelectAllUsers(); // Refresh the local list
+            users = await userDB.SelectAllUsers(); // Refresh the local list
             return true;
         }
 
-        public List<User> GetAllUsers()
+        public async Task<List<User>> GetAllUsers()
         {
-            users = userDB.SelectAllUsers();
+            users = await userDB.SelectAllUsers();
             return users;
         }
     }

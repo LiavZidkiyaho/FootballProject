@@ -42,26 +42,29 @@ namespace FootballProject.ViewModel.DB
             return user;
         }
 
-        public List<User> SelectAllUsers()
+        public async Task<List<User>> SelectAllUsers()
         {
             string query = "SELECT * FROM users";
-            var result = Select(query);
-            return result.ConvertAll(x => (User)x);
+            List<BaseEntity> list = await base.Select(query);
+            return new UserList(list);
         }
 
-        public User SelectById(int id)
+        public async Task<User> SelectById(int id)
         {
             string query = $"SELECT * FROM users WHERE id = {id}";
-            var result = Select(query);
-            return result.Count > 0 ? (User)result[0] : null;
+            List<BaseEntity> list = await base.Select(query);
+            if(list != null && list.Count == 1)
+                return list[0] as User;
+            return null;
         }
 
-        public User SelectByUsername(string username)
+        public async Task<User> SelectByUsername(string username)
         {
             string query = $"SELECT * FROM users WHERE Username = '{username}'";
-            var result = Select(query);
-            return result.Count > 0 ? (User)result[0] : null;
-
+            List<BaseEntity> list = await base.Select(query);
+            if (list != null && list.Count == 1)
+                return list[0] as User;
+            return null;
         }
 
         public override void Insert(BaseEntity entity)

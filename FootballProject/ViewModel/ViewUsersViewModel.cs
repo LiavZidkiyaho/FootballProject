@@ -89,10 +89,10 @@ namespace FootballProject.ViewModel
                 if (isRefreshing != value) { isRefreshing = value; OnPropertyChanged(); }
             }
         }
-        public void Refresh()
+        public async void Refresh()
         {
             IsRefreshing = true;
-            users = userService.GetAllUsers();
+            users = await userService.GetAllUsers();
             ObservableUsers = null;
             ObservableUsers = new ObservableCollection<User>(users);
             IsRefreshing = false;

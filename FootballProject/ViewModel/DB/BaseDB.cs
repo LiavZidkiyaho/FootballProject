@@ -30,7 +30,7 @@ namespace FootballProject.ViewModel.DB
             command = new OleDbCommand();
         }
 
-        protected List<BaseEntity> Select(string query)
+        protected async Task<List<BaseEntity>> Select(string query)
         {
             List<BaseEntity> list = new List<BaseEntity>();
 
@@ -39,7 +39,7 @@ namespace FootballProject.ViewModel.DB
                 command.Connection = connection;
                 command.CommandText = query;
                 connection.Open();
-                reader = command.ExecuteReader();
+                reader = (OleDbDataReader)await command.ExecuteReaderAsync();
 
                 while (reader.Read())
                 {
@@ -87,7 +87,7 @@ namespace FootballProject.ViewModel.DB
             }
         }
 
-        public int SaveChanges()
+        public async Task<int> SaveChanges()
         {
             int records_affected = 0;
             OleDbCommand cmd = new OleDbCommand();
@@ -99,20 +99,20 @@ namespace FootballProject.ViewModel.DB
                 foreach (var item in inserted)
                 {
                     cmd.CommandText = item.CreateOleDb(item.Entity);
-                    records_affected += cmd.ExecuteNonQuery();
+                    records_affected += await cmd.ExecuteNonQueryAsync();
 
                     command.CommandText = "Select @@Identity";
-                    item.Entity.Id = (int)command.ExecuteScalar();
+                    item.Entity.Id = (int)command.ExecuteScalarAsync().Result;
                 }
                 foreach (var item in updated)
                 {
                     cmd.CommandText = item.CreateOleDb(item.Entity);
-                    records_affected += cmd.ExecuteNonQuery();
+                    records_affected += await cmd.ExecuteNonQueryAsync();
                 }
                 foreach (var item in deleted)
                 {
                     cmd.CommandText = item.CreateOleDb(item.Entity);
-                    records_affected += cmd.ExecuteNonQuery();
+                    records_affected += await cmd.ExecuteNonQueryAsync();
                 }
             }
             catch (Exception e)

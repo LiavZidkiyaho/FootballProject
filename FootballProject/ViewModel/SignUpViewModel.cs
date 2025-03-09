@@ -195,7 +195,7 @@ namespace FootballProject.ViewModel
 
         private async void AddnewUser(string name)
         {
-            users = userService.GetAllUsers();
+            users = await userService.GetAllUsers();
             if (EditUser != null && user != null && EditUser.Id == user.Id)
             {
                 OnPropertyChanged(nameof(AddnewUser));
@@ -216,7 +216,7 @@ namespace FootballProject.ViewModel
                     }
                 }
 
-                bool f = userService.UpdateUser(users[i]);
+                bool f = await userService.UpdateUser(users[i]);
                 if (f)
                 {
                     await Shell.Current.DisplayAlert(title: "Updated user or not", message: "user updated succsesfully", cancel: "Go back");
