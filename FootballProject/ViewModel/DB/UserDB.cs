@@ -46,7 +46,7 @@ namespace FootballProject.ViewModel.DB
         {
             string query = "SELECT * FROM users";
             List<BaseEntity> list = await base.Select(query);
-            return new UserList(list);
+            return (list).Cast<User>().ToList(); ;
         }
 
         public async Task<User> SelectById(int id)

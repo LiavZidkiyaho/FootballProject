@@ -31,7 +31,7 @@ namespace FootballProject.ViewModel
         public SignUpViewModel(UserService service)
         {
             this.userService = service;
-            users = userService.GetAllUsers();
+            service.init();
             AddUserCommand = new Command<string>(AddnewUser);
         }
 
@@ -244,7 +244,7 @@ namespace FootballProject.ViewModel
                 };
 
 
-                bool f = userService.AddUser(user);
+                bool f = await userService.AddUser(user);
                 if (f)
                 {
                     await Shell.Current.DisplayAlert(title: "Added user or not", message: "Added user succsesfully", cancel: "Go back");

@@ -12,7 +12,12 @@ namespace FootballProject.Services
 
         public UserService()
         {
-            users = userDB.SelectAllUsers();
+
+        }
+
+        public async Task init()
+        {
+             users = (await userDB.SelectAllUsers()).Cast<User>().ToList();
         }
 
         public List<User> GetUsersList()

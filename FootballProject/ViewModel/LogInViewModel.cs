@@ -22,7 +22,7 @@ namespace FootballProject.ViewModel
         {
             this.service = service;
             LoginUserCommand = new Command(LoginUser);
-            users = service.GetAllUsers();
+            service.init();
             Username = "Bruh";
             Password = "Bruh";
         }

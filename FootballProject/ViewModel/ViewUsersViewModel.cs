@@ -56,7 +56,7 @@ namespace FootballProject.ViewModel
         public ViewUsersViewModel(UserService service)
         {
             userService = service;
-            users = userService.GetAllUsers(); //original List
+            LoadNigger();
             observableUsers = new ObservableCollection<User>();
             foreach (User user in users)
             {
@@ -64,10 +64,15 @@ namespace FootballProject.ViewModel
             }
             RefreshCommand = new Command(Refresh);
             AddCommand = new Command(addCommand);
-            DeleteCommand = new Command<User>((u) => { if (userService.DeleteUser(u)) Refresh(); });
+            DeleteCommand = new Command<User>(async (u) => { if (await userService.DeleteUser(u)) Refresh(); });
             EditCommand = new Command<User>(async (user) => { await EditMethodeCommand(user); });
         }
-      
+
+        public async void LoadNigger()
+        {
+            await userService.init();
+            users = await userService.GetAllUsers();
+        }
 
         public ICommand RefreshCommand
         { get; private set; }
