@@ -9,6 +9,7 @@ namespace FootballProject
             InitializeComponent();
             Routing.RegisterRoute("rHomePage", typeof(HomePage));
             Routing.RegisterRoute("rSignUp", typeof(SignUp));
+            Routing.RegisterRoute("rLogIn", typeof(LogIn));
         }
     }
 }

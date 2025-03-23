@@ -2,11 +2,70 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="FootballProject.View.HomePage"
-             Title="HomePage">
-    <VerticalStackLayout FlowDirection="RightToLeft">
-        <Label 
-            Text="Welcome to .NET MAUI!"
-            VerticalOptions="Center" 
-            HorizontalOptions="Center" />
-    </VerticalStackLayout>
+             xmlns:model="clr-namespace:FootballProject.Model;assembly=FootballProject"
+             xmlns:viewmodel="clr-namespace:FootballProject.ViewModel;assembly=FootballProject"
+             Title="HomePage"
+             BackgroundColor="#1E1E1E">
+    <Grid Margin="10">
+        <!-- Define two rows, one for the content and one for the logout button -->
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!-- Log Out Button on the top right -->
+        <Button Grid.Row="0"
+                BackgroundColor="#8294C4"
+                TextColor="White"
+                FontSize="Medium"
+                Text="Log Out"
+                HeightRequest="35"
+                CornerRadius="10"
+                Margin="5"
+                Command="{Binding LogoutCommand}"
+                HorizontalOptions="End"
+                VerticalOptions="Start" />
+
+        <!-- User Information displayed below the logout button -->
+        <ScrollView Grid.Row="1">
+            <StackLayout Spacing="20" Padding="10">
+                <Label Text="User Information"
+                       FontSize="Large"
+                       FontAttributes="Bold"
+                       TextColor="White"
+                       HorizontalOptions="Center"/>
+
+                <!-- User Details with proper binding -->
+                <Label Text="{Binding User.Name, StringFormat='Your Name: {0}'}" 
+                       TextColor="White"
+                       FontSize="Medium"
+                       HorizontalOptions="Start" />
+
+                <Label Text="{Binding User.Username, StringFormat='Your User Name: {0}'}" 
+                       TextColor="White"
+                       FontSize="Medium"
+                       HorizontalOptions="Start" />
+
+                <Label Text="{Binding User.Email, StringFormat='Your Email: {0}'}" 
+                       TextColor="White"
+                       FontSize="Medium"
+                       HorizontalOptions="Start" />
+
+                <Label Text="{Binding User.Team, StringFormat='Your Team: {0}'}" 
+                       TextColor="White"
+                       FontSize="Medium"
+                       HorizontalOptions="Start" />
+
+                <Label Text="{Binding User.IsAdmin, StringFormat='Your Admin Status: {0}'}" 
+                       TextColor="White"
+                       FontSize="Medium"
+                       HorizontalOptions="Start" />
+                
+                <Label Text="{Binding User.Role, StringFormat='Your Role: {0}'}" 
+                      TextColor="White"
+                      FontSize="Medium"
+                      HorizontalOptions="Start" />
+            </StackLayout>
+        </ScrollView>
+    </Grid>
 </ContentPage>
