@@ -39,6 +39,7 @@ namespace FootballProject.ViewModel.DB
             user.Email = reader.GetString(4);
             user.Team = reader.GetString(5);
             user.IsAdmin = reader.GetString(6);
+            user.Role = reader.GetString(7);
             return user;
         }
 

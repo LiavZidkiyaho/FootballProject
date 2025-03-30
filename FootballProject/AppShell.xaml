@@ -31,6 +31,12 @@
             Route="rPlayerProfile" />
         </Tab>
 
+        <Tab Title="Finance Page">
+            <ShellContent
+            Title="Finance Page"
+            ContentTemplate="{DataTemplate local:View.FinancePage}"
+            Route="rFinancePage" />
+        </Tab>
     </TabBar>
 
 </Shell>

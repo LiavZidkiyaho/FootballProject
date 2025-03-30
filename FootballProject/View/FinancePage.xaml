@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="FootballProject.View.FinancePage"
+             Title="Finance"
+             BackgroundColor="#1E1E1E">
+
+    <ScrollView>
+        <StackLayout Spacing="20" Padding="10">
+            <!-- Overall Bank Balance -->
+            <Frame WidthRequest="1700" HeightRequest="150" CornerRadius="30" BackgroundColor="#8294C4"
+                   HorizontalOptions="Center">
+                <Label Text="Overall Bank Balance\n999,999,999 €" TextColor="White" FontSize="Large" FontAttributes="Bold" 
+                       HorizontalTextAlignment="Start" Padding="20"/>
+            </Frame>
+
+            <!-- Profit/Loss This Season -->
+            <Frame WidthRequest="1700" HeightRequest="150" CornerRadius="30" BackgroundColor="#8294C4"
+                   HorizontalOptions="Center">
+                <Label Text="Profit/Loss This Season\n999,999,999 €" TextColor="White" FontSize="Large" FontAttributes="Bold" 
+                       HorizontalTextAlignment="Start" Padding="20"/>
+            </Frame>
+
+            <!-- Transfer Budget & Wage Budget -->
+            <Grid ColumnSpacing="20">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <!-- Transfer Budget -->
+                <Frame Grid.Column="0" WidthRequest="850" HeightRequest="250" CornerRadius="30" BackgroundColor="#8294C4">
+                    <StackLayout Padding="20">
+                        <Label Text="Transfer Budget\n999,999,999 €" TextColor="White" FontSize="Large" FontAttributes="Bold"/>
+                        <Label Text="80% of transfer revenue is made available" TextColor="White" FontSize="Medium"/>
+                    </StackLayout>
+                </Frame>
+
+                <!-- Wage Budget -->
+                <Frame Grid.Column="1" WidthRequest="850" HeightRequest="250" CornerRadius="30" BackgroundColor="#8294C4">
+                    <StackLayout Padding="20">
+                        <Label Text="Wage Budget\n999,999,999 €" TextColor="White" FontSize="Large" FontAttributes="Bold"/>
+                        <Label Text="Currently spending 999,999 € per month" TextColor="White" FontSize="Medium"/>
+                    </StackLayout>
+                </Frame>
+            </Grid>
+        </StackLayout>
+    </ScrollView>
+</ContentPage>

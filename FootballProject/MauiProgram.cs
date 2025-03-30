@@ -35,6 +35,9 @@ namespace FootballProject
             builder.Services.AddSingleton<HomePage>();
             builder.Services.AddSingleton<HomePageViewModel>();
 
+            builder.Services.AddSingleton<FinancePage>();
+            builder.Services.AddSingleton<FinancePageViewModel>();
+
             builder.Services.AddSingleton<UserService>();
             return builder.Build();
         }
