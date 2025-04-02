@@ -30,7 +30,7 @@ namespace FootballProject.ViewModel
         {
             // Perform logout logic
             //_userService.Logout();
-            await Shell.Current.GoToAsync("//rLogIn");
+            await Shell.Current.GoToAsync("///rLogIn");
         }
     }
 }

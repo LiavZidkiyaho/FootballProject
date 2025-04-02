@@ -5,45 +5,42 @@
              Title="Finance"
              BackgroundColor="#1E1E1E">
 
-    <ScrollView>
-        <StackLayout Spacing="20" Padding="10">
-            <!-- Overall Bank Balance -->
-            <Frame WidthRequest="1700" HeightRequest="150" CornerRadius="30" BackgroundColor="#8294C4"
-                   HorizontalOptions="Center">
-                <Label Text="Overall Bank Balance\n999,999,999 €" TextColor="White" FontSize="Large" FontAttributes="Bold" 
-                       HorizontalTextAlignment="Start" Padding="20"/>
-            </Frame>
+    <!-- Add Padding and Margin to the Grid -->
+    <Grid Padding="30">
+        <!-- Define 2 Rows with equal height, and 3 Columns -->
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
 
-            <!-- Profit/Loss This Season -->
-            <Frame WidthRequest="1700" HeightRequest="150" CornerRadius="30" BackgroundColor="#8294C4"
-                   HorizontalOptions="Center">
-                <Label Text="Profit/Loss This Season\n999,999,999 €" TextColor="White" FontSize="Large" FontAttributes="Bold" 
-                       HorizontalTextAlignment="Start" Padding="20"/>
-            </Frame>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <!-- Left frames will take full width -->
+            <ColumnDefinition Width="*" />
+            <!-- Empty space in the middle -->
+            <ColumnDefinition Width="500" />
+            <!-- Right vertical frame -->
+        </Grid.ColumnDefinitions>
 
-            <!-- Transfer Budget & Wage Budget -->
-            <Grid ColumnSpacing="20">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="*"/>
-                </Grid.ColumnDefinitions>
+        <!-- Overall Bank Balance Frame -->
+        <Frame Grid.ColumnSpan="2" Grid.Row="0" Grid.Column="0" CornerRadius="30" BackgroundColor="#8294C4"
+               HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand" Margin="20">
+            <Label Text="Overall Bank Balance: 999,999,999 €" TextColor="White" FontSize="Large" FontAttributes="Bold" 
+                   HorizontalTextAlignment="Start" VerticalTextAlignment="Start" Padding="20"/>
+        </Frame>
 
-                <!-- Transfer Budget -->
-                <Frame Grid.Column="0" WidthRequest="850" HeightRequest="250" CornerRadius="30" BackgroundColor="#8294C4">
-                    <StackLayout Padding="20">
-                        <Label Text="Transfer Budget\n999,999,999 €" TextColor="White" FontSize="Large" FontAttributes="Bold"/>
-                        <Label Text="80% of transfer revenue is made available" TextColor="White" FontSize="Medium"/>
-                    </StackLayout>
-                </Frame>
+        <!-- Profit/Loss This Season Frame -->
+        <Frame Grid.ColumnSpan="2" Grid.Row="1" Grid.Column="0" CornerRadius="30" BackgroundColor="#8294C4"
+               HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand" Margin="20">
+            <Label Text="Profit/Loss This Season: 999,999,999 €" TextColor="White" FontSize="Large" FontAttributes="Bold" 
+                   HorizontalTextAlignment="Start" VerticalTextAlignment="Start" Padding="20"/>
+        </Frame>
 
-                <!-- Wage Budget -->
-                <Frame Grid.Column="1" WidthRequest="850" HeightRequest="250" CornerRadius="30" BackgroundColor="#8294C4">
-                    <StackLayout Padding="20">
-                        <Label Text="Wage Budget\n999,999,999 €" TextColor="White" FontSize="Large" FontAttributes="Bold"/>
-                        <Label Text="Currently spending 999,999 € per month" TextColor="White" FontSize="Medium"/>
-                    </StackLayout>
-                </Frame>
-            </Grid>
-        </StackLayout>
-    </ScrollView>
+        <!-- Vertical Right Frame -->
+        <Frame Grid.Row="0" Grid.RowSpan="2" Grid.Column="2" CornerRadius="30" BackgroundColor="#8294C4"
+               HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand" Margin="20">
+            <Label Text="Vertical Border" TextColor="White" FontSize="Large" FontAttributes="Bold" 
+                   HorizontalTextAlignment="Center" VerticalTextAlignment="Center" Padding="20"/>
+        </Frame>
+    </Grid>
 </ContentPage>

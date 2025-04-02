@@ -31,6 +31,13 @@
             Route="rPlayerProfile" />
         </Tab>
 
+        <Tab Title="Players Search">
+            <ShellContent
+            Title="Players Search"
+            ContentTemplate="{DataTemplate local:View.PlayersSearch}"
+            Route="rPlayersSearch" />
+        </Tab>
+
         <Tab Title="Finance Page">
             <ShellContent
             Title="Finance Page"
