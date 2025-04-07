@@ -5,17 +5,17 @@
              x:Class="FootballProject.View.PlayersSearch"
              Title="Players Search"
              BackgroundColor="#1E1E1E">
-
-
-    <!-- Add Padding and Margin to the Grid -->
+    <ContentPage.BindingContext>
+        <vm:PlayersSearchViewModel />
+    </ContentPage.BindingContext>
     <Grid Padding="30">
         <!-- Define Rows for each filter, Search Bar and Results -->
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="10*" />
         </Grid.RowDefinitions>
 
         <!-- Define Columns for Labels and Inputs -->
@@ -31,16 +31,16 @@
             <Picker.ItemsSource>
                 <x:Array Type="{x:Type x:String}">
                     <x:String>Any</x:String>
-                    <x:String>Full Name</x:String>
+                    <x:String>full_name</x:String>
                     <x:String>Nationality</x:String>
-                    <x:String>Date of Birth</x:String>
-                    <x:String>Team</x:String>
-                    <x:String>User Value</x:String>
-                    <x:String>Wage</x:String>
-                    <x:String>Height</x:String>
-                    <x:String>Weight</x:String>
-                    <x:String>Foot</x:String>
-                    <x:String>Position</x:String>
+                    <x:String>dob</x:String>
+                    <x:String>team</x:String>
+                    <x:String>UserValue</x:String>
+                    <x:String>wage</x:String>
+                    <x:String>height</x:String>
+                    <x:String>weight</x:String>
+                    <x:String>foot</x:String>
+                    <x:String>position</x:String>
                 </x:Array>
             </Picker.ItemsSource>
         </Picker>
@@ -69,12 +69,15 @@
 
         <!-- Search Results -->
         <Frame Grid.Row="4" Grid.ColumnSpan="2" CornerRadius="30" BackgroundColor="#8294C4"
-               HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand" Margin="20">
+               Margin="20">
             <ScrollView>
                 <CollectionView ItemsSource="{Binding Players}">
                     <CollectionView.ItemTemplate>
                         <DataTemplate>
-                            <Frame CornerRadius="15" BackgroundColor="#1E1E1E" Padding="10" Margin="5">
+                            <Frame  CornerRadius="15" BackgroundColor="#1E1E1E">
+                                <Frame.GestureRecognizers>
+                                    <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type vm:PlayersSearchViewModel}}, Path=NavigateToPlayerProfileCommand}" CommandParameter="{Binding .}" />
+                                </Frame.GestureRecognizers>
                                 <StackLayout Orientation="Vertical">
                                     <StackLayout Orientation="Horizontal">
                                         <Label Text="Full Name: " TextColor="White" FontSize="Medium" 
