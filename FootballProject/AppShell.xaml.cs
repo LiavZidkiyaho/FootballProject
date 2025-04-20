@@ -10,6 +10,7 @@ namespace FootballProject
             Routing.RegisterRoute("rHomePage", typeof(HomePage));
             Routing.RegisterRoute("rSignUp", typeof(SignUp));
             Routing.RegisterRoute("rLogIn", typeof(LogIn));
+            Routing.RegisterRoute("rPlayerProfile", typeof(PlayerProfile));
         }
     }
 }

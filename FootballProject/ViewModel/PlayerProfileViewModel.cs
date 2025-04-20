@@ -1,6 +1,7 @@
 ﻿using FootballProject.Model;
 using System;
 using System.Collections.Generic;
+using System.Windows.Input;
 
 namespace FootballProject.ViewModel
 {
@@ -11,7 +12,9 @@ namespace FootballProject.ViewModel
 
         public PlayerProfileViewModel()
         {
+            BackCommand = new Command(OnBackCommandExecuted);
         }
+        public ICommand BackCommand { get; }
 
         public Player Player
         {
@@ -21,6 +24,11 @@ namespace FootballProject.ViewModel
                 player = value;
                 OnPropertyChanged();
             }
+        }
+
+        private async void OnBackCommandExecuted()
+        {
+            await Shell.Current.GoToAsync("///rPlayersSearch");
         }
     }
 }

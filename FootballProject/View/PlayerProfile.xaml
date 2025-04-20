@@ -5,106 +5,137 @@
              x:Class="FootballProject.View.PlayerProfile"
              Title="PlayerProfile"
              BackgroundColor="#1E1E1E">
-    <ContentPage.BindingContext>
-        <vm:PlayerProfileViewModel />
-    </ContentPage.BindingContext>
 
-    <ScrollView>
-        <StackLayout Spacing="20" Padding="10">
+    <Grid Padding="30" RowSpacing="20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
 
-            <Frame WidthRequest="1798" HeightRequest="302" CornerRadius="50" BorderColor="#8294C4" BackgroundColor="#8294C4"
-                   HorizontalOptions="Center" VerticalOptions="Start">
-                <Grid>
-                    <Frame WidthRequest="216" HeightRequest="216" CornerRadius="50" BackgroundColor="White" BorderColor="White"
-                           HorizontalOptions="Start" VerticalOptions="Center" Margin="40,0"/>
+        
 
-                    <Label Text="{Binding Player.FullName}" TextColor="White" FontSize="Large" FontAttributes="Bold" 
-                           HorizontalOptions="Start" Margin="306,50,0,0"/>
-                    <Label Text="{Binding Player.Nationality}" TextColor="White" FontSize="Medium" FontAttributes="Bold"
-                           HorizontalOptions="Start" Margin="306,115,0,0"/>
-                    <Label Text="{Binding Player.DateOfBirth, StringFormat='{0:dd/MM/yyyy} - {1} Y/O'}" TextColor="White" FontSize="Medium" FontAttributes="Bold"
-                           HorizontalOptions="Start" Margin="306,170,0,0"/>
-
-                    <Label Text="{Binding Player.Team}" TextColor="White" FontSize="Medium" FontAttributes="Bold"
-                           HorizontalOptions="Start" Margin="900,50,0,0"/>
-                    <Label Text="{Binding Player.UserValue, StringFormat='{}{0:N0} €'}" TextColor="White" FontSize="Medium" FontAttributes="Bold"
-                           HorizontalOptions="Start" Margin="900,115,0,0"/>
-                    <Label Text="{Binding Player.Wage, StringFormat='{}{0:N0} € p/m'}" TextColor="White" FontSize="Medium" FontAttributes="Bold"
-                           HorizontalOptions="Start" Margin="900,170,0,0"/>
-
-                    <Label Text="{Binding Player.Height, StringFormat='{0} cm'}" TextColor="White" FontSize="Medium" FontAttributes="Bold"
-                           HorizontalOptions="Start" Margin="1400,50,0,0"/>
-                    <Label Text="{Binding Player.Weight, StringFormat='{0} kg'}" TextColor="White" FontSize="Medium" FontAttributes="Bold"
-                           HorizontalOptions="Start" Margin="1400,115,0,0"/>
-                    <Label Text="{Binding Player.Foot}" TextColor="White" FontSize="Medium" FontAttributes="Bold"
-                           HorizontalOptions="Start" Margin="1400,170,0,0"/>
-                </Grid>
-            </Frame>
-
+        <!-- TOP PROFILE CARD -->
+        <Frame Grid.Row="0" CornerRadius="50" BackgroundColor="#8294C4"
+               HorizontalOptions="FillAndExpand" VerticalOptions="Start" Padding="30,40,30,30">
             <Grid ColumnSpacing="20">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
+                
 
-                <Frame WidthRequest="420" HeightRequest="600" CornerRadius="50" BackgroundColor="#8294C4" Margin="65,0,0,0"
-                   Padding="20" HorizontalOptions="Center">
-                    <StackLayout HorizontalOptions="Center">
-                        <Label Text="{Binding Player.Position}" TextColor="White" FontSize="Medium" FontAttributes="Bold" HorizontalOptions="Center"/>
+                
+                <!-- Name & Nation -->
+                <StackLayout Grid.Column="1" Spacing="10" VerticalOptions="Center">
+                    <Label Text="{Binding Player.FullName}" TextColor="White" FontSize="Large" FontAttributes="Bold"/>
+                    <Label Text="{Binding Player.Nationality}" TextColor="White" FontSize="Medium" FontAttributes="Bold"/>
+                    <Label Text="{Binding Player.DateOfBirth, StringFormat='{0:dd/MM/yyyy} - {1} Y/O'}" 
+                           TextColor="White" FontSize="Medium" FontAttributes="Bold"/>
+                </StackLayout>
 
-                        <Grid x:Name="PositionGrid" RowSpacing="50">
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="Auto"/>
-                                <RowDefinition Height="Auto"/>
-                                <RowDefinition Height="Auto"/>
-                                <RowDefinition Height="Auto"/>
-                                <RowDefinition Height="Auto"/>
-                                <RowDefinition Height="Auto"/>
-                            </Grid.RowDefinitions>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="Auto"/>
-                            </Grid.ColumnDefinitions>
+                <!-- Team & Financial -->
+                <StackLayout Grid.Column="2" Spacing="10" VerticalOptions="Center">
+                    <Label Text="{Binding Player.Team}" TextColor="White" FontSize="Medium" FontAttributes="Bold"/>
+                    <Label Text="{Binding Player.UserValue, StringFormat='{}{0:N0} €'}" TextColor="White" FontSize="Medium" FontAttributes="Bold"/>
+                    <Label Text="{Binding Player.Wage, StringFormat='{}{0:N0} € p/m'}" TextColor="White" FontSize="Medium" FontAttributes="Bold"/>
+                </StackLayout>
 
-                            <Ellipse x:Name="Ellipse0" Grid.Row="0" WidthRequest="40" HeightRequest="40" Fill="LightGray" HorizontalOptions="Center"/>
-                            <StackLayout Grid.Row="1" Orientation="Horizontal" HorizontalOptions="Center" Spacing="60">
-                                <Ellipse x:Name="Ellipse1" WidthRequest="40" HeightRequest="40" Fill="LightGray"/>
-                                <Ellipse x:Name="Ellipse2" WidthRequest="40" HeightRequest="40" Fill="LightGray"/>
-                                <Ellipse x:Name="Ellipse3" WidthRequest="40" HeightRequest="40" Fill="LightGray"/>
-                            </StackLayout>
-                            <Ellipse x:Name="Ellipse4" Grid.Row="2" WidthRequest="40" HeightRequest="40" Fill="LightGray" HorizontalOptions="Center"/>
-                            <Ellipse x:Name="Ellipse5" Grid.Row="3" WidthRequest="40" HeightRequest="40" Fill="LightGray" HorizontalOptions="Center"/>
-                            <StackLayout Grid.Row="4" Orientation="Horizontal" HorizontalOptions="Center" Spacing="60">
-                                <Ellipse x:Name="Ellipse6" WidthRequest="40" HeightRequest="40" Fill="LightGray"/>
-                                <Ellipse x:Name="Ellipse7" WidthRequest="40" HeightRequest="40" Fill="LightGray"/>
-                                <Ellipse x:Name="Ellipse8" WidthRequest="40" HeightRequest="40" Fill="LightGray"/>
-                            </StackLayout>
-                            <Ellipse x:Name="Ellipse9" Grid.Row="5" WidthRequest="40" HeightRequest="40" Fill="LightGray" HorizontalOptions="Center"/>
-                        </Grid>
+                <!-- Physical Attributes -->
+                <StackLayout Grid.Column="3" Spacing="10" VerticalOptions="Center">
+                    <Label Text="{Binding Player.Height, StringFormat='{0} cm'}" TextColor="White" FontSize="Medium" FontAttributes="Bold"/>
+                    <Label Text="{Binding Player.Weight, StringFormat='{0} kg'}" TextColor="White" FontSize="Medium" FontAttributes="Bold"/>
+                    <Label Text="{Binding Player.Foot}" TextColor="White" FontSize="Medium" FontAttributes="Bold"/>
 
-                    </StackLayout>
-                </Frame>
-
-                <Frame Grid.Column="1" WidthRequest="1310" HeightRequest="603" CornerRadius="50" BackgroundColor="#8294C4">
-                    <StackLayout>
-                        <Label Text="Stats - games played/started" TextColor="White" FontSize="Medium" FontAttributes="Bold"
-                               HorizontalOptions="Center"/>
-
-                        <StackLayout Orientation="Horizontal" HorizontalOptions="Center" VerticalOptions="End" Margin="0,400,0,0">
-                            <Label Text="stat" TextColor="White" FontSize="Medium" Padding="40"/>
-                            <Label Text="stat" TextColor="White" FontSize="Medium" Padding="40"/>
-                            <Label Text="stat" TextColor="White" FontSize="Medium" Padding="40"/>
-                            <Label Text="stat" TextColor="White" FontSize="Medium" Padding="40"/>
-                            <Label Text="stat" TextColor="White" FontSize="Medium" Padding="40"/>
-                            <Label Text="stat" TextColor="White" FontSize="Medium" Padding="40"/>
-                            <Label Text="stat" TextColor="White" FontSize="Medium" Padding="40"/>
-                            <Label Text="stat" TextColor="White" FontSize="Medium" Padding="40"/>
-                            <Label Text="stat" TextColor="White" FontSize="Medium" Padding="40"/>
-                            <Label Text="stat" TextColor="White" FontSize="Medium" Padding="40"/>
-                        </StackLayout>
-                    </StackLayout>
-                </Frame>
+                    <Button Grid.Column="4" Text="Back" BackgroundColor="White" TextColor="#8294C4"
+                        Command="{Binding BackCommand}" HorizontalOptions="Start" 
+                        VerticalOptions="Start" Margin="0,10,0,0" />
+                </StackLayout>
             </Grid>
+        </Frame>
 
-        </StackLayout>
-    </ScrollView>
+        <!-- POSITION + STATS -->
+        <Grid Grid.Row="1" ColumnSpacing="20">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="3*" />
+                <!-- 30% -->
+                <ColumnDefinition Width="7*" />
+                <!-- 70% -->
+            </Grid.ColumnDefinitions>
+
+            <!-- Left Frame: Position Visualization -->
+            <Frame Grid.Column="0" CornerRadius="50" BackgroundColor="#8294C4" BorderColor="#6B7DBB"
+           HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand" Padding="30,40">
+                <StackLayout HorizontalOptions="Center" VerticalOptions="Center" Spacing="30">
+                    <StackLayout Orientation="Horizontal" HorizontalOptions="Center" Spacing="10">
+                        <Label Text="Your Position:" TextColor="White" FontSize="Medium" FontAttributes="Bold" VerticalOptions="Center"/>
+                        <Label Text="{Binding Player.Position}" TextColor="White" FontSize="Medium" FontAttributes="Bold" VerticalOptions="Center"/>
+                    </StackLayout>
+                    <Grid x:Name="PositionGrid" RowSpacing="40">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+
+                        <Ellipse Grid.Row="0" WidthRequest="40" HeightRequest="40" Fill="LightGray" HorizontalOptions="Center"/>
+
+                        <StackLayout Grid.Row="1" Orientation="Horizontal" HorizontalOptions="Center" Spacing="80">
+                            <Ellipse WidthRequest="40" HeightRequest="40" Fill="LightGray"/>
+                            <Ellipse WidthRequest="40" HeightRequest="40" Fill="LightGray"/>
+                            <Ellipse WidthRequest="40" HeightRequest="40" Fill="LightGray"/>
+                        </StackLayout>
+
+                        <Ellipse Grid.Row="2" WidthRequest="40" HeightRequest="40" Fill="LightGray" HorizontalOptions="Center"/>
+                        <Ellipse Grid.Row="3" WidthRequest="40" HeightRequest="40" Fill="LightGray" HorizontalOptions="Center"/>
+
+                        <StackLayout Grid.Row="4" Orientation="Horizontal" HorizontalOptions="Center" Spacing="80">
+                            <Ellipse WidthRequest="40" HeightRequest="40" Fill="LightGray"/>
+                            <Ellipse WidthRequest="40" HeightRequest="40" Fill="LightGray"/>
+                            <Ellipse WidthRequest="40" HeightRequest="40" Fill="LightGray"/>
+                        </StackLayout>
+
+                        <Ellipse Grid.Row="5" WidthRequest="40" HeightRequest="40" Fill="LightGray" HorizontalOptions="Center"/>
+                    </Grid>
+                </StackLayout>
+            </Frame>
+
+            <!-- Right Frame: Stats -->
+            <Frame Grid.Column="1" CornerRadius="50" BackgroundColor="#8294C4"
+           HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand" Padding="30,60">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+
+                    <!-- Top: Title -->
+                    <Label Grid.Row="0" Text="Stats - games played/started"
+                   TextColor="White" FontSize="Medium" FontAttributes="Bold"
+                   HorizontalOptions="Center" VerticalOptions="Start" />
+
+                    <!-- Bottom: 10 Stats -->
+                    <ScrollView Grid.Row="1" Orientation="Horizontal" HorizontalScrollBarVisibility="Never">
+                        <StackLayout Orientation="Horizontal" HorizontalOptions="Center" Spacing="40" Padding="0,20">
+                            <Label Text="stat" TextColor="White" FontSize="Medium"/>
+                            <Label Text="stat" TextColor="White" FontSize="Medium"/>
+                            <Label Text="stat" TextColor="White" FontSize="Medium"/>
+                            <Label Text="stat" TextColor="White" FontSize="Medium"/>
+                            <Label Text="stat" TextColor="White" FontSize="Medium"/>
+                            <Label Text="stat" TextColor="White" FontSize="Medium"/>
+                            <Label Text="stat" TextColor="White" FontSize="Medium"/>
+                            <Label Text="stat" TextColor="White" FontSize="Medium"/>
+                            <Label Text="stat" TextColor="White" FontSize="Medium"/>
+                            <Label Text="stat" TextColor="White" FontSize="Medium"/>
+                        </StackLayout>
+                    </ScrollView>
+                </Grid>
+            </Frame>
+        </Grid>
+    </Grid>
 </ContentPage>

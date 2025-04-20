@@ -37,7 +37,7 @@ namespace FootballProject.ViewModel.DB
             user.Username = reader.GetString(2);
             user.Password = reader.GetString(3);
             user.Email = reader.GetString(4);
-            user.Team = reader.GetString(5);
+            user.Team = reader.GetInt32(5);
             user.IsAdmin = reader.GetString(6);
             user.Role = reader.GetString(7);
             return user;
@@ -61,12 +61,23 @@ namespace FootballProject.ViewModel.DB
 
         public async Task<User> SelectByUsername(string username)
         {
-            string query = $"SELECT * FROM users WHERE Username = '{username}'";
+            // Escape single quotes in the username to avoid SQL injection
+            string safeUsername = username.Replace("'", "''");
+
+            string query = $@"
+    SELECT u.*, t.Team 
+    FROM users u 
+    LEFT JOIN Team t ON u.team = t.id 
+    WHERE u.Username = '{safeUsername}'";
+
+
             List<BaseEntity> list = await base.Select(query);
             if (list != null && list.Count == 1)
                 return list[0] as User;
+
             return null;
         }
+
 
         public override void Insert(BaseEntity entity)
         {

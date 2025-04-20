@@ -117,8 +117,7 @@ namespace FootballProject.ViewModel
         {
             Dictionary<string, object> data = new Dictionary<string, object>();
             data.Add("player", player);
-            await Shell.Current.GoToAsync("///rPlayerProfile", data);
-            
+            await Shell.Current.GoToAsync("/rPlayerProfile", data);
         }
     }
 }

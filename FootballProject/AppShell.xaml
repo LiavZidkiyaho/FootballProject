@@ -23,14 +23,6 @@
              ContentTemplate="{DataTemplate local:View.ViewUsers}"
              Route="rViewUsers" />
         </Tab>
-
-        <Tab Title="Player Profile">
-            <ShellContent
-            Title="PlayerProfile"
-            ContentTemplate="{DataTemplate local:View.PlayerProfile}"
-            Route="rPlayerProfile" />
-        </Tab>
-
         <Tab Title="Players Search">
             <ShellContent
             Title="Players Search"
