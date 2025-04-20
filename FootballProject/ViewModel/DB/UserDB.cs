@@ -37,7 +37,11 @@ namespace FootballProject.ViewModel.DB
             user.Username = reader.GetString(2);
             user.Password = reader.GetString(3);
             user.Email = reader.GetString(4);
-            user.Team = reader.GetInt32(5);
+
+            user.Team = new Team();
+            user.Team.Id = reader.GetInt32(5);
+            user.Team.team1 = reader.GetString(8); 
+
             user.IsAdmin = reader.GetString(6);
             user.Role = reader.GetString(7);
             return user;
@@ -45,10 +49,15 @@ namespace FootballProject.ViewModel.DB
 
         public async Task<List<User>> SelectAllUsers()
         {
-            string query = "SELECT * FROM users";
+            string query = @"
+            SELECT u.*, t.Team 
+            FROM users u
+            INNER JOIN Team t ON u.team = t.id";
+
             List<BaseEntity> list = await base.Select(query);
-            return (list).Cast<User>().ToList(); ;
+            return list.Cast<User>().ToList();
         }
+
 
         public async Task<User> SelectById(int id)
         {
@@ -65,10 +74,10 @@ namespace FootballProject.ViewModel.DB
             string safeUsername = username.Replace("'", "''");
 
             string query = $@"
-    SELECT u.*, t.Team 
-    FROM users u 
-    LEFT JOIN Team t ON u.team = t.id 
-    WHERE u.Username = '{safeUsername}'";
+            SELECT u.*, t.Team 
+            FROM users u 
+            LEFT JOIN Team t ON u.team = t.id 
+            WHERE u.Username = '{safeUsername}'";
 
 
             List<BaseEntity> list = await base.Select(query);

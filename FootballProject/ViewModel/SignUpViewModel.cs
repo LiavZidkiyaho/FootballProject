@@ -24,7 +24,7 @@ namespace FootballProject.ViewModel
         private string username;
         private string password;
         private string email;
-        private string team;
+        private Team team;
         private string isAdmin = "No";
         private string errorMessage;
 
@@ -113,7 +113,7 @@ namespace FootballProject.ViewModel
                 OnPropertyChanged(nameof(IsAdmin));
             }
         }
-        public string Team 
+        public Team Team 
         {
             get => team;
             set

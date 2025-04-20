@@ -12,7 +12,7 @@ namespace FootballProject.Model
         private string? username;
         private string? password;
         private string? email;
-        private int? team;
+        private Team team;
         private string? isAdmin;
         private string? role;
 
@@ -21,7 +21,7 @@ namespace FootballProject.Model
         public string? Email { get => email; set => email = value; }
         public string? Username { get => username; set => username = value; }
         public string? Password { get => password; set => password = value; }
-        public int? Team { get => team; set => team = value; }
+        public Team Team { get => team; set => team = value; }
         public string? IsAdmin { get => isAdmin; set => isAdmin = value; }
         public string? Role { get => role; set => role = value; }
     }

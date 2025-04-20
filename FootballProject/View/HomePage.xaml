@@ -51,7 +51,7 @@
                        FontSize="Medium"
                        HorizontalOptions="Start" />
 
-                <Label Text="{Binding User.Team, StringFormat='Your Team: {0}'}" 
+                <Label Text="{Binding User.Team.team1, StringFormat='Your Team: {0}'}" 
                        TextColor="White"
                        FontSize="Medium"
                        HorizontalOptions="Start" />

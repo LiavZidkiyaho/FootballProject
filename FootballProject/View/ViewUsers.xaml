@@ -17,7 +17,7 @@
                                 <Label Grid.Column="1" Text="{Binding Username}" TextColor="#8294C4"  FontSize="Medium"/>
                                 <Label Grid.Column="2" Text="{Binding Password}" TextColor="#8294C4"  FontSize="Medium"/>
                                 <Label Grid.Column="3" Text="{Binding Email}" TextColor="#8294C4"  FontSize="Medium"/>
-                                <Label Grid.Column="4" Text="{Binding Team}" TextColor="#8294C4"  FontSize="Medium"/>
+                                <Label Grid.Column="4" Text="{Binding Team.team1}" TextColor="#8294C4"  FontSize="Medium"/>
                                 <Label Grid.Column="5" Text="{Binding IsAdmin}" TextColor="#8294C4"  FontSize="Medium"/>
 
                                     <Button
