@@ -100,7 +100,7 @@
                                     <StackLayout Orientation="Horizontal">
                                         <Label Text="Team: " TextColor="White" FontSize="Medium" 
                                                VerticalOptions="Center" HorizontalOptions="StartAndExpand"/>
-                                        <Label Text="{Binding Team}" TextColor="White" FontSize="Medium" 
+                                        <Label Text="{Binding Team.team1}" TextColor="White" FontSize="Medium" 
                                                VerticalOptions="Center" HorizontalOptions="StartAndExpand"/>
                                     </StackLayout>
                                     <StackLayout Orientation="Horizontal">

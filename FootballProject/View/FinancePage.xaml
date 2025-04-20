@@ -5,9 +5,7 @@
              Title="Finance"
              BackgroundColor="#1E1E1E">
 
-    <!-- Add Padding and Margin to the Grid -->
     <Grid Padding="30">
-        <!-- Define 2 Rows with equal height, and 3 Columns -->
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />
             <RowDefinition Height="*" />
@@ -15,32 +13,42 @@
 
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" />
-            <!-- Left frames will take full width -->
             <ColumnDefinition Width="*" />
-            <!-- Empty space in the middle -->
             <ColumnDefinition Width="500" />
-            <!-- Right vertical frame -->
         </Grid.ColumnDefinitions>
 
-        <!-- Overall Bank Balance Frame -->
+        <!-- Bank Balance -->
         <Frame Grid.ColumnSpan="2" Grid.Row="0" Grid.Column="0" CornerRadius="30" BackgroundColor="#8294C4"
                HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand" Margin="20">
-            <Label Text="Overall Bank Balance: 999,999,999 €" TextColor="White" FontSize="Large" FontAttributes="Bold" 
+            <Label Text="{Binding BankBalance}" 
+                   TextColor="White" FontSize="Large" FontAttributes="Bold"
                    HorizontalTextAlignment="Start" VerticalTextAlignment="Start" Padding="20"/>
         </Frame>
 
-        <!-- Profit/Loss This Season Frame -->
+        <!-- Profit/Loss -->
         <Frame Grid.ColumnSpan="2" Grid.Row="1" Grid.Column="0" CornerRadius="30" BackgroundColor="#8294C4"
                HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand" Margin="20">
-            <Label Text="Profit/Loss This Season: 999,999,999 €" TextColor="White" FontSize="Large" FontAttributes="Bold" 
+            <Label Text="{Binding ProfitOrLoss}" 
+                   TextColor="White" FontSize="Large" FontAttributes="Bold"
                    HorizontalTextAlignment="Start" VerticalTextAlignment="Start" Padding="20"/>
         </Frame>
 
-        <!-- Vertical Right Frame -->
+        <!-- Right Side Frame: Transfer and Wage in 2 Sections -->
         <Frame Grid.Row="0" Grid.RowSpan="2" Grid.Column="2" CornerRadius="30" BackgroundColor="#8294C4"
                HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand" Margin="20">
-            <Label Text="Vertical Border" TextColor="White" FontSize="Large" FontAttributes="Bold" 
-                   HorizontalTextAlignment="Center" VerticalTextAlignment="Center" Padding="20"/>
+            <Grid RowDefinitions="*,*">
+                <!-- Transfer Section -->
+                <VerticalStackLayout Grid.Row="0" Spacing="10" Padding="20,30,20,10">
+                    <Label Text="Transfer Budget:" TextColor="White" FontSize="Large" FontAttributes="Bold"/>
+                    <Label Text="{Binding TransferBudget}" TextColor="White" FontSize="Large"/>
+                </VerticalStackLayout>
+
+                <!-- Wage Section -->
+                <VerticalStackLayout Grid.Row="1" Spacing="10" Padding="20,10,20,30">
+                    <Label Text="Wage:" TextColor="White" FontSize="Large" FontAttributes="Bold"/>
+                    <Label Text="{Binding Wage}" TextColor="White" FontSize="Large"/>
+                </VerticalStackLayout>
+            </Grid>
         </Frame>
     </Grid>
 </ContentPage>

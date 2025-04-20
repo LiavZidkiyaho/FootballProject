@@ -32,7 +32,11 @@ namespace FootballProject.ViewModel.DB
             player.FullName = reader.GetString(1);
             player.Nationality = reader.GetString(2);
             player.DateOfBirth = reader.GetDateTime(3);
-            player.Team = reader.GetString(4);
+
+            player.Team = new Team();
+            player.Team.Id = reader.GetInt32(4);
+            player.Team.team1 = reader.GetString(11);
+
             player.UserValue = reader.GetInt32(5);
             player.Wage = reader.GetInt32(6);
             player.Height = reader.GetInt32(7);
@@ -44,40 +48,70 @@ namespace FootballProject.ViewModel.DB
 
         public async Task<List<Player>> SelectAllPlayers()
         {
-            string query = "SELECT * FROM players";
+            string query = @"
+    SELECT p.*, t.Team 
+    FROM players p
+    INNER JOIN Team t ON p.team = t.id";
+
             List<BaseEntity> list = await base.Select(query);
-            return (list).Cast<Player>().ToList();
+            return list.Cast<Player>().ToList();
         }
+
 
         public async Task<Player> SelectById(int id)
         {
-            string query = $"SELECT * FROM players WHERE id = {id}";
+            string query = $@"
+    SELECT p.*, t.Team 
+    FROM players p
+    INNER JOIN Team t ON p.team = t.id
+    WHERE p.id = {id}";
+
             List<BaseEntity> list = await base.Select(query);
             if (list != null && list.Count == 1)
                 return list[0] as Player;
             return null;
         }
 
+
         public async Task<List<Player>> SelectByFilter(string field, string value)
         {
             string query;
             if (field == "Any")
             {
-                query = $"SELECT * FROM players WHERE FullName LIKE '%{value}%' OR Nationality LIKE '%{value}%' OR DateOfBirth LIKE '%{value}%' OR Team LIKE '%{value}%' OR UserValue LIKE '%{value}%' OR Wage LIKE '%{value}%' OR Height LIKE '%{value}%' OR Weight LIKE '%{value}%' OR Foot LIKE '%{value}%' OR Position LIKE '%{value}%'";
+                query = $@"
+        SELECT p.*, t.Team 
+        FROM players p
+        INNER JOIN Team t ON p.team = t.id
+        WHERE p.FullName LIKE '%{value}%' OR p.Nationality LIKE '%{value}%' OR p.DateOfBirth LIKE '%{value}%' 
+            OR p.Team LIKE '%{value}%' OR p.UserValue LIKE '%{value}%' OR p.Wage LIKE '%{value}%' 
+            OR p.Height LIKE '%{value}%' OR p.Weight LIKE '%{value}%' OR p.Foot LIKE '%{value}%' 
+            OR p.Position LIKE '%{value}%'";
             }
             else
             {
-                query = $"SELECT * FROM players WHERE {field} LIKE '{value}'";
+                query = $@"
+        SELECT p.*, t.Team 
+        FROM players p
+        INNER JOIN Team t ON p.team = t.id
+        WHERE p.{field} LIKE '{value}'";
             }
+
             List<BaseEntity> list = await base.Select(query);
-            return (list).Cast<Player>().ToList();
+            return list.Cast<Player>().ToList();
         }
+
 
         public async Task<List<Player>> SelectAndSort(string field, string order)
         {
-            string query = $"SELECT * FROM players ORDER BY {field} {order}";
+            string query = $@"
+    SELECT p.*, t.Team 
+    FROM players p
+    INNER JOIN Team t ON p.team = t.id
+    ORDER BY p.{field} {order}";
+
             List<BaseEntity> list = await base.Select(query);
-            return (list).Cast<Player>().ToList();
+            return list.Cast<Player>().ToList();
         }
+
     }
 }

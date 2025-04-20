@@ -7,7 +7,7 @@ namespace FootballProject.Model
         private string? fullName;
         private string? nationality;
         private DateTime dateOfBirth;
-        private string? team;
+        private Team team;
         private int userValue;
         private int wage;
         private int height;
@@ -18,7 +18,7 @@ namespace FootballProject.Model
         public string FullName { get => fullName; set => fullName = value; }
         public string Nationality { get => nationality; set => nationality = value; }
         public DateTime DateOfBirth { get => dateOfBirth; set => dateOfBirth = value; }
-        public string Team { get => team; set => team = value; }
+        public Team Team { get => team; set => team = value; }
         public int UserValue { get => userValue; set => userValue = value; }
         public int Wage { get => wage; set => wage = value; }
         public int Height { get => height; set => height = value; }

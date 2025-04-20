@@ -38,7 +38,7 @@
 
                 <!-- Team & Financial -->
                 <StackLayout Grid.Column="2" Spacing="10" VerticalOptions="Center">
-                    <Label Text="{Binding Player.Team}" TextColor="White" FontSize="Medium" FontAttributes="Bold"/>
+                    <Label Text="{Binding Player.Team.team1}" TextColor="White" FontSize="Medium" FontAttributes="Bold"/>
                     <Label Text="{Binding Player.UserValue, StringFormat='{}{0:N0} €'}" TextColor="White" FontSize="Medium" FontAttributes="Bold"/>
                     <Label Text="{Binding Player.Wage, StringFormat='{}{0:N0} € p/m'}" TextColor="White" FontSize="Medium" FontAttributes="Bold"/>
                 </StackLayout>
