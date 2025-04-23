@@ -20,7 +20,7 @@
         <!-- Bank Balance -->
         <Frame Grid.ColumnSpan="2" Grid.Row="0" Grid.Column="0" CornerRadius="30" BackgroundColor="#8294C4"
                HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand" Margin="20">
-            <Label Text="{Binding BankBalance}" 
+            <Label Text="{Binding BankBalanceString}" 
                    TextColor="White" FontSize="Large" FontAttributes="Bold"
                    HorizontalTextAlignment="Start" VerticalTextAlignment="Start" Padding="20"/>
         </Frame>
@@ -28,7 +28,7 @@
         <!-- Profit/Loss -->
         <Frame Grid.ColumnSpan="2" Grid.Row="1" Grid.Column="0" CornerRadius="30" BackgroundColor="#8294C4"
                HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand" Margin="20">
-            <Label Text="{Binding ProfitOrLoss}" 
+            <Label Text="{Binding ProfitOrLossString}" 
                    TextColor="White" FontSize="Large" FontAttributes="Bold"
                    HorizontalTextAlignment="Start" VerticalTextAlignment="Start" Padding="20"/>
         </Frame>
@@ -40,15 +40,20 @@
                 <!-- Transfer Section -->
                 <VerticalStackLayout Grid.Row="0" Spacing="10" Padding="20,30,20,10">
                     <Label Text="Transfer Budget:" TextColor="White" FontSize="Large" FontAttributes="Bold"/>
-                    <Label Text="{Binding TransferBudget}" TextColor="White" FontSize="Large"/>
+                    <Label Text="{Binding TransferBudgetString}" TextColor="White" FontSize="Large"/>
+                    <Label Text="Wage:" TextColor="White" FontSize="Large" FontAttributes="Bold"/>
+                    <Label Text="{Binding WageString}" TextColor="White" FontSize="Large"/>
+
+                    <!-- Single Slider to adjust percentage of Transfer and Wage -->
+                    <Slider Minimum="0" Maximum="100" Value="{Binding SliderValue}" 
+                            ThumbColor="White" MinimumTrackColor="#FF8000" MaximumTrackColor="Gray"
+                            HorizontalOptions="FillAndExpand"/>
                 </VerticalStackLayout>
 
-                <!-- Wage Section -->
-                <VerticalStackLayout Grid.Row="1" Spacing="10" Padding="20,10,20,30">
-                    <Label Text="Wage:" TextColor="White" FontSize="Large" FontAttributes="Bold"/>
-                    <Label Text="{Binding Wage}" TextColor="White" FontSize="Large"/>
-                </VerticalStackLayout>
+                <Button Text="Save" BackgroundColor="#1E1E1E" TextColor="White" HorizontalOptions="Center" VerticalOptions="End"
+                        Command="{Binding SaveCommand}" Margin="20"/>
             </Grid>
         </Frame>
+
     </Grid>
 </ContentPage>

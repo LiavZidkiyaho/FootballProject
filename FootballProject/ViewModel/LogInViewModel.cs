@@ -86,13 +86,14 @@ namespace FootballProject.ViewModel
 
         public async void LoginUser()
         {
+            
             if (IsValidUser())
             {
                 User = await service.GetUser(Username);
                 service.CurrentUser = User;
                 Dictionary<string, object> data = new Dictionary<string, object>();
                 data.Add("User", User);
-                if (user == null)
+                if (user == null || (Username != User.Username) || (Password != User.Password))
                     await Application.Current.MainPage.DisplayAlert("Login", "Login Faild!", "ok");
                 else
                 {

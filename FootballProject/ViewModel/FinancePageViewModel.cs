@@ -8,33 +8,64 @@ namespace FootballProject.ViewModel
 {
     public class FinancePageViewModel : ViewModelBase
     {
-        private string bankBalance;
-        public string BankBalance
+        // Raw numeric values for calculations (use long to handle large budgets)
+        private long bankBalance;
+        public long BankBalance
         {
             get => bankBalance;
-            set { bankBalance = value; OnPropertyChanged(); }
+            set { bankBalance = value; OnPropertyChanged(); OnPropertyChanged(nameof(BankBalanceString)); }
         }
 
-        private string profitOrLoss;
-        public string ProfitOrLoss
+        private long profitOrLoss;
+        public long ProfitOrLoss
         {
             get => profitOrLoss;
-            set { profitOrLoss = value; OnPropertyChanged(); }
+            set { profitOrLoss = value; OnPropertyChanged(); OnPropertyChanged(nameof(ProfitOrLossString)); }
         }
 
-        private string transferBudget;
-        public string TransferBudget
+        private long transferBudget;
+        public long TransferBudget
         {
             get => transferBudget;
-            set { transferBudget = value; OnPropertyChanged(); }
+            set
+            {
+                transferBudget = value;
+                OnPropertyChanged();
+                OnPropertyChanged(nameof(TransferBudgetString));
+            }
         }
 
-        private string wage;
-        public string Wage
+        private long wage;
+        public long Wage
         {
             get => wage;
-            set { wage = value; OnPropertyChanged(); }
+            set
+            {
+                wage = value;
+                OnPropertyChanged();
+                OnPropertyChanged(nameof(WageString));
+            }
         }
+
+        private int sliderValue;
+        public int SliderValue
+        {
+            get => sliderValue;
+            set
+            {
+                sliderValue = value;
+                UpdateBudgetsBasedOnSlider();
+                OnPropertyChanged();
+            }
+        }
+
+        private long totalBudget; // Total budget remains constant
+
+        // String properties for formatted display
+        public string BankBalanceString => $"Overall Bank Balance: {BankBalance:N0} €";
+        public string ProfitOrLossString => $"Profit/Loss This Season: {ProfitOrLoss:N0} €";
+        public string TransferBudgetString => $"{TransferBudget:N0} €";
+        public string WageString => $"{Wage:N0} €";
 
         private readonly BudgetDB budgetDB = new BudgetDB();
 
@@ -48,31 +79,56 @@ namespace FootballProject.ViewModel
         {
             try
             {
-                
                 Budget budget = await budgetDB.SelectByTeamId(teamId);
 
                 if (budget != null)
                 {
-                    BankBalance = $"Overall Bank Balance: {budget.Total:N0} €";
-                    ProfitOrLoss = $"Profit/Loss This Season: {budget.ProfitLose:N0} €";
-                    TransferBudget = $"{budget.Transfer:N0} €";
-                    Wage = $"{budget.Wage:N0} €";
+                    BankBalance = budget.Total;
+                    ProfitOrLoss = budget.ProfitLose;
+                    TransferBudget = budget.Transfer;
+                    Wage = budget.Wage;
+
+                    // Set total budget and ensure consistency
+                    totalBudget = TransferBudget + Wage;
+
+                    // Set slider to match initial percentage
+                    SliderValue = (int)((TransferBudget * 100) / totalBudget);
                 }
                 else
                 {
-                    BankBalance = "Overall Bank Balance: N/A";
-                    ProfitOrLoss = "Profit/Loss This Season: N/A";
-                    TransferBudget = "N/A";
-                    Wage = "N/A";
+                    BankBalance = 0;
+                    ProfitOrLoss = 0;
+                    TransferBudget = 0;
+                    Wage = 0;
+                    totalBudget = 0;
+                    SliderValue = 0;
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                BankBalance = "Error";
-                ProfitOrLoss = "Error";
-                TransferBudget = "Error";
-                Wage = "Error";
+                BankBalance = -1; // Indicate error state
+                ProfitOrLoss = -1;
+                TransferBudget = -1;
+                Wage = -1;
+                totalBudget = -1;
+                SliderValue = 0;
             }
+        }
+
+        private void UpdateBudgetsBasedOnSlider()
+        {
+            if (totalBudget <= 0) return;
+
+            // Ensure sliderValue is clamped between 0 and 100
+            sliderValue = Math.Clamp(sliderValue, 0, 100);
+
+            // Calculate new budgets based on slider percentage
+            TransferBudget = (totalBudget * sliderValue) / 100;
+            Wage = totalBudget - TransferBudget;
+
+            // Ensure budgets never exceed bounds
+            TransferBudget = Math.Clamp(TransferBudget, 0, totalBudget);
+            Wage = Math.Clamp(Wage, 0, totalBudget);
         }
     }
 }
