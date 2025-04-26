@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using System.Windows.Input;
 using FootballProject.Model;
 using FootballProject.Services;
 using FootballProject.ViewModel.DB;
@@ -9,22 +10,24 @@ namespace FootballProject.ViewModel
     public class FinancePageViewModel : ViewModelBase
     {
         // Raw numeric values for calculations (use long to handle large budgets)
-        private long bankBalance;
-        public long BankBalance
+        private readonly BudgetDB budgetDB;
+        private int bankBalance;
+        private readonly UserService userService;
+        public int BankBalance
         {
             get => bankBalance;
             set { bankBalance = value; OnPropertyChanged(); OnPropertyChanged(nameof(BankBalanceString)); }
         }
 
-        private long profitOrLoss;
-        public long ProfitOrLoss
+        private int profitOrLoss;
+        public int ProfitOrLoss
         {
             get => profitOrLoss;
             set { profitOrLoss = value; OnPropertyChanged(); OnPropertyChanged(nameof(ProfitOrLossString)); }
         }
 
-        private long transferBudget;
-        public long TransferBudget
+        private int transferBudget;
+        public int TransferBudget
         {
             get => transferBudget;
             set
@@ -35,8 +38,8 @@ namespace FootballProject.ViewModel
             }
         }
 
-        private long wage;
-        public long Wage
+        private int wage;
+        public int Wage
         {
             get => wage;
             set
@@ -59,21 +62,24 @@ namespace FootballProject.ViewModel
             }
         }
 
-        private long totalBudget; // Total budget remains constant
+        private int totalBudget; // Total budget remains constant
 
         // String properties for formatted display
         public string BankBalanceString => $"Overall Bank Balance: {BankBalance:N0} €";
         public string ProfitOrLossString => $"Profit/Loss This Season: {ProfitOrLoss:N0} €";
         public string TransferBudgetString => $"{TransferBudget:N0} €";
-        public string WageString => $"{Wage:N0} €";
-
-        private readonly BudgetDB budgetDB = new BudgetDB();
+        public string WageString => $"{Wage:N0} €"; 
 
         public FinancePageViewModel(UserService service)
         {
-            int teamId = service.GetCurrentUser().Team.Id; // Adjust path to team ID if needed
+            userService = service;
+            budgetDB = new BudgetDB();
+            int teamId = userService.GetCurrentUser().Team.Id; // Adjust path to team ID if needed
             LoadBudgetData(teamId);
+            SaveCommand = new Command(async () => await SaveBudgets());
         }
+
+        public ICommand SaveCommand { get; }
 
         private async void LoadBudgetData(int teamId)
         {
@@ -130,5 +136,30 @@ namespace FootballProject.ViewModel
             TransferBudget = Math.Clamp(TransferBudget, 0, totalBudget);
             Wage = Math.Clamp(Wage, 0, totalBudget);
         }
+
+        private async Task SaveBudgets()
+        {
+            if (totalBudget <= 0) return;
+
+            try
+            {
+                // Create a Budget object with current values
+                Budget updatedBudget = new Budget  {};
+
+                updatedBudget.Transfer = this.TransferBudget;
+                updatedBudget.Wage = this.Wage;
+                updatedBudget.Total = this.BankBalance;
+                updatedBudget.ProfitLose = this.ProfitOrLoss;
+                updatedBudget.TeamId = userService.GetCurrentUser().Team.Id;
+
+                await budgetDB.UpdateBudget(updatedBudget);
+            }
+            catch (Exception ex)
+            {
+                // Handle errors (optional: show a popup message or log it)
+                Console.WriteLine($"Error saving budget: {ex.Message}");
+            }
+        }
+
     }
 }

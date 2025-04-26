@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data;
+using System.Threading.Tasks;
 using FootballProject.Model;
 
 namespace FootballProject.ViewModel.DB
@@ -16,16 +16,15 @@ namespace FootballProject.ViewModel.DB
         {
             var budget = (Budget)entity;
 
-            budget.Id = reader.GetInt32(1);              // id
-            budget.TeamId = reader.GetInt32(2);          // TeamId
-            budget.Wage = reader.GetInt32(3);          // Wage
-            budget.Total = reader.GetInt32(4);         // Total
-            budget.ProfitLose = reader.GetInt32(0);    // Profit/Lose
-            budget.Transfer = reader.GetInt32(5);      // Transfer
+            budget.Id = reader.GetInt32(1);          // id
+            budget.TeamId = reader.GetInt32(2);       // TeamId
+            budget.Wage = reader.GetInt32(3);         // Wage
+            budget.Total = reader.GetInt32(4);        // Total
+            budget.ProfitLose = reader.GetInt32(0);   // Profit/Lose
+            budget.Transfer = reader.GetInt32(5);     // Transfer
 
             return budget;
         }
-
 
         protected override string CreateInsertOleDb(BaseEntity entity)
         {
@@ -34,7 +33,15 @@ namespace FootballProject.ViewModel.DB
 
         protected override string CreateUpdateOleDb(BaseEntity entity)
         {
-            throw new NotImplementedException();
+            var budget = (Budget)entity;
+
+            return $@"
+                UPDATE budget 
+                SET [Wage] = {budget.Wage},
+                    [Total] = {budget.Total},
+                    [Profit/Lose] = {budget.ProfitLose},
+                    [Transfer] = {budget.Transfer}
+                WHERE TeamId = {budget.TeamId}";
         }
 
         protected override string CreateDeleteOleDb(BaseEntity entity)
@@ -42,12 +49,17 @@ namespace FootballProject.ViewModel.DB
             throw new NotImplementedException();
         }
 
-
         public async Task<Budget> SelectByTeamId(int teamId)
         {
             string query = $"SELECT *, [Profit/Lose] AS ProfitLose FROM budget WHERE TeamId = {teamId}";
             List<BaseEntity> list = await base.Select(query);
             return list.FirstOrDefault() as Budget;
+        }
+
+        public async Task UpdateBudget(Budget budget)
+        {
+            Update(budget);         // queue the update
+            await SaveChanges();    // save all queued changes
         }
     }
 }
