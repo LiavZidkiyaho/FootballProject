@@ -45,9 +45,14 @@
                     <Label Text="{Binding WageString}" TextColor="White" FontSize="Large"/>
 
                     <!-- Single Slider to adjust percentage of Transfer and Wage -->
-                    <Slider Minimum="0" Maximum="100" Value="{Binding SliderValue}" 
-                            ThumbColor="White" MinimumTrackColor="#FF8000" MaximumTrackColor="Gray"
-                            HorizontalOptions="FillAndExpand"/>
+                    <Slider Minimum="0" Maximum="100" 
+                        Value="{Binding SliderValue, Mode=TwoWay}" 
+                        ThumbColor="White" 
+        MinimumTrackColor="#FF8000" 
+        MaximumTrackColor="Gray"
+        HorizontalOptions="FillAndExpand"/>
+
+
                 </VerticalStackLayout>
 
                 <Button Text="Save" BackgroundColor="#1E1E1E" TextColor="White" HorizontalOptions="Center" VerticalOptions="End"

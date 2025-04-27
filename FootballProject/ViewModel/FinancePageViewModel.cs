@@ -94,11 +94,9 @@ namespace FootballProject.ViewModel
                     TransferBudget = budget.Transfer;
                     Wage = budget.Wage;
 
-                    // Set total budget and ensure consistency
                     totalBudget = TransferBudget + Wage;
-
-                    // Set slider to match initial percentage
                     SliderValue = (int)((TransferBudget * 100) / totalBudget);
+
                 }
                 else
                 {
@@ -125,17 +123,22 @@ namespace FootballProject.ViewModel
         {
             if (totalBudget <= 0) return;
 
-            // Ensure sliderValue is clamped between 0 and 100
-            sliderValue = Math.Clamp(sliderValue, 0, 100);
+            System.Diagnostics.Debug.WriteLine($"slider value: {sliderValue}");
 
-            // Calculate new budgets based on slider percentage
-            TransferBudget = (totalBudget * sliderValue) / 100;
+            // Correct formula:
+            TransferBudget = (int)(totalBudget * ((float)sliderValue / ((float)100)));
+            System.Diagnostics.Debug.WriteLine($"TB value: {TransferBudget}");
             Wage = totalBudget - TransferBudget;
+            System.Diagnostics.Debug.WriteLine($"Wage value: {Wage}");
 
-            // Ensure budgets never exceed bounds
-            TransferBudget = Math.Clamp(TransferBudget, 0, totalBudget);
-            Wage = Math.Clamp(Wage, 0, totalBudget);
+
+            // Update UI
+            OnPropertyChanged(nameof(TransferBudgetString));
+            OnPropertyChanged(nameof(WageString));
         }
+
+
+
 
         private async Task SaveBudgets()
         {
