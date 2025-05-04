@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:charts="clr-namespace:Microcharts.Maui;assembly=Microcharts.Maui"
              x:Class="FootballProject.View.FinancePage"
              Title="Finance"
              BackgroundColor="#1E1E1E">
@@ -17,21 +18,32 @@
             <ColumnDefinition Width="500" />
         </Grid.ColumnDefinitions>
 
-        <!-- Bank Balance -->
+        <!-- Bank Balance + Monthly Chart -->
         <Frame Grid.ColumnSpan="2" Grid.Row="0" Grid.Column="0" CornerRadius="30" BackgroundColor="#8294C4"
-               HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand" Margin="20">
-            <Label Text="{Binding BankBalanceString}" 
-                   TextColor="White" FontSize="Large" FontAttributes="Bold"
-                   HorizontalTextAlignment="Start" VerticalTextAlignment="Start" Padding="20"/>
+       HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand" Margin="20">
+            <VerticalStackLayout Padding="20">
+                <Label Text="{Binding BankBalanceString}" 
+               TextColor="White" FontSize="Large" FontAttributes="Bold"
+               HorizontalTextAlignment="Start" />
+                <charts:ChartView Chart="{Binding YearlyChart}" 
+                          HeightRequest="300" 
+                          WidthRequest="1200" />
+            </VerticalStackLayout>
         </Frame>
 
-        <!-- Profit/Loss -->
+        <!-- Profit/Loss + Yearly Chart -->
         <Frame Grid.ColumnSpan="2" Grid.Row="1" Grid.Column="0" CornerRadius="30" BackgroundColor="#8294C4"
-               HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand" Margin="20">
-            <Label Text="{Binding ProfitOrLossString}" 
-                   TextColor="White" FontSize="Large" FontAttributes="Bold"
-                   HorizontalTextAlignment="Start" VerticalTextAlignment="Start" Padding="20"/>
+       HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand" Margin="20">
+            <VerticalStackLayout Padding="20">
+                <Label Text="{Binding ProfitOrLossString}" 
+               TextColor="White" FontSize="Large" FontAttributes="Bold"
+               HorizontalTextAlignment="Start" />
+                <charts:ChartView Chart="{Binding MonthlyChart}" 
+                          HeightRequest="300" 
+                          WidthRequest="1200" />
+            </VerticalStackLayout>
         </Frame>
+
 
         <!-- Right Side Frame: Transfer and Wage in 2 Sections -->
         <Frame Grid.Row="0" Grid.RowSpan="2" Grid.Column="2" CornerRadius="30" BackgroundColor="#8294C4"
