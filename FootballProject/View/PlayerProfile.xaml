@@ -120,20 +120,25 @@
                    HorizontalOptions="Center" VerticalOptions="Start" />
 
                     <!-- Bottom: 10 Stats -->
-                    <ScrollView Grid.Row="1" Orientation="Horizontal" HorizontalScrollBarVisibility="Never">
-                        <StackLayout Orientation="Horizontal" HorizontalOptions="Center" Spacing="40" Padding="0,20">
-                            <Label Text="stat" TextColor="White" FontSize="Medium"/>
-                            <Label Text="stat" TextColor="White" FontSize="Medium"/>
-                            <Label Text="stat" TextColor="White" FontSize="Medium"/>
-                            <Label Text="stat" TextColor="White" FontSize="Medium"/>
-                            <Label Text="stat" TextColor="White" FontSize="Medium"/>
-                            <Label Text="stat" TextColor="White" FontSize="Medium"/>
-                            <Label Text="stat" TextColor="White" FontSize="Medium"/>
-                            <Label Text="stat" TextColor="White" FontSize="Medium"/>
-                            <Label Text="stat" TextColor="White" FontSize="Medium"/>
-                            <Label Text="stat" TextColor="White" FontSize="Medium"/>
-                        </StackLayout>
+                    <ScrollView Grid.Row="1" Orientation="Vertical">
+                        <FlexLayout Wrap="Wrap" Direction="Row"
+                JustifyContent="Center" AlignItems="Center"
+                BindableLayout.ItemsSource="{Binding PlayerStats}"
+                Margin="0,20" 
+                AlignContent="Center">
+                            <BindableLayout.ItemTemplate>
+                                <DataTemplate>
+                                    <Frame BackgroundColor="#6B7DBB" CornerRadius="10" Padding="10" Margin="5">
+                                        <StackLayout Spacing="5" HorizontalOptions="Center">
+                                            <Label Text="{Binding Name}" TextColor="White" FontSize="Small" HorizontalOptions="Center"/>
+                                            <Label Text="{Binding Value}" TextColor="White" FontSize="Large" FontAttributes="Bold" HorizontalOptions="Center"/>
+                                        </StackLayout>
+                                    </Frame>
+                                </DataTemplate>
+                            </BindableLayout.ItemTemplate>
+                        </FlexLayout>
                     </ScrollView>
+
                 </Grid>
             </Frame>
         </Grid>

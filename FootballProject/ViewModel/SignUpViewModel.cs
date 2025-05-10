@@ -31,7 +31,7 @@ namespace FootballProject.ViewModel
         public SignUpViewModel(UserService service)
         {
             this.userService = service;
-            service.init();
+            service.initUsers();
             AddUserCommand = new Command<string>(AddnewUser);
         }
 

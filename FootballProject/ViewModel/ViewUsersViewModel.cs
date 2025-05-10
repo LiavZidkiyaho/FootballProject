@@ -70,7 +70,7 @@ namespace FootballProject.ViewModel
 
         public async void LoadNigger()
         {
-            await userService.init();
+            await userService.initUsers();
             users = await userService.GetAllUsers();
         }
 

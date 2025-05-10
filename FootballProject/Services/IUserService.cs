@@ -9,15 +9,22 @@ namespace FootballProject.Services
         private List<User> users;
         private User currentUser;
         private readonly UserDB userDB = new UserDB();
+        private readonly StatsDB statsDB = new StatsDB();
+        private List<Stat> stats;
 
         public UserService()
         {
 
         }
 
-        public async Task init()
+        public async Task initUsers(string position = null)
         {
-             users = (await userDB.SelectAllUsers()).Cast<User>().ToList();
+            users = (await userDB.SelectAllUsers()).Cast<User>().ToList();
+        }
+
+        public async Task initStats(int id, string position = null)
+        {
+            stats = (await statsDB.SelectStatsByPosition(position, id)).Cast<Stat>().ToList();
         }
 
         public List<User> GetUsersList()
@@ -82,6 +89,12 @@ namespace FootballProject.Services
         {
             users = await userDB.SelectAllUsers();
             return users;
+        }
+
+        public async Task<List<Stat>> GetAllStats(string position, int id)
+        {
+            stats = await statsDB.SelectStatsByPosition(position, id);
+            return stats;
         }
     }
 }

@@ -14,6 +14,7 @@ namespace FootballProject.Model
         private int weight;
         private string? foot;
         private string? position;
+        private List<Stat>? stats;
 
         public string FullName { get => fullName; set => fullName = value; }
         public string Nationality { get => nationality; set => nationality = value; }
@@ -25,5 +26,6 @@ namespace FootballProject.Model
         public int Weight { get => weight; set => weight = value; }
         public string Foot { get => foot; set => foot = value; }
         public string Position { get => position; set => position = value; }
+        public List<Stat>? Stats { get => stats; set => stats = value; }
     }
 }

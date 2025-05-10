@@ -1,7 +1,11 @@
 ﻿using FootballProject.Model;
+using FootballProject.Services;
+using FootballProject.ViewModel.DB;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Windows.Input;
+using Windows.System;
 
 namespace FootballProject.ViewModel
 {
@@ -9,11 +13,36 @@ namespace FootballProject.ViewModel
     public class PlayerProfileViewModel : ViewModelBase
     {
         private Player player;
+        private ObservableCollection<Stat> playerStats;
+        private readonly StatsDB statsDB;
+        private readonly UserService userService;
 
-        public PlayerProfileViewModel()
+        public PlayerProfileViewModel(UserService Service)
         {
+            userService = Service;
+            statsDB = new StatsDB();
+            
             BackCommand = new Command(OnBackCommandExecuted);
         }
+
+        public ObservableCollection<Stat> PlayerStats
+        {
+            get => playerStats;
+            set
+            {
+                playerStats = value;
+                OnPropertyChanged();
+            }
+        }
+
+
+        public async void LoadNigger()
+        {
+            await userService.initStats(player.Id, player.Position);
+            player.Stats = userService.GetAllStats(Player.Position, Player.Id).Result;
+            PlayerStats = new ObservableCollection<Stat>(player.Stats);
+        }
+
         public ICommand BackCommand { get; }
 
         public Player Player
@@ -23,6 +52,10 @@ namespace FootballProject.ViewModel
             {
                 player = value;
                 OnPropertyChanged();
+                if (player != null)
+                {
+                    LoadNigger();
+                }
             }
         }
 
