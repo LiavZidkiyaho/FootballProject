@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:FootballProject.ViewModel"
+             x:Class="FootballProject.View.ClubPlayersSearch"
+             Title="ClubPlayersSearch"
+             BackgroundColor="#1E1E1E">
+    <Grid Padding="30">
+        <!-- Define Rows for each filter, Search Bar and Results -->
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="10*" />
+        </Grid.RowDefinitions>
+
+        <!-- Define Columns for Labels and Inputs -->
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+
+        <!-- Filter Selection -->
+        <Label Grid.Row="0" Grid.Column="0" Text="Select Field:" TextColor="White" VerticalOptions="Center" Margin="5"/>
+        <Picker Grid.Row="0" Grid.Column="1" x:Name="FilterPicker" TextColor="White" BackgroundColor="#2E2E2E" Margin="5"
+        SelectedItem="{Binding SelectedField, Mode=TwoWay}">
+            <Picker.ItemsSource>
+                <x:Array Type="{x:Type x:String}">
+                    <x:String>Any</x:String>
+                    <x:String>full_name</x:String>
+                </x:Array>
+            </Picker.ItemsSource>
+        </Picker>
+
+        <!-- Sort Selection -->
+        <Label Grid.Row="1" Grid.Column="0" Text="Sort By:" TextColor="White" VerticalOptions="Center" Margin="5"/>
+        <Picker Grid.Row="1" Grid.Column="1" x:Name="SortPicker" TextColor="White" BackgroundColor="#2E2E2E" Margin="5"
+        SelectedItem="{Binding SortOrder, Mode=TwoWay}">
+            <Picker.ItemsSource>
+                <x:Array Type="{x:Type x:String}">
+                    <x:String>None</x:String>
+                    <x:String>Asc</x:String>
+                    <x:String>Desc</x:String>
+                </x:Array>
+            </Picker.ItemsSource>
+        </Picker>
+
+
+        <!-- Filter Input -->
+        <Label Grid.Row="2" Grid.Column="0" Text="Enter Value:" TextColor="White" VerticalOptions="Center" Margin="5"/>
+        <Entry Grid.Row="2" Grid.Column="1" x:Name="FilterValue" Placeholder="Enter value" TextColor="White" BackgroundColor="#2E2E2E" Margin="5"
+       Text="{Binding FilterValue, Mode=TwoWay}"/>
+
+        <!-- Search Button -->
+        <Button Grid.Row="3" Grid.ColumnSpan="2" Text="Search" BackgroundColor="#8294C4" TextColor="White" Margin="5"
+        Command="{Binding SearchCommand}"/>
+
+        <!-- Search Results -->
+        <Frame Grid.Row="4" Grid.ColumnSpan="2" CornerRadius="30" BackgroundColor="#8294C4"
+       Margin="20">
+            <ScrollView>
+                <CollectionView ItemsSource="{Binding Players}">
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <Frame  CornerRadius="15" BackgroundColor="#1E1E1E">
+                                <Frame.GestureRecognizers>
+                                    <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type vm:ClubPlayersSearchViewModel}}, Path=NavigateToPlayerProfileCommand}" CommandParameter="{Binding .}" />
+                                </Frame.GestureRecognizers>
+                                <StackLayout Orientation="Vertical">
+                                    <StackLayout Orientation="Horizontal">
+                                        <Label Text="Full Name: " TextColor="White" FontSize="Medium" 
+                                       VerticalOptions="Center" HorizontalOptions="StartAndExpand"/>
+                                        <Label Text="{Binding FullName}" TextColor="White" FontSize="Medium" 
+                                       VerticalOptions="Center" HorizontalOptions="StartAndExpand"/>
+                                    </StackLayout>
+                                    <StackLayout Orientation="Horizontal">
+                                        <Label Text="Nationality: " TextColor="White" FontSize="Medium" 
+                                       VerticalOptions="Center" HorizontalOptions="StartAndExpand"/>
+                                        <Label Text="{Binding Nationality}" TextColor="White" FontSize="Medium" 
+                                       VerticalOptions="Center" HorizontalOptions="StartAndExpand"/>
+                                    </StackLayout>
+                                    <StackLayout Orientation="Horizontal">
+                                        <Label Text="Date of Birth: " TextColor="White" FontSize="Medium" 
+                                       VerticalOptions="Center" HorizontalOptions="StartAndExpand"/>
+                                        <Label Text="{Binding DateOfBirth}" TextColor="White" FontSize="Medium" 
+                                       VerticalOptions="Center" HorizontalOptions="StartAndExpand"/>
+                                    </StackLayout>
+                                    <StackLayout Orientation="Horizontal">
+                                        <Label Text="Team: " TextColor="White" FontSize="Medium" 
+                                       VerticalOptions="Center" HorizontalOptions="StartAndExpand"/>
+                                        <Label Text="{Binding Team.team1}" TextColor="White" FontSize="Medium" 
+                                       VerticalOptions="Center" HorizontalOptions="StartAndExpand"/>
+                                    </StackLayout>
+                                    <StackLayout Orientation="Horizontal">
+                                        <Label Text="User Value: " TextColor="White" FontSize="Medium" 
+                                       VerticalOptions="Center" HorizontalOptions="StartAndExpand"/>
+                                        <Label Text="{Binding UserValue}" TextColor="White" FontSize="Medium" 
+                                       VerticalOptions="Center" HorizontalOptions="StartAndExpand"/>
+                                    </StackLayout>
+                                    <StackLayout Orientation="Horizontal">
+                                        <Label Text="Wage: " TextColor="White" FontSize="Medium" 
+                                       VerticalOptions="Center" HorizontalOptions="StartAndExpand"/>
+                                        <Label Text="{Binding Wage}" TextColor="White" FontSize="Medium" 
+                                       VerticalOptions="Center" HorizontalOptions="StartAndExpand"/>
+                                    </StackLayout>
+                                    <StackLayout Orientation="Horizontal">
+                                        <Label Text="Height: " TextColor="White" FontSize="Medium" 
+                                       VerticalOptions="Center" HorizontalOptions="StartAndExpand"/>
+                                        <Label Text="{Binding Height}" TextColor="White" FontSize="Medium" 
+                                       VerticalOptions="Center" HorizontalOptions="StartAndExpand"/>
+                                    </StackLayout>
+                                    <StackLayout Orientation="Horizontal">
+                                        <Label Text="Weight: " TextColor="White" FontSize="Medium" 
+                                       VerticalOptions="Center" HorizontalOptions="StartAndExpand"/>
+                                        <Label Text="{Binding Weight}" TextColor="White" FontSize="Medium" 
+                                       VerticalOptions="Center" HorizontalOptions="StartAndExpand"/>
+                                    </StackLayout>
+                                    <StackLayout Orientation="Horizontal">
+                                        <Label Text="Foot: " TextColor="White" FontSize="Medium" 
+                                       VerticalOptions="Center" HorizontalOptions="StartAndExpand"/>
+                                        <Label Text="{Binding Foot}" TextColor="White" FontSize="Medium" 
+                                       VerticalOptions="Center" HorizontalOptions="StartAndExpand"/>
+                                    </StackLayout>
+                                    <StackLayout Orientation="Horizontal">
+                                        <Label Text="Position: " TextColor="White" FontSize="Medium" 
+                                       VerticalOptions="Center" HorizontalOptions="StartAndExpand"/>
+                                        <Label Text="{Binding Position}" TextColor="White" FontSize="Medium" 
+                                       VerticalOptions="Center" HorizontalOptions="StartAndExpand"/>
+                                    </StackLayout>
+                                </StackLayout>
+                            </Frame>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+            </ScrollView>
+        </Frame>
+    </Grid>
+</ContentPage>

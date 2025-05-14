@@ -29,7 +29,12 @@
             ContentTemplate="{DataTemplate local:View.PlayersSearch}"
             Route="rPlayersSearch" />
         </Tab>
-
+        <Tab Title="Players Search">
+            <ShellContent
+             Title="Club Players Search"
+             ContentTemplate="{DataTemplate local:View.ClubPlayersSearch}"
+             Route="rClubPlayersSearch" />
+        </Tab>
         <Tab Title="Finance Page">
             <ShellContent
             Title="Finance Page"

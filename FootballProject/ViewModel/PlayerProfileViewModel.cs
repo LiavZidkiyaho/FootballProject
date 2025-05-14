@@ -10,12 +10,14 @@ using Windows.System;
 namespace FootballProject.ViewModel
 {
     [QueryProperty(nameof(Player), "player")]
+    [QueryProperty(nameof(Source), "source")]
     public class PlayerProfileViewModel : ViewModelBase
     {
         private Player player;
         private ObservableCollection<Stat> playerStats;
         private readonly StatsDB statsDB;
         private readonly UserService userService;
+        private string source;
 
         public PlayerProfileViewModel(UserService Service)
         {
@@ -45,6 +47,18 @@ namespace FootballProject.ViewModel
 
         public ICommand BackCommand { get; }
 
+
+        public string Source
+        {
+            get => source;
+            set
+            {
+                source = value;
+                OnPropertyChanged();
+            }
+        }
+
+
         public Player Player
         {
             get => player;
@@ -61,7 +75,16 @@ namespace FootballProject.ViewModel
 
         private async void OnBackCommandExecuted()
         {
-            await Shell.Current.GoToAsync("///rPlayersSearch");
+            switch (Source)
+            {
+                case "ClubPlayersSearch":
+                    await Shell.Current.GoToAsync("///rClubPlayersSearch");
+                    break;
+                case "PlayersSearch":
+                default:
+                    await Shell.Current.GoToAsync("///rPlayersSearch");
+                    break;
+            }
         }
     }
 }

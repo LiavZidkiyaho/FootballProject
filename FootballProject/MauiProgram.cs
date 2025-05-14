@@ -43,6 +43,9 @@ namespace FootballProject
             builder.Services.AddSingleton<PlayersSearch>();
             builder.Services.AddSingleton<PlayersSearchViewModel>();
 
+            builder.Services.AddSingleton<ClubPlayersSearch>();
+            builder.Services.AddSingleton<ClubPlayersSearchViewModel>();
+
             builder.Services.AddSingleton<PlayerProfile>();
             builder.Services.AddSingleton <PlayerProfileViewModel>();
 
