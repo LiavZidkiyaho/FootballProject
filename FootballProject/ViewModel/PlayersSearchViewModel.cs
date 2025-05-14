@@ -1,11 +1,10 @@
 ﻿using FootballProject.Model;
 using FootballProject.ViewModel.DB;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using System.Windows.Input;
-using Windows.System;
+using Microsoft.Maui.Controls;
 
 namespace FootballProject.ViewModel
 {
@@ -22,11 +21,11 @@ namespace FootballProject.ViewModel
             playerDB = new PlayerDB();
             players = new ObservableCollection<Player>();
 
-            SelectedField = "Any"; // Default to "Any"
-            SortOrder = "None"; // Default to "None"
+            SelectedField = "Any"; // Default field
+            SortOrder = "None";    // Default sort
 
-            SearchCommand = new Command(async () => await SearchPlayers());
-            NavigateToPlayerProfileCommand = new Command<Player>(async (player) => await NavigateToPlayerProfile(player));
+            SearchCommand = new Command(async () => await SearchPlayersAsync());
+            NavigateToPlayerProfileCommand = new Command<Player>(async (player) => await NavigateToPlayerProfileAsync(player));
         }
 
         public ObservableCollection<Player> Players
@@ -72,52 +71,54 @@ namespace FootballProject.ViewModel
         public ICommand SearchCommand { get; }
         public ICommand NavigateToPlayerProfileCommand { get; }
 
-        private async Task SearchPlayers()
+        private async Task SearchPlayersAsync()
         {
-            if (string.IsNullOrEmpty(SelectedField) || SelectedField == "Any")
+            if (SelectedField == "Any" || string.IsNullOrEmpty(SelectedField))
             {
-                // If no specific field is selected, filter by any field and the entered filter value
-                if (!string.IsNullOrEmpty(FilterValue))
+                if (!string.IsNullOrWhiteSpace(FilterValue))
                 {
-                    Players = new ObservableCollection<Player>(await playerDB.SelectByFilter("Any", FilterValue));
+                    Players = new ObservableCollection<Player>(
+                        await playerDB.SelectByFilter("Any", FilterValue));
                 }
-                else if (!string.IsNullOrEmpty(SortOrder) && SortOrder != "None")
+                else if (!string.IsNullOrWhiteSpace(SortOrder) && SortOrder != "None")
                 {
-                    // If no filter value is provided but a sort order is specified, apply sorting
-                    Players = new ObservableCollection<Player>(await playerDB.SelectAndSort("Any", SortOrder));
+                    Players = new ObservableCollection<Player>(
+                        await playerDB.SelectAndSort("Any", SortOrder));
                 }
                 else
                 {
-                    // If no filter value and no sort order are provided, return all players
-                    Players = new ObservableCollection<Player>(await playerDB.SelectAllPlayers());
+                    Players = new ObservableCollection<Player>(
+                        await playerDB.SelectAllPlayers());
                 }
             }
             else
             {
-                // If a specific field is selected and a filter value is provided
-                if (!string.IsNullOrEmpty(FilterValue))
+                if (!string.IsNullOrWhiteSpace(FilterValue))
                 {
-                    // Apply the filter based on the selected field and value
-                    Players = new ObservableCollection<Player>(await playerDB.SelectByFilter(SelectedField, FilterValue));
+                    Players = new ObservableCollection<Player>(
+                        await playerDB.SelectByFilter(SelectedField, FilterValue));
                 }
-                else if (!string.IsNullOrEmpty(SortOrder) && SortOrder != "None")
+                else if (!string.IsNullOrWhiteSpace(SortOrder) && SortOrder != "None")
                 {
-                    // If no filter value is provided but a sort order is specified, apply sorting
-                    Players = new ObservableCollection<Player>(await playerDB.SelectAndSort(SelectedField, SortOrder));
+                    Players = new ObservableCollection<Player>(
+                        await playerDB.SelectAndSort(SelectedField, SortOrder));
                 }
                 else
                 {
-                    // If no filter value and no sort order are provided, select all players for the selected field
-                    Players = new ObservableCollection<Player>(await playerDB.SelectAllPlayers());
+                    Players = new ObservableCollection<Player>(
+                        await playerDB.SelectAllPlayers());
                 }
             }
         }
 
-        private async Task NavigateToPlayerProfile(Player player)
+        private async Task NavigateToPlayerProfileAsync(Player player)
         {
-            Dictionary<string, object> data = new Dictionary<string, object>();
-            data.Add("player", player);
-            data.Add("source", "PlayersSearch");
+            var data = new Dictionary<string, object>
+            {
+                { "player", player },
+                { "source", "PlayersSearch" }
+            };
+
             await Shell.Current.GoToAsync("/rPlayerProfile", data);
         }
     }

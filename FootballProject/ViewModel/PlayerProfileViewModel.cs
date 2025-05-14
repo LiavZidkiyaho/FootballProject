@@ -1,11 +1,10 @@
 ﻿using FootballProject.Model;
 using FootballProject.Services;
 using FootballProject.ViewModel.DB;
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Threading.Tasks;
 using System.Windows.Input;
-using Windows.System;
+using Microsoft.Maui.Controls;
 
 namespace FootballProject.ViewModel
 {
@@ -16,15 +15,15 @@ namespace FootballProject.ViewModel
         private Player player;
         private ObservableCollection<Stat> playerStats;
         private readonly StatsDB statsDB;
-        private readonly UserService userService;
+        private readonly IUser userService;
         private string source;
 
-        public PlayerProfileViewModel(UserService Service)
+        public PlayerProfileViewModel(IUser service)
         {
-            userService = Service;
+            userService = service;
             statsDB = new StatsDB();
-            
-            BackCommand = new Command(OnBackCommandExecuted);
+
+            BackCommand = new Command(async () => await OnBackCommandExecuted());
         }
 
         public ObservableCollection<Stat> PlayerStats
@@ -37,17 +36,6 @@ namespace FootballProject.ViewModel
             }
         }
 
-
-        public async void LoadNigger()
-        {
-            await userService.initStats(player.Id, player.Position);
-            player.Stats = userService.GetAllStats(Player.Position, Player.Id).Result;
-            PlayerStats = new ObservableCollection<Stat>(player.Stats);
-        }
-
-        public ICommand BackCommand { get; }
-
-
         public string Source
         {
             get => source;
@@ -58,7 +46,6 @@ namespace FootballProject.ViewModel
             }
         }
 
-
         public Player Player
         {
             get => player;
@@ -66,14 +53,24 @@ namespace FootballProject.ViewModel
             {
                 player = value;
                 OnPropertyChanged();
+
                 if (player != null)
                 {
-                    LoadNigger();
+                    _ = LoadPlayerStatsAsync(); // fire-and-forget
                 }
             }
         }
 
-        private async void OnBackCommandExecuted()
+        public ICommand BackCommand { get; }
+
+        private async Task LoadPlayerStatsAsync()
+        {
+            var stats = await userService.GetAllStats(player.Position, player.Id);
+            player.Stats = stats;
+            PlayerStats = new ObservableCollection<Stat>(stats);
+        }
+
+        private async Task OnBackCommandExecuted()
         {
             switch (Source)
             {

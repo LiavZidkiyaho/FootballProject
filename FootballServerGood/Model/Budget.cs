@@ -1,5 +1,5 @@
 ﻿
-namespace FootballProject.Model
+namespace FootballServerGood.Model
 {
     public class Budget : BaseEntity
     {

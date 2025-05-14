@@ -1,11 +1,12 @@
-﻿using System;
-using System.Threading.Tasks;
-using System.Windows.Input;
-using FootballProject.Model;
+﻿using FootballProject.Model;
 using FootballProject.Services;
 using FootballProject.ViewModel.DB;
 using Microcharts;
 using SkiaSharp;
+using System;
+using System.Threading.Tasks;
+using System.Windows.Input;
+using Windows.System;
 
 namespace FootballProject.ViewModel
 {
@@ -15,7 +16,7 @@ namespace FootballProject.ViewModel
         private readonly YearlyBudgetDB yearlyBudgetDB;
         private readonly SeasonBudgetDB seasonBudgetDB;
         private long bankBalance;
-        private readonly UserService userService;
+        private readonly IUser userService;
         public Chart YearlyChart { get; private set; }
         public Chart MonthlyChart { get; private set; }
 
@@ -88,21 +89,21 @@ namespace FootballProject.ViewModel
         public int Nov { get; set; }
         public int Dec { get; set; }
 
-        public int YearlyId { get; set; } // Add a computed property or bind this as needed
-        public int SeasonId { get; set; } // Add a computed property or bind this as needed
+        public int YearlyId { get; set; }
+        public int SeasonId { get; set; }
 
         public string BankBalanceString => $"Overall Bank Balance: {BankBalance:N0} €";
         public string ProfitOrLossString => $"Profit/Loss This Season: {ProfitOrLoss:N0} €";
         public string TransferBudgetString => $"{TransferBudget:N0} €";
         public string WageString => $"{Wage:N0} €";
 
-        public FinancePageViewModel(UserService service)
+        public FinancePageViewModel(IUser service)
         {
             userService = service;
             budgetDB = new BudgetDB();
             yearlyBudgetDB = new YearlyBudgetDB();
             seasonBudgetDB = new SeasonBudgetDB();
-            int teamId = userService.GetCurrentUser().Team.Id;
+            int teamId = (userService as UserService)?.GetCurrentUser().Team.Id ?? 0;
             LoadBudgetData(teamId);
             SaveCommand = new Command(async () => await SaveBudgets());
             YearlyChart = new LineChart
@@ -115,7 +116,7 @@ namespace FootballProject.ViewModel
             MonthlyChart = new LineChart
             {
                 Entries = new[]
-               {
+                {
                     new ChartEntry(20) { Label = "No Data", ValueLabel = "0", Color = SKColors.Gray }
                 }
             };
@@ -182,7 +183,6 @@ namespace FootballProject.ViewModel
             }
         }
 
-
         private void LoadYearlyChart()
         {
             YearlyChart = new LineChart
@@ -226,7 +226,6 @@ namespace FootballProject.ViewModel
             OnPropertyChanged(nameof(MonthlyChart));
         }
 
-
         private void UpdateBudgetsBasedOnSlider()
         {
             if (totalBudget <= 0) return;
@@ -249,7 +248,7 @@ namespace FootballProject.ViewModel
 
             try
             {
-                var currentUser = userService.GetCurrentUser();
+                var currentUser = (userService as UserService)?.GetCurrentUser();
 
                 Budget updatedBudget = new Budget
                 {

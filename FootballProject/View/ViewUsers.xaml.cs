@@ -15,6 +15,6 @@ public partial class ViewUsers : ContentPage
     protected override void OnAppearing()
     {
         base.OnAppearing();
-        viewModel.Refresh();
+        viewModel.RefreshAsync();
     }
 }

@@ -1,11 +1,11 @@
-﻿using FootballProject.Model;
+﻿using FootballServerGood.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace FootballProject.Model
+namespace FootballServerGood.DataAccess
 {
     public delegate string CreateOleDb(BaseEntity entity);
     public class ChangeEntity

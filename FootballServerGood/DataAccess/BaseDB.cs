@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.OleDb;
-using FootballProject.Model;
+using FootballServerGood.Model;
 
-namespace FootballProject.ViewModel.DB
+namespace FootballServerGood.DataAccess
 {
     public abstract class BaseDB
     {
@@ -62,7 +62,7 @@ namespace FootballProject.ViewModel.DB
 
         public virtual void Insert(BaseEntity entity)
         {
-            BaseEntity reqEntity = newEntity();
+            BaseEntity reqEntity = this.newEntity();
             if (entity != null && entity.GetType() == reqEntity.GetType())
             {
                 inserted.Add(new ChangeEntity(this.CreateInsertOleDb, entity));
@@ -71,7 +71,7 @@ namespace FootballProject.ViewModel.DB
 
         public virtual void Update(BaseEntity entity)
         {
-            BaseEntity reqEntity = newEntity();
+            BaseEntity reqEntity = this.newEntity();
             if (entity != null && entity.GetType() == reqEntity.GetType())
             {
                 updated.Add(new ChangeEntity(this.CreateUpdateOleDb, entity));
@@ -80,7 +80,7 @@ namespace FootballProject.ViewModel.DB
 
         public virtual void Delete(BaseEntity entity)
         {
-            BaseEntity reqEntity = newEntity();
+            BaseEntity reqEntity = this.newEntity();
             if (entity != null && entity.GetType() == reqEntity.GetType())
             {
                 deleted.Add(new ChangeEntity(this.CreateDeleteOleDb, entity));
@@ -93,8 +93,8 @@ namespace FootballProject.ViewModel.DB
             OleDbCommand cmd = new OleDbCommand();
             try
             {
-                cmd.Connection = connection;
-                connection.Open();
+                cmd.Connection = this.connection;
+                this.connection.Open();
 
                 foreach (var item in inserted)
                 {

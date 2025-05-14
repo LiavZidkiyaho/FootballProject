@@ -1,136 +1,119 @@
 ﻿using FootballProject.Model;
 using FootballProject.Services;
-using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
-using static System.Runtime.InteropServices.JavaScript.JSType;
+using Microsoft.Maui.Controls;
 
 namespace FootballProject.ViewModel
 {
     public class ViewUsersViewModel : ViewModelBase
     {
+        private readonly IUser userService;
         private bool isRefreshing;
         private bool isAdmin;
-        UserService userService;
-
-        public List<User> users;
-        private User? user;
-
-        public ObservableCollection<User> observableUsers;
+        private ObservableCollection<User> observableUsers;
 
         public ObservableCollection<User> ObservableUsers
         {
-            get { return observableUsers; }
+            get => observableUsers;
             set
             {
                 if (observableUsers != value)
                 {
                     observableUsers = value;
-                    OnPropertyChanged(nameof(ObservableUsers));
+                    OnPropertyChanged();
                 }
             }
         }
 
-        public List<User> Users
-        {
-            get
-            {
-                return users;
-            }
-            set
-            {
-                if (value != null)
-                {
-                    users = value;
-                    ObservableUsers = new ObservableCollection<User>(users);
-                    OnPropertyChanged(nameof(Users));
-                    Refresh();
-                }
-            }
-        }
-
-        public ViewUsersViewModel(UserService service)
-        {
-            userService = service;
-            LoadNigger();
-            observableUsers = new ObservableCollection<User>();
-            foreach (User user in users)
-            {
-                observableUsers.Add(user);
-            }
-            RefreshCommand = new Command(Refresh);
-            AddCommand = new Command(addCommand);
-            DeleteCommand = new Command<User>(async (u) => { if (await userService.DeleteUser(u)) Refresh(); });
-            EditCommand = new Command<User>(async (user) => { await EditMethodeCommand(user); });
-        }
-
-        public async void LoadNigger()
-        {
-            await userService.initUsers();
-            users = await userService.GetAllUsers();
-        }
-
-        public ICommand RefreshCommand
-        { get; private set; }
-
-        public ICommand EditCommand
-        { get; private set; }
-
-        public ICommand DeleteCommand
-        { get; private set; }
-
-        public ICommand AddCommand { get; private set; }
-
+        public ICommand RefreshCommand { get; }
+        public ICommand EditCommand { get; }
+        public ICommand DeleteCommand { get; }
+        public ICommand AddCommand { get; }
 
         public bool IsRefreshing
         {
-            get { return isRefreshing; }
+            get => isRefreshing;
             set
             {
-                if (isRefreshing != value) { isRefreshing = value; OnPropertyChanged(); }
+                if (isRefreshing != value)
+                {
+                    isRefreshing = value;
+                    OnPropertyChanged();
+                }
             }
-        }
-        public async void Refresh()
-        {
-            IsRefreshing = true;
-            users = await userService.GetAllUsers();
-            ObservableUsers = null;
-            ObservableUsers = new ObservableCollection<User>(users);
-            IsRefreshing = false;
-        }
-
-        public async void addCommand()
-        {
-            await Shell.Current.GoToAsync("/rSignUp");
-        }
-
-        private async Task EditMethodeCommand(User user)
-        {
-            Dictionary<string, object> data = new Dictionary<string, object>();
-            data.Add("user", user);
-            await Shell.Current.GoToAsync("rSignUp", data);
         }
 
         public bool IsAdmin
         {
-            get { return isAdmin; }
+            get => isAdmin;
             set
             {
                 if (isAdmin != value)
                 {
                     isAdmin = value;
-                    OnPropertyChanged(nameof(IsAdmin));
+                    OnPropertyChanged();
                 }
             }
         }
 
-        public User GiveCurrentUser()
+        public ViewUsersViewModel(IUser service)
         {
-            return userService.GetCurrentUser();
+            userService = service;
+
+            ObservableUsers = new ObservableCollection<User>();
+
+            RefreshCommand = new Command(async () => await RefreshAsync());
+            AddCommand = new Command(async () => await GoToAddUserPage());
+            DeleteCommand = new Command<User>(async (u) => await DeleteUserAsync(u));
+            EditCommand = new Command<User>(async (u) => await EditUserAsync(u));
+
+            _ = LoadUsersAsync(); // fire and forget
+        }
+
+        public async Task LoadUsersAsync()
+        {
+            var users = await userService.GetAllUsers();
+            ObservableUsers = new ObservableCollection<User>(users);
+        }
+
+        public async Task RefreshAsync()
+        {
+            IsRefreshing = true;
+            await LoadUsersAsync();
+            IsRefreshing = false;
+        }
+
+        private async Task DeleteUserAsync(User user)
+        {
+            bool deleted = await userService.DeleteUser(user);
+            if (deleted)
+            {
+                await RefreshAsync();
+            }
+        }
+
+        private async Task EditUserAsync(User user)
+        {
+            var data = new Dictionary<string, object>
+            {
+                { "user", user }
+            };
+            await Shell.Current.GoToAsync("rSignUp", data);
+        }
+
+        private async Task GoToAddUserPage()
+        {
+            await Shell.Current.GoToAsync("/rSignUp");
+        }
+
+        public User GetCurrentUser()
+        {
+            if (userService is UserService us)
+                return us.GetCurrentUser();
+            return null;
         }
     }
 }

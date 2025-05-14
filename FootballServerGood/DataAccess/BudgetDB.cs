@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using FootballProject.Model;
+using FootballServerGood.Model;
 
-namespace FootballProject.ViewModel.DB
+namespace FootballServerGood.DataAccess
 {
     public class BudgetDB : BaseDB
     {
@@ -95,7 +95,7 @@ WHERE
 
 
 
-            List<BaseEntity> list = await Select(query);
+            List<BaseEntity> list = await base.Select(query);
             return list.FirstOrDefault() as Budget;
         }
 

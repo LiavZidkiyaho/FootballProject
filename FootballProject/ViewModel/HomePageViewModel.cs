@@ -5,31 +5,42 @@ using Microsoft.Maui.Controls;
 
 namespace FootballProject.ViewModel
 {
-    public class HomePageViewModel
+    public class HomePageViewModel : ViewModelBase
     {
-        private readonly UserService _userService;
+        private readonly IUser _userService;
+        private User user;
 
-        public User User { get; set; }
-
-        // Command for Log Out
-        public ICommand LogoutCommand { get; }
-
-        public HomePageViewModel(UserService userService)
+        public User User
         {
-            _userService = userService;
-
-            // Initialize User from the service (assuming it's the logged-in user)
-            User = _userService.GetCurrentUser();
-
-            // Command to log out
-            LogoutCommand = new Command(OnLogout);
+            get => user;
+            set
+            {
+                if (user != value)
+                {
+                    user = value;
+                    OnPropertyChanged();
+                }
+            }
         }
 
-        // Method to handle log out action
-        private async void OnLogout()
+        public ICommand LogoutCommand { get; }
+
+        public HomePageViewModel(IUser userService)
         {
-            // Perform logout logic
-            //_userService.Logout();
+            _userService = userService;
+            User = (_userService as UserService)?.GetCurrentUser(); // Cast only if using UserService
+            LogoutCommand = new Command(async () => await OnLogoutAsync());
+        }
+
+        private async Task OnLogoutAsync()
+        {
+            // Optional: clear current user if applicable
+            if (_userService is UserService us)
+            {
+                us.SetCurrentUser(null);
+            }
+
+            // Navigate to login page
             await Shell.Current.GoToAsync("///rLogIn");
         }
     }

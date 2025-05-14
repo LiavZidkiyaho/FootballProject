@@ -1,9 +1,9 @@
-﻿using FootballProject.Model;
+﻿using FootballServerGood.Model;
 using System.Collections.Generic;
 using System.Data.OleDb;
 using System.Threading.Tasks;
 
-namespace FootballProject.ViewModel.DB
+namespace FootballServerGood.DataAccess
 {
     public class PlayerDB : BaseDB
     {
@@ -53,7 +53,7 @@ namespace FootballProject.ViewModel.DB
     FROM players p
     INNER JOIN Team t ON p.team = t.id";
 
-            List<BaseEntity> list = await Select(query);
+            List<BaseEntity> list = await base.Select(query);
             return list.Cast<Player>().ToList();
         }
 
@@ -66,7 +66,7 @@ namespace FootballProject.ViewModel.DB
     INNER JOIN Team t ON p.team = t.id
     WHERE p.id = {id}";
 
-            List<BaseEntity> list = await Select(query);
+            List<BaseEntity> list = await base.Select(query);
             if (list != null && list.Count == 1)
                 return list[0] as Player;
             return null;
@@ -96,7 +96,7 @@ namespace FootballProject.ViewModel.DB
         WHERE p.{field} LIKE '{value}'";
             }
 
-            List<BaseEntity> list = await Select(query);
+            List<BaseEntity> list = await base.Select(query);
             return list.Cast<Player>().ToList();
         }
 
@@ -109,7 +109,7 @@ namespace FootballProject.ViewModel.DB
     INNER JOIN Team t ON p.team = t.id
     ORDER BY p.{field} {order}";
 
-            List<BaseEntity> list = await Select(query);
+            List<BaseEntity> list = await base.Select(query);
             return list.Cast<Player>().ToList();
         }
 
@@ -121,7 +121,7 @@ namespace FootballProject.ViewModel.DB
         INNER JOIN Team t ON p.team = t.id
         WHERE p.team = {teamId}";
 
-            List<BaseEntity> list = await Select(query);
+            List<BaseEntity> list = await base.Select(query);
             return list.Cast<Player>().ToList();
         }
 
@@ -133,7 +133,7 @@ namespace FootballProject.ViewModel.DB
         INNER JOIN Team t ON p.team = t.id
         WHERE p.team = {teamId} AND p.FullName LIKE '%{firstName}%'";
 
-            List<BaseEntity> list = await Select(query);
+            List<BaseEntity> list = await base.Select(query);
             return list.Cast<Player>().ToList();
         }
 

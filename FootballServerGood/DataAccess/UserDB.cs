@@ -1,8 +1,8 @@
-﻿using FootballProject.Model;
+﻿using FootballServerGood.Model;
 using System.Collections.Generic;
 using System.Data.OleDb;
 
-namespace FootballProject.ViewModel.DB
+namespace FootballServerGood.DataAccess
 {
     public class UserDB : BaseDB
     {
@@ -54,7 +54,7 @@ namespace FootballProject.ViewModel.DB
             FROM users u
             INNER JOIN Team t ON u.team = t.id";
 
-            List<BaseEntity> list = await Select(query);
+            List<BaseEntity> list = await base.Select(query);
             return list.Cast<User>().ToList();
         }
 
@@ -62,7 +62,7 @@ namespace FootballProject.ViewModel.DB
         public async Task<User> SelectById(int id)
         {
             string query = $"SELECT * FROM users WHERE id = {id}";
-            List<BaseEntity> list = await Select(query);
+            List<BaseEntity> list = await base.Select(query);
             if(list != null && list.Count == 1)
                 return list[0] as User;
             return null;
@@ -80,7 +80,7 @@ namespace FootballProject.ViewModel.DB
             WHERE u.Username = '{safeUsername}'";
 
 
-            List<BaseEntity> list = await Select(query);
+            List<BaseEntity> list = await base.Select(query);
             if (list != null && list.Count == 1)
                 return list[0] as User;
 

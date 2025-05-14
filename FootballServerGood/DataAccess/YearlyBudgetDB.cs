@@ -1,6 +1,6 @@
-﻿using FootballProject.Model;
+﻿using FootballServerGood.Model;
 
-namespace FootballProject.ViewModel.DB
+namespace FootballServerGood.DataAccess
 {
     public class YearlyBudgetDB : BaseDB
     {

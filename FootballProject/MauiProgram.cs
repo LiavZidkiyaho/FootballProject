@@ -49,7 +49,7 @@ namespace FootballProject
             builder.Services.AddSingleton<PlayerProfile>();
             builder.Services.AddSingleton <PlayerProfileViewModel>();
 
-            builder.Services.AddSingleton<UserService>();
+            builder.Services.AddSingleton<IUser, WebService>();
             return builder.Build();
         }
     }

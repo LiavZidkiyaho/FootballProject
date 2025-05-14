@@ -24,7 +24,7 @@ namespace FootballProject.Services
 
         public async Task initStats(int id, string position = null)
         {
-            stats = (await statsDB.SelectStatsByPosition(position, id)).Cast<Stat>().ToList();
+            
         }
 
         public List<User> GetUsersList()

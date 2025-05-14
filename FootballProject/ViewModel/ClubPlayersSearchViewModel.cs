@@ -1,31 +1,34 @@
 ﻿using FootballProject.Model;
 using FootballProject.Services;
 using FootballProject.ViewModel.DB;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Threading.Tasks;
 using System.Windows.Input;
+using Microsoft.Maui.Controls;
 
 namespace FootballProject.ViewModel
 {
     public class ClubPlayersSearchViewModel : ViewModelBase
     {
         private readonly PlayerDB playerDB;
-        private readonly UserService userService;
+        private readonly IUser userService;
         private ObservableCollection<Player> players;
         private string selectedField;
         private string filterValue;
         private string sortOrder;
 
-        public ClubPlayersSearchViewModel(UserService service)
+        public ClubPlayersSearchViewModel(IUser service)
         {
             playerDB = new PlayerDB();
             players = new ObservableCollection<Player>();
             userService = service;
 
-            SelectedField = "Any"; // Default to "Any"
-            SortOrder = "None"; // Default to "None"
+            SelectedField = "Any";
+            SortOrder = "None";
 
-            SearchCommand = new Command(async () => await SearchPlayers());
-            NavigateToPlayerProfileCommand = new Command<Player>(async (player) => await NavigateToPlayerProfile(player));
+            SearchCommand = new Command(async () => await SearchPlayersAsync());
+            NavigateToPlayerProfileCommand = new Command<Player>(async (player) => await NavigateToPlayerProfileAsync(player));
         }
 
         public ObservableCollection<Player> Players
@@ -67,15 +70,22 @@ namespace FootballProject.ViewModel
                 OnPropertyChanged();
             }
         }
+
         public ICommand SearchCommand { get; }
         public ICommand NavigateToPlayerProfileCommand { get; }
 
-        private async Task SearchPlayers()
+        private async Task SearchPlayersAsync()
         {
-            var manager = userService.CurrentUser;
+            var manager = (userService as UserService)?.GetCurrentUser(); // Only if local UserService
+            if (manager?.Team == null)
+            {
+                await Application.Current.MainPage.DisplayAlert("Error", "No team associated with this user.", "OK");
+                return;
+            }
+
             var teamId = manager.Team.Id;
 
-            if (!string.IsNullOrEmpty(FilterValue))
+            if (!string.IsNullOrWhiteSpace(FilterValue))
             {
                 Players = new ObservableCollection<Player>(
                     await playerDB.SelectTeamPlayersByFirstName(teamId, FilterValue));
@@ -87,11 +97,14 @@ namespace FootballProject.ViewModel
             }
         }
 
-        private async Task NavigateToPlayerProfile(Player player)
+        private async Task NavigateToPlayerProfileAsync(Player player)
         {
-            Dictionary<string, object> data = new Dictionary<string, object>();
-            data.Add("player", player);
-            data.Add("source", "ClubPlayersSearch");
+            var data = new Dictionary<string, object>
+            {
+                { "player", player },
+                { "source", "ClubPlayersSearch" }
+            };
+
             await Shell.Current.GoToAsync("/rPlayerProfile", data);
         }
     }
