@@ -12,7 +12,7 @@ namespace FootballProject.ViewModel
     [QueryProperty(nameof(EditUser), "user")]
     public class SignUpViewModel : ViewModelBase
     {
-        private readonly UserService userService;
+        private readonly IUser userService;
         private List<User> users = new List<User>();
         private User user = new User();
         private User? editUser;
@@ -21,7 +21,7 @@ namespace FootballProject.ViewModel
         private string isAdmin = "No";
         private string errorMessage;
 
-        public SignUpViewModel(UserService service)
+        public SignUpViewModel(IUser service)
         {
             userService = service;
             _ = userService.initUsers();

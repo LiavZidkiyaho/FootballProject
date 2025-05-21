@@ -14,5 +14,7 @@ namespace FootballProject.Services
         Task<bool> DeleteUser(User user);
 
         Task<List<Stat>> GetAllStats(string position, int playerId);
+        
+        public Task initUsers();
     }
 }

@@ -5,8 +5,10 @@ using Microsoft.Maui.Controls;
 
 namespace FootballProject.ViewModel
 {
+    [QueryProperty(nameof(User), "User")]
     public class HomePageViewModel : ViewModelBase
     {
+        
         private readonly IUser _userService;
         private User user;
 
@@ -28,7 +30,6 @@ namespace FootballProject.ViewModel
         public HomePageViewModel(IUser userService)
         {
             _userService = userService;
-            User = (_userService as UserService)?.GetCurrentUser(); // Cast only if using UserService
             LogoutCommand = new Command(async () => await OnLogoutAsync());
         }
 

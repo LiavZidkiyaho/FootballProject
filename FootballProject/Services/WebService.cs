@@ -72,6 +72,11 @@ namespace FootballProject.Services
             return response.IsSuccessStatusCode;
         }
 
+        public async Task initUsers()
+        {
+            await Task.CompletedTask;
+        }
+
         public async Task InitStats(int id, string position = null)
         {
             await Task.CompletedTask;

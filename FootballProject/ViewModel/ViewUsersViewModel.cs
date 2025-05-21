@@ -106,7 +106,7 @@ namespace FootballProject.ViewModel
 
         private async Task GoToAddUserPage()
         {
-            await Shell.Current.GoToAsync("/rSignUp");
+            await Shell.Current.GoToAsync("rSignUp");
         }
 
         public User GetCurrentUser()
