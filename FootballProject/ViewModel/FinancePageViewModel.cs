@@ -1,37 +1,21 @@
 ﻿using FootballProject.Model;
 using FootballProject.Services;
-using FootballProject.ViewModel.DB;
 using Microcharts;
 using SkiaSharp;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
-using Windows.System;
 
 namespace FootballProject.ViewModel
 {
     public class FinancePageViewModel : ViewModelBase
     {
-        private readonly BudgetDB budgetDB;
-        private readonly YearlyBudgetDB yearlyBudgetDB;
-        private readonly SeasonBudgetDB seasonBudgetDB;
-        private long bankBalance;
-        private readonly IUser userService;
+        private readonly IUser webService;
+
         public Chart YearlyChart { get; private set; }
         public Chart MonthlyChart { get; private set; }
-
-        public long BankBalance
-        {
-            get => bankBalance;
-            set { bankBalance = value; OnPropertyChanged(); OnPropertyChanged(nameof(BankBalanceString)); }
-        }
-
-        private long profitOrLoss;
-        public long ProfitOrLoss
-        {
-            get => profitOrLoss;
-            set { profitOrLoss = value; OnPropertyChanged(); OnPropertyChanged(nameof(ProfitOrLossString)); }
-        }
 
         private long transferBudget;
         public long TransferBudget
@@ -57,6 +41,30 @@ namespace FootballProject.ViewModel
             }
         }
 
+        private long totalBalance;
+        public long TotalBalance
+        {
+            get => totalBalance;
+            set
+            {
+                totalBalance = value;
+                OnPropertyChanged();
+                OnPropertyChanged(nameof(TotalBalanceString));
+            }
+        }
+
+        private long totalDiff;
+        public long TotalDiff
+        {
+            get => totalDiff;
+            set
+            {
+                totalDiff = value;
+                OnPropertyChanged();
+                OnPropertyChanged(nameof(TotalDiffString));
+            }
+        }
+
         private int sliderValue;
         public int SliderValue
         {
@@ -71,224 +79,147 @@ namespace FootballProject.ViewModel
 
         private long totalBudget;
 
-        public int One { get; set; }
-        public int Two { get; set; }
-        public int Three { get; set; }
-        public int Four { get; set; }
-        public int Five { get; set; }
-
-        public int Jan { get; set; }
-        public int Feb { get; set; }
-        public int Mar { get; set; }
-        public int Apr { get; set; }
-        public int June { get; set; }
-        public int July { get; set; }
-        public int Aug { get; set; }
-        public int Sep { get; set; }
-        public int Oct { get; set; }
-        public int Nov { get; set; }
-        public int Dec { get; set; }
-
-        public int YearlyId { get; set; }
-        public int SeasonId { get; set; }
-
-        public string BankBalanceString => $"Overall Bank Balance: {BankBalance:N0} €";
-        public string ProfitOrLossString => $"Profit/Loss This Season: {ProfitOrLoss:N0} €";
         public string TransferBudgetString => $"{TransferBudget:N0} €";
         public string WageString => $"{Wage:N0} €";
+        public string TotalBalanceString => $"Total Balance: {TotalBalance:N0} €";
+        public string TotalDiffString => $"Profit/Loss: {TotalDiff:N0} €";
+
+        public ICommand SaveCommand { get; }
 
         public FinancePageViewModel(IUser service)
         {
-            userService = service;
-            budgetDB = new BudgetDB();
-            yearlyBudgetDB = new YearlyBudgetDB();
-            seasonBudgetDB = new SeasonBudgetDB();
-            int teamId = (userService as UserService)?.GetCurrentUser().Team.Id ?? 0;
-            LoadBudgetData(teamId);
-            SaveCommand = new Command(async () => await SaveBudgets());
-            YearlyChart = new LineChart
-            {
-                Entries = new[]
-                {
-                    new ChartEntry(20) { Label = "No Data", ValueLabel = "0", Color = SKColors.Gray }
-                }
-            };
-            MonthlyChart = new LineChart
-            {
-                Entries = new[]
-                {
-                    new ChartEntry(20) { Label = "No Data", ValueLabel = "0", Color = SKColors.Gray }
-                }
-            };
-            LoadYearlyChart();
-            LoadMonthlyChart();
-        }
+            webService = service;
+            SaveCommand = new Command(async () => await SaveNewBudget());
 
-        public ICommand SaveCommand { get; }
+            YearlyChart = EmptyChart("No yearly data");
+            MonthlyChart = EmptyChart("No monthly data");
+
+            int teamId = webService.GetCurrentUser()?.Team.Id ?? 0;
+            LoadBudgetData(teamId);
+        }
 
         private async void LoadBudgetData(int teamId)
         {
             try
             {
-                Budget budget = await budgetDB.SelectByTeamId(teamId);
+                var allBudgets = await webService.GetBudgetsByTeamId(teamId) ?? new List<Budget>();
+                var now = DateTime.Now;
 
-                if (budget != null)
-                {
-                    BankBalance = budget.Total;
-                    ProfitOrLoss = budget.ProfitLose;
-                    TransferBudget = budget.Transfer;
-                    Wage = budget.Wage;
-                    YearlyId = budget.YearId;
-                    SeasonId = budget.SeasonId;
+                TransferBudget = allBudgets.Where(b => b.Purpose == "Transfer").Sum(b => b.Total);
+                Wage = allBudgets.Where(b => b.Purpose == "Wage").Sum(b => b.Total);
+                TotalBalance = allBudgets.Where(b => b.Purpose == "Balance").Sum(b => b.Total);
+                TotalDiff = allBudgets.Where(b => b.Purpose == "Difference").Sum(b => b.Total);
 
-                    One = budget.One;
-                    Two = budget.Two;
-                    Three = budget.Three;
-                    Four = budget.Four;
-                    Five = budget.Five;
+                totalBudget = TransferBudget + Wage;
+                SliderValue = totalBudget > 0 ? (int)Math.Round((double)TransferBudget * 100 / totalBudget) : 0;
 
-                    Jan = budget.Jan;
-                    Feb = budget.Feb;
-                    Mar = budget.Mar;
-                    Apr = budget.Apr;
-                    June = budget.June;
-                    July = budget.July;
-                    Aug = budget.Aug;
-                    Sep = budget.Sep;
-                    Oct = budget.Oct;
-                    Nov = budget.Nov;
-                    Dec = budget.Dec;
+                YearlyChart = CreateChart(allBudgets
+                    .Where(b => b.Purpose == "Balance" && b.EnterDate.Year >= now.Year - 4)
+                    .GroupBy(b => b.EnterDate.Year), SKColors.Green);
 
-                    totalBudget = TransferBudget + Wage;
-                    SliderValue = (int)((TransferBudget * 100) / totalBudget);
-                }
-                else
-                {
-                    BankBalance = 0;
-                    ProfitOrLoss = 0;
-                    TransferBudget = 0;
-                    Wage = 0;
-                    totalBudget = 0;
-                    SliderValue = 0;
-                }
+                MonthlyChart = CreateChart(allBudgets
+                    .Where(b => b.Purpose == "Difference" && b.EnterDate >= now.AddMonths(-11))
+                    .GroupBy(b => new { b.EnterDate.Year, b.EnterDate.Month })
+                    .Select(g => new
+                    {
+                        Key = new DateTime(g.Key.Year, g.Key.Month, 1).ToString("MMM"),
+                        Value = g.Sum(b => b.Total)
+                    }), SKColors.Red);
+
+                OnPropertyChanged(nameof(YearlyChart));
+                OnPropertyChanged(nameof(MonthlyChart));
+                OnPropertyChanged(nameof(TransferBudgetString));
+                OnPropertyChanged(nameof(WageString));
+                OnPropertyChanged(nameof(TotalBalanceString));
+                OnPropertyChanged(nameof(TotalDiffString));
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                BankBalance = -1;
-                ProfitOrLoss = -1;
-                TransferBudget = -1;
-                Wage = -1;
-                totalBudget = -1;
-                SliderValue = 0;
+                Console.WriteLine($"Error loading finance data: {ex.Message}");
             }
-        }
-
-        private void LoadYearlyChart()
-        {
-            YearlyChart = new LineChart
-            {
-                Entries = new[]
-                {
-                    new ChartEntry(One) { Label = "Year 1", ValueLabel = One.ToString(), Color = SKColors.Red },
-                    new ChartEntry(Two) { Label = "Year 2", ValueLabel = Two.ToString(), Color = SKColors.Orange },
-                    new ChartEntry(Three) { Label = "Year 3", ValueLabel = Three.ToString(), Color = SKColors.Yellow },
-                    new ChartEntry(Four) { Label = "Year 4", ValueLabel = Four.ToString(), Color = SKColors.Green },
-                    new ChartEntry(Five) { Label = "Year 5", ValueLabel = Five.ToString(), Color = SKColors.Blue }
-                },
-                LabelOrientation = Orientation.Horizontal,
-                ValueLabelOrientation = Orientation.Horizontal
-            };
-
-            OnPropertyChanged(nameof(YearlyChart));
-        }
-
-        private void LoadMonthlyChart()
-        {
-            MonthlyChart = new LineChart
-            {
-                Entries = new[]
-                {
-                    new ChartEntry(Jan) { Label = "Jan", ValueLabel = Jan.ToString(), Color = SKColors.Red },
-                    new ChartEntry(Feb) { Label = "Feb", ValueLabel = Feb.ToString(), Color = SKColors.Orange },
-                    new ChartEntry(Mar) { Label = "Mar", ValueLabel = Mar.ToString(), Color = SKColors.Yellow },
-                    new ChartEntry(Apr) { Label = "Apr", ValueLabel = Apr.ToString(), Color = SKColors.Green },
-                    new ChartEntry(June) { Label = "Jun", ValueLabel = June.ToString(), Color = SKColors.Teal },
-                    new ChartEntry(July) { Label = "Jul", ValueLabel = July.ToString(), Color = SKColors.Blue },
-                    new ChartEntry(Aug) { Label = "Aug", ValueLabel = Aug.ToString(), Color = SKColors.Purple },
-                    new ChartEntry(Sep) { Label = "Sep", ValueLabel = Sep.ToString(), Color = SKColors.Magenta },
-                    new ChartEntry(Oct) { Label = "Oct", ValueLabel = Oct.ToString(), Color = SKColors.Brown },
-                    new ChartEntry(Nov) { Label = "Nov", ValueLabel = Nov.ToString(), Color = SKColors.Gray },
-                    new ChartEntry(Dec) { Label = "Dec", ValueLabel = Dec.ToString(), Color = SKColors.Black }
-                },
-                LabelOrientation = Orientation.Horizontal,
-                ValueLabelOrientation = Orientation.Horizontal
-            };
-            OnPropertyChanged(nameof(MonthlyChart));
         }
 
         private void UpdateBudgetsBasedOnSlider()
         {
             if (totalBudget <= 0) return;
 
-            System.Diagnostics.Debug.WriteLine($"slider value: {sliderValue}");
+            long exactTransfer = (long)Math.Round(totalBudget * sliderValue / 100.0);
+            long exactWage = totalBudget - exactTransfer;
 
-            TransferBudget = (int)(totalBudget * ((float)sliderValue / 100f));
-            Wage = totalBudget - TransferBudget;
-
-            System.Diagnostics.Debug.WriteLine($"TB value: {TransferBudget}");
-            System.Diagnostics.Debug.WriteLine($"Wage value: {Wage}");
+            TransferBudget = exactTransfer;
+            Wage = exactWage;
 
             OnPropertyChanged(nameof(TransferBudgetString));
             OnPropertyChanged(nameof(WageString));
         }
 
-        private async Task SaveBudgets()
+        private async Task SaveNewBudget()
         {
-            if (totalBudget <= 0) return;
-
             try
             {
-                var currentUser = (userService as UserService)?.GetCurrentUser();
+                var currentUser = webService.GetCurrentUser();
+                if (currentUser == null) return;
 
-                Budget updatedBudget = new Budget
+                var newBudget = new Budget
                 {
                     TeamId = currentUser.Team.Id,
-                    Transfer = this.TransferBudget,
-                    Wage = this.Wage,
-                    Total = this.YearlyId,
-                    ProfitLose = this.SeasonId,
-
-                    One = this.One,
-                    Two = this.Two,
-                    Three = this.Three,
-                    Four = this.Four,
-                    Five = this.Five,
-
-                    Jan = this.Jan,
-                    Feb = this.Feb,
-                    Mar = this.Mar,
-                    Apr = this.Apr,
-                    June = this.June,
-                    July = this.July,
-                    Aug = this.Aug,
-                    Sep = this.Sep,
-                    Oct = this.Oct,
-                    Nov = this.Nov,
-                    Dec = this.Dec
+                    Total = 1000,
+                    EnterDate = DateTime.Now,
+                    Purpose = "Transfer"
                 };
 
-                await budgetDB.UpdateBudget(updatedBudget);
-                await yearlyBudgetDB.UpdateBudget(updatedBudget);
-                await seasonBudgetDB.UpdateBudget(updatedBudget);
-
-                await budgetDB.SaveChanges();
-                await yearlyBudgetDB.SaveChanges();
-                await seasonBudgetDB.SaveChanges();
+                await webService.CreateBudget(newBudget);
+                LoadBudgetData(currentUser.Team.Id);
             }
             catch (Exception ex)
             {
                 Console.WriteLine($"Error saving budget: {ex.Message}");
             }
+        }
+
+        private LineChart CreateChart(IEnumerable<IGrouping<int, Budget>> groupedData, SKColor color)
+        {
+            var entries = groupedData
+                .OrderBy(g => g.Key)
+                .Select(g => new ChartEntry(g.Sum(b => b.Total))
+                {
+                    Label = g.Key.ToString(),
+                    ValueLabel = g.Sum(b => b.Total).ToString(),
+                    Color = color
+                }).ToList();
+
+            return entries.Any()
+                ? new LineChart { Entries = entries }
+                : EmptyChart("No data");
+        }
+
+        private LineChart CreateChart(IEnumerable<dynamic> data, SKColor color)
+        {
+            var entries = data
+                .OrderBy(d => d.Key)
+                .Select(d => new ChartEntry(d.Value)
+                {
+                    Label = d.Key.ToString(),
+                    ValueLabel = d.Value.ToString(),
+                    Color = color
+                }).ToList();
+
+            return entries.Any()
+                ? new LineChart { Entries = entries }
+                : EmptyChart("No data");
+        }
+
+        private LineChart EmptyChart(string label)
+        {
+            return new LineChart
+            {
+                Entries = new List<ChartEntry>
+                {
+                    new ChartEntry(0) { Label = label, ValueLabel = "0", Color = SKColors.Gray }
+                },
+                LabelOrientation = Orientation.Horizontal,
+                ValueLabelOrientation = Orientation.Horizontal
+            };
         }
     }
 }

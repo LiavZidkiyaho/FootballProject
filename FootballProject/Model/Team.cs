@@ -8,8 +8,8 @@ namespace FootballProject.Model
 {
     public class Team : BaseEntity
     {
-        private string? team;
+        private string team;
 
-        public string? team1 { get => team; set => team = value; }
+        public string team1 { get => team; set => team = value; }
     }
 }

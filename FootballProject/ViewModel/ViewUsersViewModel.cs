@@ -20,11 +20,8 @@ namespace FootballProject.ViewModel
             get => observableUsers;
             set
             {
-                if (observableUsers != value)
-                {
-                    observableUsers = value;
-                    OnPropertyChanged();
-                }
+                observableUsers = value;
+                OnPropertyChanged();
             }
         }
 
@@ -38,11 +35,8 @@ namespace FootballProject.ViewModel
             get => isRefreshing;
             set
             {
-                if (isRefreshing != value)
-                {
-                    isRefreshing = value;
-                    OnPropertyChanged();
-                }
+                isRefreshing = value;
+                OnPropertyChanged();
             }
         }
 
@@ -51,11 +45,8 @@ namespace FootballProject.ViewModel
             get => isAdmin;
             set
             {
-                if (isAdmin != value)
-                {
-                    isAdmin = value;
-                    OnPropertyChanged();
-                }
+                isAdmin = value;
+                OnPropertyChanged();
             }
         }
 
@@ -88,6 +79,8 @@ namespace FootballProject.ViewModel
 
         private async Task DeleteUserAsync(User user)
         {
+            if (user == null) return;
+
             bool deleted = await userService.DeleteUser(user);
             if (deleted)
             {
@@ -97,23 +90,19 @@ namespace FootballProject.ViewModel
 
         private async Task EditUserAsync(User user)
         {
+            if (user == null) return;
+
             var data = new Dictionary<string, object>
             {
                 { "user", user }
             };
+
             await Shell.Current.GoToAsync("rSignUp", data);
         }
 
         private async Task GoToAddUserPage()
         {
             await Shell.Current.GoToAsync("rSignUp");
-        }
-
-        public User GetCurrentUser()
-        {
-            if (userService is UserService us)
-                return us.GetCurrentUser();
-            return null;
         }
     }
 }

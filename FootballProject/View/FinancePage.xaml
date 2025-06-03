@@ -6,7 +6,7 @@
              Title="Finance"
              BackgroundColor="#1E1E1E">
 
-    <Grid Padding="30">
+    <Grid Padding="20">
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />
             <RowDefinition Height="*" />
@@ -15,62 +15,65 @@
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" />
             <ColumnDefinition Width="*" />
-            <ColumnDefinition Width="500" />
+            <ColumnDefinition Width="480" />
         </Grid.ColumnDefinitions>
 
-        <!-- Bank Balance + Monthly Chart -->
-        <Frame Grid.ColumnSpan="2" Grid.Row="0" Grid.Column="0" CornerRadius="30" BackgroundColor="#8294C4"
-       HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand" Margin="20">
-            <VerticalStackLayout Padding="20">
+        <!-- Bank Balance + Yearly Chart -->
+        <Frame Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2"
+               BackgroundColor="#8294C4"
+               CornerRadius="20" Margin="15">
+            <VerticalStackLayout Padding="10,10,10,5" Spacing="6">
                 <Label Text="{Binding BankBalanceString}" 
-               TextColor="White" FontSize="Large" FontAttributes="Bold"
-               HorizontalTextAlignment="Start" />
+                       TextColor="White" FontSize="Medium" FontAttributes="Bold" />
+                <Label Text="{Binding TotalBalanceString}" 
+                       TextColor="White" FontSize="Small" FontAttributes="Italic"
+                       HorizontalOptions="End" />
                 <charts:ChartView Chart="{Binding YearlyChart}" 
-                          HeightRequest="300" 
-                          WidthRequest="1200" />
+                                  HeightRequest="250" 
+                                  WidthRequest="1000" />
             </VerticalStackLayout>
         </Frame>
 
-        <!-- Profit/Loss + Yearly Chart -->
-        <Frame Grid.ColumnSpan="2" Grid.Row="1" Grid.Column="0" CornerRadius="30" BackgroundColor="#8294C4"
-       HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand" Margin="20">
-            <VerticalStackLayout Padding="20">
+        <!-- Profit/Loss + Monthly Chart -->
+        <Frame Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2"
+               BackgroundColor="#8294C4"
+               CornerRadius="20" Margin="15">
+            <VerticalStackLayout Padding="10,10,10,5" Spacing="6">
                 <Label Text="{Binding ProfitOrLossString}" 
-               TextColor="White" FontSize="Large" FontAttributes="Bold"
-               HorizontalTextAlignment="Start" />
+                       TextColor="White" FontSize="Medium" FontAttributes="Bold" />
+                <Label Text="{Binding TotalDiffString}" 
+                       TextColor="White" FontSize="Small" FontAttributes="Italic"
+                       HorizontalOptions="End" />
                 <charts:ChartView Chart="{Binding MonthlyChart}" 
-                          HeightRequest="300" 
-                          WidthRequest="1200" />
+                                  HeightRequest="250" 
+                                  WidthRequest="1000" />
             </VerticalStackLayout>
         </Frame>
 
+        <!-- Transfer & Wage Panel -->
+        <Frame Grid.Row="0" Grid.Column="2" Grid.RowSpan="2"
+               BackgroundColor="#8294C4"
+               CornerRadius="20" Margin="15">
+            <VerticalStackLayout Padding="15,15,15,10" Spacing="10">
+                <Label Text="Transfer Budget:" TextColor="White" FontSize="Medium" FontAttributes="Bold"/>
+                <Label Text="{Binding TransferBudgetString}" TextColor="White" FontSize="Medium"/>
+                <Label Text="Wage:" TextColor="White" FontSize="Medium" FontAttributes="Bold"/>
+                <Label Text="{Binding WageString}" TextColor="White" FontSize="Medium"/>
 
-        <!-- Right Side Frame: Transfer and Wage in 2 Sections -->
-        <Frame Grid.Row="0" Grid.RowSpan="2" Grid.Column="2" CornerRadius="30" BackgroundColor="#8294C4"
-               HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand" Margin="20">
-            <Grid RowDefinitions="*,*">
-                <!-- Transfer Section -->
-                <VerticalStackLayout Grid.Row="0" Spacing="10" Padding="20,30,20,10">
-                    <Label Text="Transfer Budget:" TextColor="White" FontSize="Large" FontAttributes="Bold"/>
-                    <Label Text="{Binding TransferBudgetString}" TextColor="White" FontSize="Large"/>
-                    <Label Text="Wage:" TextColor="White" FontSize="Large" FontAttributes="Bold"/>
-                    <Label Text="{Binding WageString}" TextColor="White" FontSize="Large"/>
-
-                    <!-- Single Slider to adjust percentage of Transfer and Wage -->
-                    <Slider Minimum="0" Maximum="100" 
+                <Slider Minimum="0" Maximum="100" 
                         Value="{Binding SliderValue, Mode=TwoWay}" 
-                        ThumbColor="White" 
-        MinimumTrackColor="#FF8000" 
-        MaximumTrackColor="Gray"
-        HorizontalOptions="FillAndExpand"/>
+                        ThumbColor="White"
+                        MinimumTrackColor="#FF8000" 
+                        MaximumTrackColor="Gray"
+                        HorizontalOptions="FillAndExpand"/>
 
-
-                </VerticalStackLayout>
-
-                <Button Text="Save" BackgroundColor="#1E1E1E" TextColor="White" HorizontalOptions="Center" VerticalOptions="End"
-                        Command="{Binding SaveCommand}" Margin="20"/>
-            </Grid>
+                <Button Text="Save"
+                        BackgroundColor="#1E1E1E"
+                        TextColor="White"
+                        HorizontalOptions="Center"
+                        VerticalOptions="End"
+                        Command="{Binding SaveCommand}" />
+            </VerticalStackLayout>
         </Frame>
-
     </Grid>
 </ContentPage>

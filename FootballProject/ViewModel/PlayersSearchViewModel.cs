@@ -1,5 +1,5 @@
 ﻿using FootballProject.Model;
-using FootballProject.ViewModel.DB;
+using FootballProject.Services;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
@@ -10,19 +10,20 @@ namespace FootballProject.ViewModel
 {
     public class PlayersSearchViewModel : ViewModelBase
     {
-        private readonly PlayerDB playerDB;
+        private readonly IUser service;
+
         private ObservableCollection<Player> players;
         private string selectedField;
         private string filterValue;
         private string sortOrder;
 
-        public PlayersSearchViewModel()
+        public PlayersSearchViewModel(IUser webService)
         {
-            playerDB = new PlayerDB();
-            players = new ObservableCollection<Player>();
+            service = webService;
 
-            SelectedField = "Any"; // Default field
-            SortOrder = "None";    // Default sort
+            players = new ObservableCollection<Player>();
+            SelectedField = "Any";
+            SortOrder = "None";
 
             SearchCommand = new Command(async () => await SearchPlayersAsync());
             NavigateToPlayerProfileCommand = new Command<Player>(async (player) => await NavigateToPlayerProfileAsync(player));
@@ -78,17 +79,17 @@ namespace FootballProject.ViewModel
                 if (!string.IsNullOrWhiteSpace(FilterValue))
                 {
                     Players = new ObservableCollection<Player>(
-                        await playerDB.SelectByFilter("Any", FilterValue));
+                        await service.SelectByFilter("Any", FilterValue));
                 }
                 else if (!string.IsNullOrWhiteSpace(SortOrder) && SortOrder != "None")
                 {
                     Players = new ObservableCollection<Player>(
-                        await playerDB.SelectAndSort("Any", SortOrder));
+                        await service.SelectAndSort("Any", SortOrder));
                 }
                 else
                 {
                     Players = new ObservableCollection<Player>(
-                        await playerDB.SelectAllPlayers());
+                        await service.SelectAllPlayers());
                 }
             }
             else
@@ -96,17 +97,17 @@ namespace FootballProject.ViewModel
                 if (!string.IsNullOrWhiteSpace(FilterValue))
                 {
                     Players = new ObservableCollection<Player>(
-                        await playerDB.SelectByFilter(SelectedField, FilterValue));
+                        await service.SelectByFilter(SelectedField, FilterValue));
                 }
                 else if (!string.IsNullOrWhiteSpace(SortOrder) && SortOrder != "None")
                 {
                     Players = new ObservableCollection<Player>(
-                        await playerDB.SelectAndSort(SelectedField, SortOrder));
+                        await service.SelectAndSort(SelectedField, SortOrder));
                 }
                 else
                 {
                     Players = new ObservableCollection<Player>(
-                        await playerDB.SelectAllPlayers());
+                        await service.SelectAllPlayers());
                 }
             }
         }

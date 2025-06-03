@@ -1,6 +1,8 @@
 ﻿using FootballServerGood.Model;
+using FootballServerGood.DataAccess;
 using System.Collections.Generic;
 using System.Data.OleDb;
+using System.Reflection.PortableExecutable;
 
 namespace FootballServerGood.DataAccess
 {
@@ -14,14 +16,35 @@ namespace FootballServerGood.DataAccess
         protected override string CreateInsertOleDb(BaseEntity entity)
         {
             var user = (User)entity;
-            return $"INSERT INTO users (FullName, Username, UserPassword, Email, team, admin) VALUES ('{user.Name}', '{user.Username}', '{user.Password}', '{user.Email}','{user.Team}','{user.IsAdmin}')";
+
+            return $@"
+INSERT INTO users (FullName, Username, UserPassword, Email, team, admin, Role)
+VALUES ('{user.Name.Replace("'", "''")}', 
+        '{user.Username.Replace("'", "''")}', 
+        '{user.Password.Replace("'", "''")}', 
+        '{user.Email.Replace("'", "''")}', 
+        {user.Team.Id}, 
+        '{user.IsAdmin.Replace("'", "''")}', 
+        '{user.Role.Replace("'", "''")}')";
         }
+
 
         protected override string CreateUpdateOleDb(BaseEntity entity)
         {
             var user = (User)entity;
-            return $"UPDATE users SET FullName = '{user.Name}', Username = '{user.Username}', UserPassword = '{user.Password}', Email = '{user.Email}', team = '{user.Team}', admin = '{user.IsAdmin}' WHERE id = {user.Id}";
+
+            return $@"
+UPDATE users 
+SET FullName = '{user.Name.Replace("'", "''")}', 
+    Username = '{user.Username.Replace("'", "''")}', 
+    UserPassword = '{user.Password.Replace("'", "''")}', 
+    Email = '{user.Email.Replace("'", "''")}', 
+    team = {user.Team.Id}, 
+    admin = '{user.IsAdmin.Replace("'", "''")}', 
+    Role = '{user.Role.Replace("'", "''")}'
+WHERE id = {user.Id}";
         }
+
 
         protected override string CreateDeleteOleDb(BaseEntity entity)
         {
@@ -33,14 +56,14 @@ namespace FootballServerGood.DataAccess
         {
             var user = (User)entity;
             user.Id = reader.GetInt32(0);
-            user.Name= reader.GetString(1);
+            user.Name = reader.GetString(1);
             user.Username = reader.GetString(2);
             user.Password = reader.GetString(3);
             user.Email = reader.GetString(4);
 
             user.Team = new Team();
             user.Team.Id = reader.GetInt32(5);
-            user.Team.team1 = reader.GetString(8); 
+            user.Team.team1 = reader.GetString(8);
 
             user.IsAdmin = reader.GetString(6);
             user.Role = reader.GetString(7);
@@ -54,19 +77,26 @@ namespace FootballServerGood.DataAccess
             FROM users u
             INNER JOIN Team t ON u.team = t.id";
 
-            List<BaseEntity> list = await base.Select(query);
+            List<BaseEntity> list = await Select(query);
             return list.Cast<User>().ToList();
         }
 
 
         public async Task<User> SelectById(int id)
         {
-            string query = $"SELECT * FROM users WHERE id = {id}";
-            List<BaseEntity> list = await base.Select(query);
-            if(list != null && list.Count == 1)
+            string query = $@"
+        SELECT u.*, t.Team 
+        FROM users u
+        INNER JOIN Team t ON u.team = t.id
+        WHERE u.id = {id}";
+
+            List<BaseEntity> list = await Select(query);
+            if (list != null && list.Count == 1)
                 return list[0] as User;
+
             return null;
         }
+
 
         public async Task<User> SelectByUsername(string username)
         {
@@ -80,7 +110,7 @@ namespace FootballServerGood.DataAccess
             WHERE u.Username = '{safeUsername}'";
 
 
-            List<BaseEntity> list = await base.Select(query);
+            List<BaseEntity> list = await Select(query);
             if (list != null && list.Count == 1)
                 return list[0] as User;
 

@@ -42,7 +42,7 @@ namespace FootballProject.ViewModel
             }
 
             // Navigate to login page
-            await Shell.Current.GoToAsync("///rLogIn");
+            await Shell.Current.GoToAsync("/rLogIn");
         }
     }
 }

@@ -2,6 +2,7 @@
 using FootballProject.Services;
 using FootballProject.ViewModel.DB;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -16,16 +17,56 @@ namespace FootballProject.ViewModel
         private List<User> users = new List<User>();
         private User user = new User();
         private User? editUser;
-        private string name, username, password, email;
-        private Team team;
-        private string isAdmin = "No";
-        private string errorMessage;
+        private string name, username, password, email, errorMessage;
+        private Team selectedTeam;
+        private string selectedRole;
+        private bool isAdmin;
 
         public SignUpViewModel(IUser service)
         {
             userService = service;
-            _ = userService.initUsers();
-            AddUserCommand = new Command(async () => await AddOrUpdateUser());
+            AddUserCommand = new Command(async () => await AddOrUpdateUser(), () => CanAddUser);
+
+            Roles = new ObservableCollection<string> { "Coach", "Manager" };
+            Teams = new ObservableCollection<Team>();
+            LoadTeams();
+        }
+
+        public ObservableCollection<Team> Teams { get; }
+        public ObservableCollection<string> Roles { get; }
+
+        public Team SelectedTeam
+        {
+            get => selectedTeam;
+            set { selectedTeam = value; OnPropertyChanged(); OnPropertyChanged(nameof(CanAddUser)); }
+        }
+
+        public string SelectedRole
+        {
+            get => selectedRole;
+            set { selectedRole = value; OnPropertyChanged(); OnPropertyChanged(nameof(CanAddUser)); }
+        }
+
+        public bool IsAdmin
+        {
+            get => isAdmin;
+            set
+            {
+                isAdmin = value;
+                OnPropertyChanged();
+                OnPropertyChanged(nameof(IsNotAdmin));
+            }
+        }
+
+        public bool IsNotAdmin
+        {
+            get => !isAdmin;
+            set
+            {
+                isAdmin = !value;
+                OnPropertyChanged();
+                OnPropertyChanged(nameof(IsAdmin));
+            }
         }
 
         public string Name
@@ -52,25 +93,15 @@ namespace FootballProject.ViewModel
             set { email = value; OnPropertyChanged(); HandleError(); }
         }
 
-        public Team Team
-        {
-            get => team;
-            set { team = value; OnPropertyChanged(); }
-        }
-
-        public string IsAdmin
-        {
-            get => isAdmin;
-            set { isAdmin = value; OnPropertyChanged(); }
-        }
-
         public string ErrorMessage
         {
             get => errorMessage;
             set { errorMessage = value; OnPropertyChanged(); }
         }
 
-        public bool HasError => !ValidName() || !ValidUsername() || !ValidPassword() || !ValidEmail();
+        public bool HasError =>
+            !ValidName() || !ValidUsername() || !ValidPassword() || !ValidEmail() ||
+            SelectedTeam == null || string.IsNullOrWhiteSpace(SelectedRole);
 
         public bool CanAddUser => !HasError;
 
@@ -92,32 +123,42 @@ namespace FootballProject.ViewModel
                         Password = editUser.Password,
                         Email = editUser.Email,
                         Team = editUser.Team,
-                        IsAdmin = editUser.IsAdmin
+                        IsAdmin = editUser.IsAdmin,
+                        Role = editUser.Role
                     };
 
                     Name = editUser.Name;
                     Username = editUser.Username;
                     Password = editUser.Password;
                     Email = editUser.Email;
-                    Team = editUser.Team;
-                    IsAdmin = editUser.IsAdmin;
+                    SelectedTeam = editUser.Team;
+                    IsAdmin = editUser.IsAdmin == "Yes";
+                    SelectedRole = editUser.Role;
                 }
                 else
                 {
                     user = new User();
                     Name = Username = Password = Email = null;
-                    Team = null;
-                    IsAdmin = "No";
+                    SelectedTeam = null;
+                    IsAdmin = false;
+                    SelectedRole = null;
                 }
+
                 HandleError();
                 OnPropertyChanged();
             }
         }
 
+        private async void LoadTeams()
+        {
+            var list = await userService.GetAllTeams();
+            Teams.Clear();
+            foreach (var t in list)
+                Teams.Add(t);
+        }
+
         private bool ValidName() => !string.IsNullOrWhiteSpace(Name) && Name.Length >= 3;
-
         private bool ValidUsername() => !string.IsNullOrWhiteSpace(Username) && Username.Length >= 3;
-
         private bool ValidPassword() => !string.IsNullOrWhiteSpace(Password) && Password.Length >= 6;
 
         private bool ValidEmail()
@@ -134,6 +175,8 @@ namespace FootballProject.ViewModel
             if (!ValidUsername()) errors.Add("Username is too short.");
             if (!ValidPassword()) errors.Add("Password must be at least 6 characters.");
             if (!ValidEmail()) errors.Add("Invalid email address.");
+            if (SelectedTeam == null) errors.Add("Team must be selected.");
+            if (string.IsNullOrWhiteSpace(SelectedRole)) errors.Add("Role must be selected.");
             ErrorMessage = string.Join("\n", errors);
             OnPropertyChanged(nameof(HasError));
             OnPropertyChanged(nameof(CanAddUser));
@@ -145,7 +188,7 @@ namespace FootballProject.ViewModel
             HandleError();
             if (HasError) return;
 
-            // Editing existing user
+            // Editing user
             if (EditUser != null && user != null && EditUser.Id == user.Id)
             {
                 var existing = users.Find(u => u.Id == user.Id);
@@ -155,8 +198,9 @@ namespace FootballProject.ViewModel
                     existing.Username = Username;
                     existing.Password = Password;
                     existing.Email = Email;
-                    existing.Team = Team;
-                    existing.IsAdmin = IsAdmin;
+                    existing.Team = SelectedTeam;
+                    existing.IsAdmin = IsAdmin ? "Yes" : "No";
+                    existing.Role = SelectedRole;
 
                     bool updated = await userService.UpdateUser(existing);
                     if (updated)
@@ -173,8 +217,8 @@ namespace FootballProject.ViewModel
             }
             else
             {
-                // Check for duplicate username
-                if (users.Exists(u => u.Username.Equals(Username, StringComparison.OrdinalIgnoreCase)))
+                // Add new user
+                if (users.Exists(u => u.Username.Equals(Username, System.StringComparison.OrdinalIgnoreCase)))
                 {
                     await Shell.Current.DisplayAlert("Error", "Username already exists.", "OK");
                     return;
@@ -187,8 +231,9 @@ namespace FootballProject.ViewModel
                     Username = Username,
                     Password = Password,
                     Email = Email,
-                    Team = Team,
-                    IsAdmin = IsAdmin
+                    Team = SelectedTeam,
+                    IsAdmin = IsAdmin ? "Yes" : "No",
+                    Role = SelectedRole
                 };
 
                 bool added = await userService.AddUser(user);
@@ -196,12 +241,12 @@ namespace FootballProject.ViewModel
                 {
                     await Shell.Current.DisplayAlert("Success", "User added successfully.", "OK");
                     await Shell.Current.GoToAsync("///rViewUsers");
+                    EditUser = null;
                 }
                 else
                 {
                     await Shell.Current.DisplayAlert("Error", "Failed to add user.", "Cancel");
                 }
-                EditUser = null;
             }
         }
     }

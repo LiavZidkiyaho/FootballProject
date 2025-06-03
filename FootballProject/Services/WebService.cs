@@ -36,6 +36,18 @@ namespace FootballProject.Services
             return JsonSerializer.Deserialize<List<User>>(json, options);
         }
 
+        private User currentUser;
+
+        public User GetCurrentUser()
+        {
+            return currentUser;
+        }
+
+        public void SetCurrentUser(User user)
+        {
+            currentUser = user;
+        }
+
         public async Task<User> GetUser(string username)
         {
             var response = await client.GetAsync($"{baseUrl}/api/users/by-username/{username}");
@@ -92,39 +104,42 @@ namespace FootballProject.Services
 
         // ---------------------- BUDGET METHODS ----------------------
 
-        public async Task<Budget> GetBudgetByTeamId(int teamId)
+        public async Task<List<Budget>> GetBudgetsByTeamId(int teamId)
         {
             var response = await client.GetAsync($"{baseUrl}/api/budgets/team/{teamId}");
-            response.EnsureSuccessStatusCode();
+            if (!response.IsSuccessStatusCode) return new List<Budget>();
+
             var json = await response.Content.ReadAsStringAsync();
-            return JsonSerializer.Deserialize<Budget>(json, options);
+            return JsonSerializer.Deserialize<List<Budget>>(json, options);
         }
+
 
         public async Task<bool> UpdateBudget(Budget budget)
         {
             var content = new StringContent(JsonSerializer.Serialize(budget, options), Encoding.UTF8, "application/json");
-            var response = await client.PutAsync($"{baseUrl}/api/budgets/{budget.TeamId}", content);
+            var response = await client.PutAsync($"{baseUrl}/api/budgets/{budget.Id}", content);
             return response.IsSuccessStatusCode;
         }
 
-        public async Task<bool> UpdateYearlyBudget(Budget budget)
+        public async Task<bool> CreateBudget(Budget budget)
         {
             var content = new StringContent(JsonSerializer.Serialize(budget, options), Encoding.UTF8, "application/json");
-            var response = await client.PutAsync($"{baseUrl}/api/yearlybudgets/{budget.Total}", content);
+            var response = await client.PostAsync($"{baseUrl}/api/budgets", content);
             return response.IsSuccessStatusCode;
         }
 
-        public async Task<bool> UpdateSeasonBudget(Budget budget)
+        public async Task<bool> DeleteBudget(int budgetId)
         {
-            var content = new StringContent(JsonSerializer.Serialize(budget, options), Encoding.UTF8, "application/json");
-            var response = await client.PutAsync($"{baseUrl}/api/seasonbudgets/{budget.ProfitLose}", content);
+            var response = await client.DeleteAsync($"{baseUrl}/api/budgets/{budgetId}");
             return response.IsSuccessStatusCode;
         }
 
         public async Task SaveChanges()
         {
-            await Task.CompletedTask; // No-op in web context
+            // No-op in REST API client context (placeholder for consistency with DBService interface)
+            await Task.CompletedTask;
         }
+
 
         // ---------------------- PLAYER METHODS ----------------------
 
@@ -167,5 +182,15 @@ namespace FootballProject.Services
             var json = await response.Content.ReadAsStringAsync();
             return JsonSerializer.Deserialize<List<Player>>(json, options);
         }
+
+        public async Task<List<Team>> GetAllTeams()
+        {
+            var response = await client.GetAsync($"{baseUrl}/api/team");
+            response.EnsureSuccessStatusCode();
+            var json = await response.Content.ReadAsStringAsync();
+            return JsonSerializer.Deserialize<List<Team>>(json, options);
+        }
+
     }
+
 }

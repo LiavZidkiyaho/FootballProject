@@ -11,7 +11,6 @@ namespace FootballProject.ViewModel
 {
     public class ClubPlayersSearchViewModel : ViewModelBase
     {
-        private readonly PlayerDB playerDB;
         private readonly IUser userService;
         private ObservableCollection<Player> players;
         private string selectedField;
@@ -20,7 +19,6 @@ namespace FootballProject.ViewModel
 
         public ClubPlayersSearchViewModel(IUser service)
         {
-            playerDB = new PlayerDB();
             players = new ObservableCollection<Player>();
             userService = service;
 
@@ -76,7 +74,7 @@ namespace FootballProject.ViewModel
 
         private async Task SearchPlayersAsync()
         {
-            var manager = (userService as UserService)?.GetCurrentUser(); // Only if local UserService
+            var manager = userService.GetCurrentUser(); // Only if local UserService
             if (manager?.Team == null)
             {
                 await Application.Current.MainPage.DisplayAlert("Error", "No team associated with this user.", "OK");
@@ -88,12 +86,12 @@ namespace FootballProject.ViewModel
             if (!string.IsNullOrWhiteSpace(FilterValue))
             {
                 Players = new ObservableCollection<Player>(
-                    await playerDB.SelectTeamPlayersByFirstName(teamId, FilterValue));
+                    await userService.SelectTeamPlayersByFirstName(teamId, FilterValue));
             }
             else
             {
                 Players = new ObservableCollection<Player>(
-                    await playerDB.SelectPlayersByTeam(teamId));
+                    await userService.SelectPlayersByTeam(teamId));
             }
         }
 

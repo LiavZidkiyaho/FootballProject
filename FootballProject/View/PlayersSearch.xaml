@@ -5,9 +5,6 @@
              x:Class="FootballProject.View.PlayersSearch"
              Title="Players Search"
              BackgroundColor="#1E1E1E">
-    <ContentPage.BindingContext>
-        <vm:PlayersSearchViewModel />
-    </ContentPage.BindingContext>
     <Grid Padding="30">
         <!-- Define Rows for each filter, Search Bar and Results -->
         <Grid.RowDefinitions>

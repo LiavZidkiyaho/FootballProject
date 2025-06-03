@@ -131,7 +131,7 @@ namespace FootballServerGood.DataAccess
         SELECT p.*, t.Team 
         FROM players p
         INNER JOIN Team t ON p.team = t.id
-        WHERE p.team = {teamId} AND p.FullName LIKE '%{firstName}%'";
+        WHERE p.team = {teamId} AND p.full_name LIKE '%{firstName}%'";
 
             List<BaseEntity> list = await base.Select(query);
             return list.Cast<Player>().ToList();

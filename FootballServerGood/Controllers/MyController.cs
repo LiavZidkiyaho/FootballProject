@@ -1,6 +1,5 @@
 ﻿using FootballServerGood.Model;
 using FootballServerGood.DataAccess;
-using FootballServerGood.Model;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Threading.Tasks;

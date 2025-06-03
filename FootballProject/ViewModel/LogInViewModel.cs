@@ -87,7 +87,8 @@ namespace FootballProject.ViewModel
                 User = fetchedUser;
 
                 await Application.Current.MainPage.DisplayAlert("Login Success", $"Welcome, {User.Name}!", "OK");
-
+                var user = await service.GetUser(Username);
+                service.SetCurrentUser(user);
                 App.Current.MainPage = new AppShell();
                 await Shell.Current.GoToAsync("///rHomePage", new Dictionary<string, object>
                 {

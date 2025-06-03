@@ -7,35 +7,45 @@
              Title="ViewUsers">
     <Grid Margin="10">
         <ScrollView>
-        <RefreshView Command="{Binding RefreshCommand}" IsRefreshing="{Binding IsRefreshing}" Grid.Row="2">
-            <CollectionView ItemsSource="{Binding ObservableUsers}">
-                <CollectionView.ItemTemplate>
-                    <DataTemplate x:DataType="model:User">
-                        <Border StrokeThickness="1" StrokeShape="RoundRectangle 10" Padding="10" Margin="5">
-                            <Grid ColumnDefinitions="*,*,*,*,*,*,*" RowDefinitions="*,*,*" >
-                                <Label Grid.Column="0" Text="{Binding Name}" TextColor="#8294C4" FontSize="Medium"/>
-                                <Label Grid.Column="1" Text="{Binding Username}" TextColor="#8294C4"  FontSize="Medium"/>
-                                <Label Grid.Column="2" Text="{Binding Password}" TextColor="#8294C4"  FontSize="Medium"/>
-                                <Label Grid.Column="3" Text="{Binding Email}" TextColor="#8294C4"  FontSize="Medium"/>
-                                <Label Grid.Column="4" Text="{Binding Team.team1}" TextColor="#8294C4"  FontSize="Medium"/>
-                                <Label Grid.Column="5" Text="{Binding IsAdmin}" TextColor="#8294C4"  FontSize="Medium"/>
+            <RefreshView Command="{Binding RefreshCommand}" IsRefreshing="{Binding IsRefreshing}">
+                <CollectionView ItemsSource="{Binding ObservableUsers}">
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate x:DataType="model:User">
+                            <Border StrokeThickness="1" StrokeShape="RoundRectangle 10" Padding="10" Margin="5">
+                                <Grid ColumnDefinitions="*,*,*,*,*,*,*,*" RowDefinitions="Auto,Auto">
+                                    <Label Grid.Column="0" Text="{Binding Name}" TextColor="#8294C4" FontSize="Medium"/>
+                                    <Label Grid.Column="1" Text="{Binding Username}" TextColor="#8294C4" FontSize="Medium"/>
+                                    <Label Grid.Column="2" Text="{Binding Password}" TextColor="#8294C4" FontSize="Medium"/>
+                                    <Label Grid.Column="3" Text="{Binding Email}" TextColor="#8294C4" FontSize="Medium"/>
+                                    <Label Grid.Column="4" Text="{Binding Team.team1}" TextColor="#8294C4" FontSize="Medium"/>
+                                    <Label Grid.Column="5" Text="{Binding IsAdmin}" TextColor="#8294C4" FontSize="Medium"/>
+                                    <Label Grid.Column="6" Text="{Binding Role}" TextColor="#8294C4" FontSize="Medium"/>
 
-                                    <Button
-                                            Grid.Row="2" Grid.Column="0" BackgroundColor="#8294C4" TextColor="White" FontSize="Medium" Text="Delete user" HeightRequest="35" CornerRadius="10" Margin="5"
-                                            Command="{Binding DeleteCommand, Source={x:RelativeSource AncestorType={x:Type viewmodel:ViewUsersViewModel},Mode=FindAncestorBindingContext}}" 
+                                    <Button Grid.Row="1" Grid.Column="0" BackgroundColor="#8294C4" TextColor="White" FontSize="Medium"
+                                            Text="Delete user" HeightRequest="35" CornerRadius="10" Margin="5"
+                                            Command="{Binding DeleteCommand, Source={x:RelativeSource AncestorType={x:Type viewmodel:ViewUsersViewModel}}}" 
                                             CommandParameter="{Binding .}"/>
-                                    <Button Grid.Row="2" Grid.Column="1" BackgroundColor="#8294C4" TextColor="White" FontSize="Medium"  Text="Edit user" HeightRequest="35" CornerRadius="10" Margin="5"
-                                            Command="{Binding EditCommand, Source={x:RelativeSource AncestorType={x:Type viewmodel:ViewUsersViewModel},Mode=FindAncestorBindingContext}}" 
+
+                                    <Button Grid.Row="1" Grid.Column="1" BackgroundColor="#8294C4" TextColor="White" FontSize="Medium"
+                                            Text="Edit user" HeightRequest="35" CornerRadius="10" Margin="5"
+                                            Command="{Binding EditCommand, Source={x:RelativeSource AncestorType={x:Type viewmodel:ViewUsersViewModel}}}" 
                                             CommandParameter="{Binding .}"/>
-                            </Grid>
-                        </Border>
-                    </DataTemplate>
-                </CollectionView.ItemTemplate>
-            </CollectionView>
-        </RefreshView>
+                                </Grid>
+                            </Border>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+            </RefreshView>
         </ScrollView>
-        <Button  BackgroundColor="#8294C4" VerticalOptions="End" TextColor="White" FontSize="Medium" Text="Add User" HeightRequest="35" CornerRadius="10" Margin="5"
-        Command="{Binding AddCommand, Source={x:RelativeSource AncestorType={x:Type viewmodel:ViewUsersViewModel}, Mode=FindAncestorBindingContext}}" 
-        CommandParameter="{Binding .}"/>
+
+        <Button BackgroundColor="#8294C4"
+                VerticalOptions="End"
+                TextColor="White"
+                FontSize="Medium"
+                Text="Add User"
+                HeightRequest="35"
+                CornerRadius="10"
+                Margin="5"
+                Command="{Binding AddCommand, Source={x:RelativeSource AncestorType={x:Type viewmodel:ViewUsersViewModel}}}" />
     </Grid>
 </ContentPage>
