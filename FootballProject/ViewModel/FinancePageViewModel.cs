@@ -65,24 +65,35 @@ namespace FootballProject.ViewModel
             }
         }
 
-        private int sliderValue;
-        public int SliderValue
-        {
-            get => sliderValue;
-            set
-            {
-                sliderValue = value;
-                UpdateBudgetsBasedOnSlider();
-                OnPropertyChanged();
-            }
-        }
-
-        private long totalBudget;
-
         public string TransferBudgetString => $"{TransferBudget:N0} €";
         public string WageString => $"{Wage:N0} €";
         public string TotalBalanceString => $"Total Balance: {TotalBalance:N0} €";
         public string TotalDiffString => $"Profit/Loss: {TotalDiff:N0} €";
+
+        // Form Properties
+        public List<string> BudgetPurposes { get; } = new() { "Transfer", "Wage", "Balance", "Difference" };
+
+        private string newBudgetAmount;
+        public string NewBudgetAmount
+        {
+            get => newBudgetAmount;
+            set
+            {
+                newBudgetAmount = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private string selectedPurpose;
+        public string SelectedPurpose
+        {
+            get => selectedPurpose;
+            set
+            {
+                selectedPurpose = value;
+                OnPropertyChanged();
+            }
+        }
 
         public ICommand SaveCommand { get; }
 
@@ -110,9 +121,6 @@ namespace FootballProject.ViewModel
                 TotalBalance = allBudgets.Where(b => b.Purpose == "Balance").Sum(b => b.Total);
                 TotalDiff = allBudgets.Where(b => b.Purpose == "Difference").Sum(b => b.Total);
 
-                totalBudget = TransferBudget + Wage;
-                SliderValue = totalBudget > 0 ? (int)Math.Round((double)TransferBudget * 100 / totalBudget) : 0;
-
                 YearlyChart = CreateChart(allBudgets
                     .Where(b => b.Purpose == "Balance" && b.EnterDate.Year >= now.Year - 4)
                     .GroupBy(b => b.EnterDate.Year), SKColors.Green);
@@ -139,20 +147,6 @@ namespace FootballProject.ViewModel
             }
         }
 
-        private void UpdateBudgetsBasedOnSlider()
-        {
-            if (totalBudget <= 0) return;
-
-            long exactTransfer = (long)Math.Round(totalBudget * sliderValue / 100.0);
-            long exactWage = totalBudget - exactTransfer;
-
-            TransferBudget = exactTransfer;
-            Wage = exactWage;
-
-            OnPropertyChanged(nameof(TransferBudgetString));
-            OnPropertyChanged(nameof(WageString));
-        }
-
         private async Task SaveNewBudget()
         {
             try
@@ -160,15 +154,26 @@ namespace FootballProject.ViewModel
                 var currentUser = webService.GetCurrentUser();
                 if (currentUser == null) return;
 
+                if (!long.TryParse(NewBudgetAmount, out var amount) || string.IsNullOrEmpty(SelectedPurpose))
+                {
+                    Console.WriteLine("Invalid input. Please enter a numeric amount and select a purpose.");
+                    return;
+                }
+
                 var newBudget = new Budget
                 {
                     TeamId = currentUser.Team.Id,
-                    Total = 1000,
+                    Total = amount,
                     EnterDate = DateTime.Now,
-                    Purpose = "Transfer"
+                    Purpose = SelectedPurpose
                 };
 
                 await webService.CreateBudget(newBudget);
+
+                // Clear inputs
+                NewBudgetAmount = string.Empty;
+                SelectedPurpose = null;
+
                 LoadBudgetData(currentUser.Team.Id);
             }
             catch (Exception ex)
@@ -176,6 +181,7 @@ namespace FootballProject.ViewModel
                 Console.WriteLine($"Error saving budget: {ex.Message}");
             }
         }
+
 
         private LineChart CreateChart(IEnumerable<IGrouping<int, Budget>> groupedData, SKColor color)
         {

@@ -7,6 +7,16 @@ namespace FootballProject
         public AppShell()
         {
             InitializeComponent();
+            ManagerTab.IsVisible = App.manager;
+            if(App.role == "Coach")
+            {
+                ClubSearch.IsVisible = true;
+            }
+            else
+            {
+                ClubSearch.IsVisible = false;
+
+            }
             Routing.RegisterRoute("rHomePage", typeof(HomePage));
             Routing.RegisterRoute("rSignUp", typeof(SignUp));
             Routing.RegisterRoute("rLogIn", typeof(LogIn));

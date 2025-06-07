@@ -6,6 +6,7 @@
              xmlns:viewmodel="clr-namespace:FootballProject.ViewModel;assembly=FootballProject"
              Title="HomePage"
              BackgroundColor="#1E1E1E">
+
     <Grid Margin="10">
         <!-- Define two rows, one for the content and one for the logout button -->
         <Grid.RowDefinitions>

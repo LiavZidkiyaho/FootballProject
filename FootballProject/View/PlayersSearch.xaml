@@ -37,7 +37,7 @@
                     <x:String>height</x:String>
                     <x:String>weight</x:String>
                     <x:String>foot</x:String>
-                    <x:String>position</x:String>
+                    <x:String>postion</x:String>
                 </x:Array>
             </Picker.ItemsSource>
         </Picker>

@@ -50,28 +50,34 @@
             </VerticalStackLayout>
         </Frame>
 
-        <!-- Transfer & Wage Panel -->
+        <!-- Budget Entry Form Panel -->
         <Frame Grid.Row="0" Grid.Column="2" Grid.RowSpan="2"
                BackgroundColor="#8294C4"
                CornerRadius="20" Margin="15">
             <VerticalStackLayout Padding="15,15,15,10" Spacing="10">
+
                 <Label Text="Transfer Budget:" TextColor="White" FontSize="Medium" FontAttributes="Bold"/>
                 <Label Text="{Binding TransferBudgetString}" TextColor="White" FontSize="Medium"/>
                 <Label Text="Wage:" TextColor="White" FontSize="Medium" FontAttributes="Bold"/>
                 <Label Text="{Binding WageString}" TextColor="White" FontSize="Medium"/>
 
-                <Slider Minimum="0" Maximum="100" 
-                        Value="{Binding SliderValue, Mode=TwoWay}" 
-                        ThumbColor="White"
-                        MinimumTrackColor="#FF8000" 
-                        MaximumTrackColor="Gray"
-                        HorizontalOptions="FillAndExpand"/>
+                <Label x:Name="AmountLabel" Text="Enter Budget Amount:" TextColor="White"/>
+                <Entry x:Name="AmountEnrty" Placeholder="Amount in €"
+                       Keyboard="Numeric"
+                       Text="{Binding NewBudgetAmount}"
+                       BackgroundColor="White"
+                       TextColor="Black"/>
 
-                <Button Text="Save"
+                <Label x:Name="PurposeLabel" Text="Select Purpose:" TextColor="White"/>
+                <Picker x:Name="PurposeEnrty" ItemsSource="{Binding BudgetPurposes}"
+                        SelectedItem="{Binding SelectedPurpose}"
+                        BackgroundColor="White"
+                        TextColor="Black"/>
+
+                <Button x:Name="Save"  Text="Add Budget Entry"
                         BackgroundColor="#1E1E1E"
                         TextColor="White"
                         HorizontalOptions="Center"
-                        VerticalOptions="End"
                         Command="{Binding SaveCommand}" />
             </VerticalStackLayout>
         </Frame>

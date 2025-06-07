@@ -83,24 +83,33 @@
                             <RowDefinition Height="Auto"/>
                         </Grid.RowDefinitions>
 
-                        <Ellipse Grid.Row="0" WidthRequest="40" HeightRequest="40" Fill="LightGray" HorizontalOptions="Center"/>
+                        <!-- Row 0: Goalkeeper -->
+                        <Ellipse x:Name="st" Grid.Row="0" WidthRequest="40" HeightRequest="40" Fill="LightGray" HorizontalOptions="Center"/>
 
+                        <!-- Row 1: Defenders -->
                         <StackLayout Grid.Row="1" Orientation="Horizontal" HorizontalOptions="Center" Spacing="80">
-                            <Ellipse WidthRequest="40" HeightRequest="40" Fill="LightGray"/>
-                            <Ellipse WidthRequest="40" HeightRequest="40" Fill="LightGray"/>
-                            <Ellipse WidthRequest="40" HeightRequest="40" Fill="LightGray"/>
+                            <Ellipse x:Name="winger1" WidthRequest="40" HeightRequest="40" Fill="LightGray"/>
+                            <Ellipse x:Name="am" WidthRequest="40" HeightRequest="40" Fill="LightGray"/>
+                            <Ellipse x:Name="winger2" WidthRequest="40" HeightRequest="40" Fill="LightGray"/>
+                            
                         </StackLayout>
 
-                        <Ellipse Grid.Row="2" WidthRequest="40" HeightRequest="40" Fill="LightGray" HorizontalOptions="Center"/>
-                        <Ellipse Grid.Row="3" WidthRequest="40" HeightRequest="40" Fill="LightGray" HorizontalOptions="Center"/>
+                        <!-- Row 2 -->
+                        <Ellipse x:Name="cm" Grid.Row="2" WidthRequest="40" HeightRequest="40" Fill="LightGray" HorizontalOptions="Center"/>
 
+                        <!-- Row 3 -->
+                        <Ellipse x:Name="dm" Grid.Row="3" WidthRequest="40" HeightRequest="40" Fill="LightGray" HorizontalOptions="Center"/>
+
+                        <!-- Row 4: Wingers and AM -->
                         <StackLayout Grid.Row="4" Orientation="Horizontal" HorizontalOptions="Center" Spacing="80">
-                            <Ellipse WidthRequest="40" HeightRequest="40" Fill="LightGray"/>
-                            <Ellipse WidthRequest="40" HeightRequest="40" Fill="LightGray"/>
-                            <Ellipse WidthRequest="40" HeightRequest="40" Fill="LightGray"/>
+                            <Ellipse x:Name="fb1" WidthRequest="40" HeightRequest="40" Fill="LightGray"/>
+                            <Ellipse x:Name="cb" WidthRequest="40" HeightRequest="40" Fill="LightGray"/>
+                            <Ellipse x:Name="fb2" WidthRequest="40" HeightRequest="40" Fill="LightGray"/>
                         </StackLayout>
 
-                        <Ellipse Grid.Row="5" WidthRequest="40" HeightRequest="40" Fill="LightGray" HorizontalOptions="Center"/>
+                        <!-- Row 5 -->
+                        <Ellipse x:Name="gk" Grid.Row="5" WidthRequest="40" HeightRequest="40" Fill="LightGray" HorizontalOptions="Center"/>
+
                     </Grid>
                 </StackLayout>
             </Frame>

@@ -191,6 +191,21 @@ namespace FootballProject.Services
             return JsonSerializer.Deserialize<List<Team>>(json, options);
         }
 
+        public async Task<Team?> AddTeam(Team team)
+        {
+            var content = new StringContent(JsonSerializer.Serialize(team, options), Encoding.UTF8, "application/json");
+            var response = await client.PostAsync($"{baseUrl}/api/team", content);
+
+            if (!response.IsSuccessStatusCode)
+                return null;
+
+            var json = await response.Content.ReadAsStringAsync();
+            return JsonSerializer.Deserialize<Team>(json, options);  // contains correct Id
+        }
+
+
+
+
     }
 
 }

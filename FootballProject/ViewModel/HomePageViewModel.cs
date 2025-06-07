@@ -36,7 +36,7 @@ namespace FootballProject.ViewModel
         private async Task OnLogoutAsync()
         {
             // Optional: clear current user if applicable
-            if (_userService is UserService us)
+            if (_userService is IUser us)
             {
                 us.SetCurrentUser(null);
             }

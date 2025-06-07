@@ -17,7 +17,7 @@
              Route="rHomePage" />
         </Tab>
 
-        <Tab Title="View Users">
+        <Tab Title="View Users" x:Name="ManagerTab">
             <ShellContent
              Title="ViewUsers"
              ContentTemplate="{DataTemplate local:View.ViewUsers}"
@@ -29,7 +29,7 @@
             ContentTemplate="{DataTemplate local:View.PlayersSearch}"
             Route="rPlayersSearch" />
         </Tab>
-        <Tab Title="Players Search">
+        <Tab Title="Club Search" x:Name="ClubSearch">
             <ShellContent
              Title="Club Players Search"
              ContentTemplate="{DataTemplate local:View.ClubPlayersSearch}"

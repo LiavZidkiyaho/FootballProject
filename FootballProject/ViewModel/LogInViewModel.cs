@@ -21,7 +21,6 @@ namespace FootballProject.ViewModel
         public LoginViewModel(IUser service)
         {
             this.service = service;
-
             LoginUserCommand = new Command(async () => await LoginUser());
             NavToRegisterCommand = new Command(async () => await Shell.Current.GoToAsync("RegisterPage"));
 
@@ -89,6 +88,15 @@ namespace FootballProject.ViewModel
                 await Application.Current.MainPage.DisplayAlert("Login Success", $"Welcome, {User.Name}!", "OK");
                 var user = await service.GetUser(Username);
                 service.SetCurrentUser(user);
+                if(user.IsAdmin == "True")
+                {
+                    App.manager = true;
+                }
+                else
+                {
+                    App.manager = false;
+                }
+                App.role = user.Role;
                 App.Current.MainPage = new AppShell();
                 await Shell.Current.GoToAsync("///rHomePage", new Dictionary<string, object>
                 {

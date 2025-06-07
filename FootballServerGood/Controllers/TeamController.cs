@@ -28,11 +28,12 @@ namespace FootballServerGood.Controllers
         }
 
         [HttpPost]
-        public IActionResult AddTeam([FromBody] Team team)
+        public ActionResult<Team> AddTeam([FromBody] Team team)
         {
-            teamDB.Insert(team);
-            teamDB.SaveChanges();
-            return CreatedAtAction(nameof(GetById), new { id = team.Id }, team);
+            teamDB.Insert(team);         // or _context.Teams.Add(team);
+            teamDB.SaveChanges();        // after this, team.Id should be updated
+
+            return Ok(team);             // <== return full team with new Id
         }
 
         [HttpPut("{id}")]

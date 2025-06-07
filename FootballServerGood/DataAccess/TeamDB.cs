@@ -26,7 +26,7 @@ namespace FootballServerGood.DataAccess
         {
             var team = (Team)entity;
             return $@"
-INSERT INTO Team (TeamName)
+INSERT INTO Team (Team)
 VALUES ('{team.team1.Replace("'", "''")}')";
         }
 
@@ -35,7 +35,7 @@ VALUES ('{team.team1.Replace("'", "''")}')";
             var team = (Team)entity;
             return $@"
 UPDATE Team 
-SET TeamName = '{team.team1.Replace("'", "''")}'
+SET Team = '{team.team1.Replace("'", "''")}'
 WHERE Id = {team.Id}";
         }
 

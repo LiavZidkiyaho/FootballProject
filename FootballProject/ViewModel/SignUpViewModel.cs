@@ -1,6 +1,6 @@
 ﻿using FootballProject.Model;
 using FootballProject.Services;
-using FootballProject.ViewModel.DB;
+using FootballProject.ViewModel;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Text.RegularExpressions;
@@ -14,8 +14,8 @@ namespace FootballProject.ViewModel
     public class SignUpViewModel : ViewModelBase
     {
         private readonly IUser userService;
-        private List<User> users = new List<User>();
-        private User user = new User();
+        private List<User> users = new();
+        private User user = new();
         private User? editUser;
         private string name, username, password, email, errorMessage;
         private Team selectedTeam;
@@ -26,6 +26,7 @@ namespace FootballProject.ViewModel
         {
             userService = service;
             AddUserCommand = new Command(async () => await AddOrUpdateUser(), () => CanAddUser);
+            AddTeamCommand = new Command(async () => await AddTeam());
 
             Roles = new ObservableCollection<string> { "Coach", "Manager" };
             Teams = new ObservableCollection<Team>();
@@ -34,6 +35,9 @@ namespace FootballProject.ViewModel
 
         public ObservableCollection<Team> Teams { get; }
         public ObservableCollection<string> Roles { get; }
+
+        public ICommand AddUserCommand { get; }
+        public ICommand AddTeamCommand { get; }
 
         public Team SelectedTeam
         {
@@ -105,8 +109,6 @@ namespace FootballProject.ViewModel
 
         public bool CanAddUser => !HasError;
 
-        public ICommand AddUserCommand { get; }
-
         public User? EditUser
         {
             get => editUser;
@@ -132,7 +134,7 @@ namespace FootballProject.ViewModel
                     Password = editUser.Password;
                     Email = editUser.Email;
                     SelectedTeam = editUser.Team;
-                    IsAdmin = editUser.IsAdmin == "Yes";
+                    IsAdmin = editUser.IsAdmin == "True";
                     SelectedRole = editUser.Role;
                 }
                 else
@@ -188,7 +190,7 @@ namespace FootballProject.ViewModel
             HandleError();
             if (HasError) return;
 
-            // Editing user
+            // Editing existing user
             if (EditUser != null && user != null && EditUser.Id == user.Id)
             {
                 var existing = users.Find(u => u.Id == user.Id);
@@ -199,7 +201,7 @@ namespace FootballProject.ViewModel
                     existing.Password = Password;
                     existing.Email = Email;
                     existing.Team = SelectedTeam;
-                    existing.IsAdmin = IsAdmin ? "Yes" : "No";
+                    existing.IsAdmin = IsAdmin ? "True" : "False";
                     existing.Role = SelectedRole;
 
                     bool updated = await userService.UpdateUser(existing);
@@ -232,7 +234,7 @@ namespace FootballProject.ViewModel
                     Password = Password,
                     Email = Email,
                     Team = SelectedTeam,
-                    IsAdmin = IsAdmin ? "Yes" : "No",
+                    IsAdmin = IsAdmin ? "True" : "False",
                     Role = SelectedRole
                 };
 
@@ -249,5 +251,33 @@ namespace FootballProject.ViewModel
                 }
             }
         }
+
+        private async Task AddTeam()
+        {
+            string result = await Shell.Current.DisplayPromptAsync("New Team", "Enter team name:", "Add", "Cancel", "Team name");
+            if (!string.IsNullOrWhiteSpace(result))
+            {
+                var newTeam = new Team { team1 = result };
+                var addedTeam = await userService.AddTeam(newTeam);
+
+                if (addedTeam != null)
+                {
+                    // Clear and reload the teams
+                    var updatedTeams = await userService.GetAllTeams();
+                    Teams.Clear();
+                    foreach (var team in updatedTeams)
+                        Teams.Add(team);
+
+                    SelectedTeam = addedTeam; // optional: auto-select the new team
+
+                    await Shell.Current.DisplayAlert("Success", "Team added.", "OK");
+                }
+                else
+                {
+                    await Shell.Current.DisplayAlert("Error", "Failed to add team.", "Cancel");
+                }
+            }
+        }
+
     }
 }

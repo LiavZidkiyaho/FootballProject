@@ -1,6 +1,5 @@
 ﻿using FootballProject.Model;
 using FootballProject.Services;
-using FootballProject.ViewModel.DB;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -14,14 +13,12 @@ namespace FootballProject.ViewModel
     {
         private Player player;
         private ObservableCollection<Stat> playerStats;
-        private readonly StatsDB statsDB;
         private readonly IUser userService;
         private string source;
 
         public PlayerProfileViewModel(IUser service)
         {
             userService = service;
-            statsDB = new StatsDB();
 
             BackCommand = new Command(async () => await OnBackCommandExecuted());
         }
@@ -76,10 +73,12 @@ namespace FootballProject.ViewModel
             {
                 case "ClubPlayersSearch":
                     await Shell.Current.GoToAsync("///rClubPlayersSearch");
+                    PlayerStats = null;
                     break;
                 case "PlayersSearch":
                 default:
                     await Shell.Current.GoToAsync("///rPlayersSearch");
+                    PlayerStats = null;
                     break;
             }
         }

@@ -15,6 +15,8 @@ namespace FootballProject.Services
         Task<bool> UpdateUser(User user);
         Task<bool> DeleteUser(User user);
 
+        Task<Team?> AddTeam(Team team);
+
         Task<List<Team>> GetAllTeams();
 
         Task<List<Stat>> GetAllStats(string position, int playerId);

@@ -1,6 +1,5 @@
 ﻿using FootballProject.Model;
 using FootballProject.Services;
-using FootballProject.ViewModel.DB;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;

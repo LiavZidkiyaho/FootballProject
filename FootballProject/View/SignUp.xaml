@@ -60,15 +60,22 @@
                        Keyboard="Email"/>
             </HorizontalStackLayout>
 
-            <!-- Team Picker -->
+            <!-- Team Picker with Add Button -->
             <HorizontalStackLayout Grid.Row="5">
                 <Label TextColor="White" Padding="15" Text="Team:" FontSize="15" />
                 <Picker Title="Select a team"
                         ItemsSource="{Binding Teams}"
                         ItemDisplayBinding="{Binding team1}"
                         SelectedItem="{Binding SelectedTeam}"
-                        WidthRequest="250"
+                        WidthRequest="180"
                         TextColor="White"/>
+                <Button Text="+"
+                        Command="{Binding AddTeamCommand}"
+                        BackgroundColor="#1E1E1E"
+                        TextColor="White"
+                        WidthRequest="40"
+                        HeightRequest="40"
+                        Margin="5,0,0,0"/>
             </HorizontalStackLayout>
 
             <!-- Role Picker -->
@@ -84,8 +91,8 @@
             <!-- Admin Selection -->
             <HorizontalStackLayout Grid.Row="7">
                 <Label TextColor="White" Padding="15" Text="Is Admin:" FontSize="15" />
-                <RadioButton Content="Yes" GroupName="adminGroup" IsChecked="{Binding IsAdmin}" />
-                <RadioButton Content="No" GroupName="adminGroup" IsChecked="{Binding IsNotAdmin}" />
+                <RadioButton Content="True" GroupName="adminGroup" IsChecked="{Binding IsAdmin}" />
+                <RadioButton Content="False" GroupName="adminGroup" IsChecked="{Binding IsNotAdmin}" />
             </HorizontalStackLayout>
 
             <!-- Register Button -->
