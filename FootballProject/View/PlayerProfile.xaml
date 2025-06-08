@@ -48,6 +48,7 @@
                     <Label Text="{Binding Player.Height, StringFormat='{0} cm'}" TextColor="White" FontSize="Medium" FontAttributes="Bold"/>
                     <Label Text="{Binding Player.Weight, StringFormat='{0} kg'}" TextColor="White" FontSize="Medium" FontAttributes="Bold"/>
                     <Label Text="{Binding Player.Foot}" TextColor="White" FontSize="Medium" FontAttributes="Bold"/>
+                    <Label Text="{Binding PlayerRating}" TextColor="White" FontSize="Medium" FontAttributes="Bold"/>
 
                     <Button Grid.Column="4" Text="Back" BackgroundColor="White" TextColor="#8294C4"
                         Command="{Binding BackCommand}" HorizontalOptions="Start" 

@@ -6,18 +6,30 @@ using FootballServerGood.Model;
 
 namespace FootballServerGood.DataAccess
 {
+    /// <summary>
+    /// Handles database access related to player statistics, categorized by position-specific tables.
+    /// </summary>
     public class StatsDB : BaseDB
     {
+        /// <summary>
+        /// Creates a new empty Stat entity instance.
+        /// </summary>
         protected override BaseEntity newEntity()
         {
             return new Stat();
         }
 
+        /// <summary>
+        /// Maps one stat field from the reader to a Stat entity.
+        /// Ignores "id" and "player_id" columns, returning the first actual stat field found.
+        /// </summary>
+        /// <param name="entity">The base entity to populate.</param>
+        /// <returns>A Stat object with Name and Value from one stat column.</returns>
         protected override BaseEntity CreateModel(BaseEntity entity)
         {
             Stat stat = (Stat)entity;
 
-            // Skip id and player_id and just get the first stat column
+            // Skip id and player_id, take the first stat found
             for (int i = 0; i < reader.FieldCount; i++)
             {
                 string name = reader.GetName(i);
@@ -25,29 +37,43 @@ namespace FootballServerGood.DataAccess
                 {
                     stat.Name = name;
                     stat.Value = Convert.ToInt32(reader[i]);
-                    break; // Only take the first stat
+                    break;
                 }
             }
 
             return stat;
         }
 
-
+        /// <summary>
+        /// Not implemented. Inserting stat records is not supported directly.
+        /// </summary>
         protected override string CreateInsertOleDb(BaseEntity entity)
         {
             throw new NotImplementedException();
         }
 
+        /// <summary>
+        /// Not implemented. Updating stat records is not supported directly.
+        /// </summary>
         protected override string CreateUpdateOleDb(BaseEntity entity)
         {
             throw new NotImplementedException();
         }
 
+        /// <summary>
+        /// Not implemented. Deleting stat records is not supported directly.
+        /// </summary>
         protected override string CreateDeleteOleDb(BaseEntity entity)
         {
             throw new NotImplementedException();
         }
 
+        /// <summary>
+        /// Retrieves all stats for a given player from a position-specific stats table (e.g., "gkStats", "defStats").
+        /// </summary>
+        /// <param name="position">The position string (e.g., "gk", "def", "mid", "att") used to determine the table name.</param>
+        /// <param name="playerId">The ID of the player whose stats should be retrieved.</param>
+        /// <returns>A list of Stat objects, each representing one stat field and value.</returns>
         public async Task<List<Stat>> SelectStatsByPosition(string position, int playerId)
         {
             string table = position.ToLower() + "Stats";
@@ -62,6 +88,7 @@ namespace FootballServerGood.DataAccess
                 connection.Open();
                 reader = (OleDbDataReader)await command.ExecuteReaderAsync();
 
+                // Only one row per player expected
                 if (reader.Read())
                 {
                     for (int i = 0; i < reader.FieldCount; i++)
@@ -85,6 +112,5 @@ namespace FootballServerGood.DataAccess
 
             return stats;
         }
-
     }
 }

@@ -5,6 +5,9 @@ using FootballServerGood.Model;
 
 namespace FootballServerGood.DataAccess
 {
+    /// <summary>
+    /// Base class for handling common database operations (CRUD) using OleDb for MS Access.
+    /// </summary>
     public abstract class BaseDB
     {
         private string connectionString;
@@ -16,20 +19,45 @@ namespace FootballServerGood.DataAccess
         protected List<ChangeEntity> deleted = new List<ChangeEntity>();
         protected List<ChangeEntity> updated = new List<ChangeEntity>();
 
+        /// <summary>
+        /// Creates an empty instance of the entity type.
+        /// </summary>
         protected abstract BaseEntity newEntity();
+
+        /// <summary>
+        /// Creates the SQL INSERT statement for a given entity.
+        /// </summary>
         protected abstract string CreateInsertOleDb(BaseEntity entity);
+
+        /// <summary>
+        /// Creates the SQL UPDATE statement for a given entity.
+        /// </summary>
         protected abstract string CreateUpdateOleDb(BaseEntity entity);
+
+        /// <summary>
+        /// Creates the SQL DELETE statement for a given entity.
+        /// </summary>
         protected abstract string CreateDeleteOleDb(BaseEntity entity);
+
+        /// <summary>
+        /// Maps an entity using the current reader state.
+        /// </summary>
         protected abstract BaseEntity CreateModel(BaseEntity entity);
 
+        /// <summary>
+        /// Initializes the database connection and command.
+        /// </summary>
         public BaseDB()
         {
-            //connectionString = @"Provider=Microsoft.ACE.OLEDB.12.0;Data Source=D:\Users\User\Documents\GitHub\FootballProject\FootballProject\ViewModel\DB\Football2.accdb;Persist Security Info=True";
-            connectionString = @"Provider=Microsoft.ACE.OLEDB.12.0;Data Source=C:\Users\אבי\Documents\GitHub\FootballProject\FootballServerGood\DataAccess\Football2.accdb;Persist Security Info=True";
+            // Replace path below as needed
+            connectionString = @"Provider=Microsoft.ACE.OLEDB.12.0;Data Source=E:\GitHub\FootballProject\FootballServerGood\DataAccess\Football2.accdb;Persist Security Info=True";
             connection = new OleDbConnection(connectionString);
             command = new OleDbCommand();
         }
 
+        /// <summary>
+        /// Executes a SELECT query and returns a list of entities.
+        /// </summary>
         protected async Task<List<BaseEntity>> Select(string query)
         {
             List<BaseEntity> list = new List<BaseEntity>();
@@ -60,6 +88,9 @@ namespace FootballServerGood.DataAccess
             return list;
         }
 
+        /// <summary>
+        /// Adds an entity to the insert queue.
+        /// </summary>
         public virtual void Insert(BaseEntity entity)
         {
             BaseEntity reqEntity = this.newEntity();
@@ -69,6 +100,9 @@ namespace FootballServerGood.DataAccess
             }
         }
 
+        /// <summary>
+        /// Adds an entity to the update queue.
+        /// </summary>
         public virtual void Update(BaseEntity entity)
         {
             BaseEntity reqEntity = this.newEntity();
@@ -78,6 +112,9 @@ namespace FootballServerGood.DataAccess
             }
         }
 
+        /// <summary>
+        /// Adds an entity to the delete queue.
+        /// </summary>
         public virtual void Delete(BaseEntity entity)
         {
             BaseEntity reqEntity = this.newEntity();
@@ -87,6 +124,10 @@ namespace FootballServerGood.DataAccess
             }
         }
 
+        /// <summary>
+        /// Executes all pending INSERT, UPDATE, and DELETE operations.
+        /// </summary>
+        /// <returns>Total number of records affected.</returns>
         public async Task<int> SaveChanges()
         {
             int records_affected = 0;
@@ -130,4 +171,4 @@ namespace FootballServerGood.DataAccess
             return records_affected;
         }
     }
-}//fuck liav (from gal :))
+}

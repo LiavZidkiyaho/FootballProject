@@ -8,6 +8,10 @@ using Microsoft.Maui.Controls;
 
 namespace FootballProject.ViewModel
 {
+    /// <summary>
+    /// ViewModel for managing and displaying the list of users.
+    /// Supports loading, refreshing, editing, deleting, and navigating to user creation.
+    /// </summary>
     public class ViewUsersViewModel : ViewModelBase
     {
         private readonly IUser userService;
@@ -15,6 +19,9 @@ namespace FootballProject.ViewModel
         private bool isAdmin;
         private ObservableCollection<User> observableUsers;
 
+        /// <summary>
+        /// The list of users displayed in the UI.
+        /// </summary>
         public ObservableCollection<User> ObservableUsers
         {
             get => observableUsers;
@@ -25,11 +32,9 @@ namespace FootballProject.ViewModel
             }
         }
 
-        public ICommand RefreshCommand { get; }
-        public ICommand EditCommand { get; }
-        public ICommand DeleteCommand { get; }
-        public ICommand AddCommand { get; }
-
+        /// <summary>
+        /// Indicates whether the user list is currently refreshing.
+        /// </summary>
         public bool IsRefreshing
         {
             get => isRefreshing;
@@ -40,6 +45,9 @@ namespace FootballProject.ViewModel
             }
         }
 
+        /// <summary>
+        /// Indicates if the current user is an admin (can control visibility of certain UI features).
+        /// </summary>
         public bool IsAdmin
         {
             get => isAdmin;
@@ -50,6 +58,16 @@ namespace FootballProject.ViewModel
             }
         }
 
+        // Commands
+        public ICommand RefreshCommand { get; }
+        public ICommand EditCommand { get; }
+        public ICommand DeleteCommand { get; }
+        public ICommand AddCommand { get; }
+
+        /// <summary>
+        /// Constructor initializes the user service and binds all commands.
+        /// </summary>
+        /// <param name="service">The service that handles user data.</param>
         public ViewUsersViewModel(IUser service)
         {
             userService = service;
@@ -61,15 +79,21 @@ namespace FootballProject.ViewModel
             DeleteCommand = new Command<User>(async (u) => await DeleteUserAsync(u));
             EditCommand = new Command<User>(async (u) => await EditUserAsync(u));
 
-            _ = LoadUsersAsync(); // fire and forget
+            _ = LoadUsersAsync(); // Load users on initialization (fire-and-forget)
         }
 
+        /// <summary>
+        /// Loads the user list from the service.
+        /// </summary>
         public async Task LoadUsersAsync()
         {
             var users = await userService.GetAllUsers();
             ObservableUsers = new ObservableCollection<User>(users);
         }
 
+        /// <summary>
+        /// Refreshes the user list with loading indication.
+        /// </summary>
         public async Task RefreshAsync()
         {
             IsRefreshing = true;
@@ -77,6 +101,10 @@ namespace FootballProject.ViewModel
             IsRefreshing = false;
         }
 
+        /// <summary>
+        /// Deletes the specified user from the database.
+        /// </summary>
+        /// <param name="user">The user to delete.</param>
         private async Task DeleteUserAsync(User user)
         {
             if (user == null) return;
@@ -88,6 +116,10 @@ namespace FootballProject.ViewModel
             }
         }
 
+        /// <summary>
+        /// Navigates to the sign-up page for editing an existing user.
+        /// </summary>
+        /// <param name="user">The user to edit.</param>
         private async Task EditUserAsync(User user)
         {
             if (user == null) return;
@@ -100,6 +132,9 @@ namespace FootballProject.ViewModel
             await Shell.Current.GoToAsync("rSignUp", data);
         }
 
+        /// <summary>
+        /// Navigates to the sign-up page for adding a new user.
+        /// </summary>
         private async Task GoToAddUserPage()
         {
             await Shell.Current.GoToAsync("rSignUp");

@@ -8,6 +8,9 @@ using Microsoft.Maui.Controls;
 
 namespace FootballProject.ViewModel
 {
+    /// <summary>
+    /// ViewModel for searching and navigating through the list of all players (not limited to a single team).
+    /// </summary>
     public class PlayersSearchViewModel : ViewModelBase
     {
         private readonly IUser service;
@@ -17,6 +20,9 @@ namespace FootballProject.ViewModel
         private string filterValue;
         private string sortOrder;
 
+        /// <summary>
+        /// Constructor initializes commands and default values.
+        /// </summary>
         public PlayersSearchViewModel(IUser webService)
         {
             service = webService;
@@ -29,6 +35,9 @@ namespace FootballProject.ViewModel
             NavigateToPlayerProfileCommand = new Command<Player>(async (player) => await NavigateToPlayerProfileAsync(player));
         }
 
+        /// <summary>
+        /// Collection of players displayed in the UI.
+        /// </summary>
         public ObservableCollection<Player> Players
         {
             get => players;
@@ -39,6 +48,9 @@ namespace FootballProject.ViewModel
             }
         }
 
+        /// <summary>
+        /// The field selected for filtering or sorting players (e.g., "Position", "Nationality").
+        /// </summary>
         public string SelectedField
         {
             get => selectedField;
@@ -49,6 +61,9 @@ namespace FootballProject.ViewModel
             }
         }
 
+        /// <summary>
+        /// The value to filter players by (e.g., "Goalkeeper").
+        /// </summary>
         public string FilterValue
         {
             get => filterValue;
@@ -59,6 +74,9 @@ namespace FootballProject.ViewModel
             }
         }
 
+        /// <summary>
+        /// The order to sort players (e.g., "Ascending", "Descending").
+        /// </summary>
         public string SortOrder
         {
             get => sortOrder;
@@ -69,9 +87,19 @@ namespace FootballProject.ViewModel
             }
         }
 
+        /// <summary>
+        /// Command that executes a player search based on selected filters and sort options.
+        /// </summary>
         public ICommand SearchCommand { get; }
+
+        /// <summary>
+        /// Command that navigates to a player's profile page.
+        /// </summary>
         public ICommand NavigateToPlayerProfileCommand { get; }
 
+        /// <summary>
+        /// Performs the player search depending on the selected field, filter value, and sort order.
+        /// </summary>
         private async Task SearchPlayersAsync()
         {
             if (SelectedField == "Any" || string.IsNullOrEmpty(SelectedField))
@@ -112,6 +140,10 @@ namespace FootballProject.ViewModel
             }
         }
 
+        /// <summary>
+        /// Navigates to the player profile page with the selected player's data.
+        /// </summary>
+        /// <param name="player">The player to show details for.</param>
         private async Task NavigateToPlayerProfileAsync(Player player)
         {
             var data = new Dictionary<string, object>

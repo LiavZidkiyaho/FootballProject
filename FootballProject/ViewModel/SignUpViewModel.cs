@@ -1,6 +1,5 @@
 ﻿using FootballProject.Model;
 using FootballProject.Services;
-using FootballProject.ViewModel;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Text.RegularExpressions;
@@ -10,6 +9,10 @@ using Microsoft.Maui.Controls;
 
 namespace FootballProject.ViewModel
 {
+    /// <summary>
+    /// ViewModel for registering new users or editing existing ones.
+    /// Manages form validation, submission, and dynamic team/role selections.
+    /// </summary>
     [QueryProperty(nameof(EditUser), "user")]
     public class SignUpViewModel : ViewModelBase
     {
@@ -22,6 +25,9 @@ namespace FootballProject.ViewModel
         private string selectedRole;
         private bool isAdmin;
 
+        /// <summary>
+        /// Constructor initializing commands and collections.
+        /// </summary>
         public SignUpViewModel(IUser service)
         {
             userService = service;
@@ -109,6 +115,9 @@ namespace FootballProject.ViewModel
 
         public bool CanAddUser => !HasError;
 
+        /// <summary>
+        /// If editing an existing user, this property pre-fills the form with current values.
+        /// </summary>
         public User? EditUser
         {
             get => editUser;
@@ -151,6 +160,9 @@ namespace FootballProject.ViewModel
             }
         }
 
+        /// <summary>
+        /// Loads available teams into the UI dropdown.
+        /// </summary>
         private async void LoadTeams()
         {
             var list = await userService.GetAllTeams();
@@ -170,6 +182,9 @@ namespace FootballProject.ViewModel
             return Regex.IsMatch(Email, pattern);
         }
 
+        /// <summary>
+        /// Recalculates the form's error state and builds the error message.
+        /// </summary>
         private void HandleError()
         {
             var errors = new List<string>();
@@ -184,13 +199,15 @@ namespace FootballProject.ViewModel
             OnPropertyChanged(nameof(CanAddUser));
         }
 
+        /// <summary>
+        /// Adds a new user or updates an existing one.
+        /// </summary>
         private async Task AddOrUpdateUser()
         {
             users = await userService.GetAllUsers();
             HandleError();
             if (HasError) return;
 
-            // Editing existing user
             if (EditUser != null && user != null && EditUser.Id == user.Id)
             {
                 var existing = users.Find(u => u.Id == user.Id);
@@ -219,7 +236,6 @@ namespace FootballProject.ViewModel
             }
             else
             {
-                // Add new user
                 if (users.Exists(u => u.Username.Equals(Username, System.StringComparison.OrdinalIgnoreCase)))
                 {
                     await Shell.Current.DisplayAlert("Error", "Username already exists.", "OK");
@@ -252,6 +268,9 @@ namespace FootballProject.ViewModel
             }
         }
 
+        /// <summary>
+        /// Adds a new team using a prompt dialog.
+        /// </summary>
         private async Task AddTeam()
         {
             string result = await Shell.Current.DisplayPromptAsync("New Team", "Enter team name:", "Add", "Cancel", "Team name");
@@ -262,13 +281,12 @@ namespace FootballProject.ViewModel
 
                 if (addedTeam != null)
                 {
-                    // Clear and reload the teams
                     var updatedTeams = await userService.GetAllTeams();
                     Teams.Clear();
                     foreach (var team in updatedTeams)
                         Teams.Add(team);
 
-                    SelectedTeam = addedTeam; // optional: auto-select the new team
+                    SelectedTeam = addedTeam;
 
                     await Shell.Current.DisplayAlert("Success", "Team added.", "OK");
                 }
@@ -278,6 +296,5 @@ namespace FootballProject.ViewModel
                 }
             }
         }
-
     }
 }

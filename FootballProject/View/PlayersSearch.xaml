@@ -136,6 +136,12 @@
                                         <Label Text="{Binding Position}" TextColor="White" FontSize="Medium" 
                                                VerticalOptions="Center" HorizontalOptions="StartAndExpand"/>
                                     </StackLayout>
+                                    <StackLayout Orientation="Horizontal">
+                                        <Label Text="Position: " TextColor="White" FontSize="Medium" 
+                                                VerticalOptions="Center" HorizontalOptions="StartAndExpand"/>
+                                        <Label Text="{Binding Position}" TextColor="White" FontSize="Medium" 
+                                               VerticalOptions="Center" HorizontalOptions="StartAndExpand"/>
+                                    </StackLayout>
                                 </StackLayout>
                             </Frame>
                         </DataTemplate>

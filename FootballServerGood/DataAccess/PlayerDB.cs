@@ -5,26 +5,46 @@ using System.Threading.Tasks;
 
 namespace FootballServerGood.DataAccess
 {
+    /// <summary>
+    /// Handles database operations for Player entities, including filtering, sorting, and team-based queries.
+    /// </summary>
     public class PlayerDB : BaseDB
     {
+        /// <summary>
+        /// Returns a new empty Player instance for casting base entities.
+        /// </summary>
         protected override BaseEntity newEntity()
         {
             return new Player();
         }
 
+        /// <summary>
+        /// Throws NotImplementedException – inserting players is not supported via this DB.
+        /// </summary>
         protected override string CreateInsertOleDb(BaseEntity entity)
         {
             throw new NotImplementedException();
         }
+
+        /// <summary>
+        /// Throws NotImplementedException – updating players is not supported via this DB.
+        /// </summary>
         protected override string CreateUpdateOleDb(BaseEntity entity)
         {
             throw new NotImplementedException();
         }
+
+        /// <summary>
+        /// Throws NotImplementedException – deleting players is not supported via this DB.
+        /// </summary>
         protected override string CreateDeleteOleDb(BaseEntity entity)
         {
             throw new NotImplementedException();
         }
 
+        /// <summary>
+        /// Converts the current row in the reader to a Player object.
+        /// </summary>
         protected override BaseEntity CreateModel(BaseEntity entity)
         {
             var player = (Player)entity;
@@ -35,7 +55,7 @@ namespace FootballServerGood.DataAccess
 
             player.Team = new Team();
             player.Team.Id = reader.GetInt32(4);
-            player.Team.team1 = reader.GetString(11);
+            player.Team.team1 = reader.GetString(11); // team name column from JOINed Team table
 
             player.UserValue = reader.GetInt32(5);
             player.Wage = reader.GetInt32(6);
@@ -46,6 +66,9 @@ namespace FootballServerGood.DataAccess
             return player;
         }
 
+        /// <summary>
+        /// Gets all players with their teams.
+        /// </summary>
         public async Task<List<Player>> SelectAllPlayers()
         {
             string query = @"
@@ -57,7 +80,9 @@ namespace FootballServerGood.DataAccess
             return list.Cast<Player>().ToList();
         }
 
-
+        /// <summary>
+        /// Gets a single player by ID, including team info.
+        /// </summary>
         public async Task<Player> SelectById(int id)
         {
             string query = $@"
@@ -72,7 +97,11 @@ namespace FootballServerGood.DataAccess
             return null;
         }
 
-
+        /// <summary>
+        /// Filters players by any field or by a specific one.
+        /// </summary>
+        /// <param name="field">Field to filter (or "Any" for all fields)</param>
+        /// <param name="value">Value to match</param>
         public async Task<List<Player>> SelectByFilter(string field, string value)
         {
             string query;
@@ -83,7 +112,7 @@ namespace FootballServerGood.DataAccess
         FROM players p
         INNER JOIN Team t ON p.team = t.id
         WHERE p.FullName LIKE '%{value}%' OR p.Nationality LIKE '%{value}%' OR p.DateOfBirth LIKE '%{value}%' 
-            OR p.Team LIKE '%{value}%' OR p.UserValue LIKE '%{value}%' OR p.Wage LIKE '%{value}%' 
+            OR t.Team LIKE '%{value}%' OR p.UserValue LIKE '%{value}%' OR p.Wage LIKE '%{value}%' 
             OR p.Height LIKE '%{value}%' OR p.Weight LIKE '%{value}%' OR p.Foot LIKE '%{value}%' 
             OR p.Position LIKE '%{value}%'";
             }
@@ -100,7 +129,11 @@ namespace FootballServerGood.DataAccess
             return list.Cast<Player>().ToList();
         }
 
-
+        /// <summary>
+        /// Returns players sorted by a specific field and order.
+        /// </summary>
+        /// <param name="field">Sort field</param>
+        /// <param name="order">"ASC" or "DESC"</param>
         public async Task<List<Player>> SelectAndSort(string field, string order)
         {
             string query = $@"
@@ -113,6 +146,9 @@ namespace FootballServerGood.DataAccess
             return list.Cast<Player>().ToList();
         }
 
+        /// <summary>
+        /// Gets all players belonging to a specific team.
+        /// </summary>
         public async Task<List<Player>> SelectPlayersByTeam(int teamId)
         {
             string query = $@"
@@ -125,6 +161,9 @@ namespace FootballServerGood.DataAccess
             return list.Cast<Player>().ToList();
         }
 
+        /// <summary>
+        /// Gets players by partial name match within a specific team.
+        /// </summary>
         public async Task<List<Player>> SelectTeamPlayersByFirstName(int teamId, string firstName)
         {
             string query = $@"
@@ -136,7 +175,5 @@ namespace FootballServerGood.DataAccess
             List<BaseEntity> list = await base.Select(query);
             return list.Cast<Player>().ToList();
         }
-
-
     }
 }

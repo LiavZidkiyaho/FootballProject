@@ -10,12 +10,25 @@ using System.Windows.Input;
 
 namespace FootballProject.ViewModel
 {
+    /// <summary>
+    /// ViewModel for displaying and managing the finance data of a team.
+    /// Includes budget entry, budget visualization by year/month, and summary calculations.
+    /// </summary>
     public class FinancePageViewModel : ViewModelBase
     {
         private readonly IUser webService;
 
+        /// <summary>
+        /// Chart displaying total balance per year (last 5 years).
+        /// </summary>
         public Chart YearlyChart { get; private set; }
+
+        /// <summary>
+        /// Chart displaying monthly profit/loss over the past 12 months.
+        /// </summary>
         public Chart MonthlyChart { get; private set; }
+
+        // --- Budget Summary Properties ---
 
         private long transferBudget;
         public long TransferBudget
@@ -65,15 +78,37 @@ namespace FootballProject.ViewModel
             }
         }
 
+        /// <summary>
+        /// Formatted transfer budget string.
+        /// </summary>
         public string TransferBudgetString => $"{TransferBudget:N0} €";
+
+        /// <summary>
+        /// Formatted wage string.
+        /// </summary>
         public string WageString => $"{Wage:N0} €";
+
+        /// <summary>
+        /// Formatted total balance string.
+        /// </summary>
         public string TotalBalanceString => $"Total Balance: {TotalBalance:N0} €";
+
+        /// <summary>
+        /// Formatted profit/loss string.
+        /// </summary>
         public string TotalDiffString => $"Profit/Loss: {TotalDiff:N0} €";
 
-        // Form Properties
+        // --- Form Input Properties ---
+
+        /// <summary>
+        /// List of available purposes for budget entries.
+        /// </summary>
         public List<string> BudgetPurposes { get; } = new() { "Transfer", "Wage", "Balance", "Difference" };
 
         private string newBudgetAmount;
+        /// <summary>
+        /// New budget amount input (string).
+        /// </summary>
         public string NewBudgetAmount
         {
             get => newBudgetAmount;
@@ -85,6 +120,9 @@ namespace FootballProject.ViewModel
         }
 
         private string selectedPurpose;
+        /// <summary>
+        /// Selected purpose from the dropdown.
+        /// </summary>
         public string SelectedPurpose
         {
             get => selectedPurpose;
@@ -95,8 +133,15 @@ namespace FootballProject.ViewModel
             }
         }
 
+        /// <summary>
+        /// Command to save a new budget entry.
+        /// </summary>
         public ICommand SaveCommand { get; }
 
+        /// <summary>
+        /// Constructor. Initializes command, charts, and triggers data loading.
+        /// </summary>
+        /// <param name="service">Injected IUser service.</param>
         public FinancePageViewModel(IUser service)
         {
             webService = service;
@@ -109,6 +154,10 @@ namespace FootballProject.ViewModel
             LoadBudgetData(teamId);
         }
 
+        /// <summary>
+        /// Loads all budget data for the team, updates totals and charts.
+        /// </summary>
+        /// <param name="teamId">Current user's team ID.</param>
         private async void LoadBudgetData(int teamId)
         {
             try
@@ -147,6 +196,9 @@ namespace FootballProject.ViewModel
             }
         }
 
+        /// <summary>
+        /// Saves a new budget entry for the current user's team.
+        /// </summary>
         private async Task SaveNewBudget()
         {
             try
@@ -182,7 +234,9 @@ namespace FootballProject.ViewModel
             }
         }
 
-
+        /// <summary>
+        /// Creates a yearly or grouped chart from integer keys (e.g., year).
+        /// </summary>
         private LineChart CreateChart(IEnumerable<IGrouping<int, Budget>> groupedData, SKColor color)
         {
             var entries = groupedData
@@ -199,6 +253,9 @@ namespace FootballProject.ViewModel
                 : EmptyChart("No data");
         }
 
+        /// <summary>
+        /// Creates a chart from dynamic grouped values (e.g., monthly).
+        /// </summary>
         private LineChart CreateChart(IEnumerable<dynamic> data, SKColor color)
         {
             var entries = data
@@ -215,6 +272,9 @@ namespace FootballProject.ViewModel
                 : EmptyChart("No data");
         }
 
+        /// <summary>
+        /// Generates a fallback chart with a placeholder entry.
+        /// </summary>
         private LineChart EmptyChart(string label)
         {
             return new LineChart
